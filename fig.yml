@@ -1,0 +1,23 @@
+web: 
+   build: fb-invoices
+   ports:
+   - "8081:8081"
+   links: 
+   - repository
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   #command: env
+   volumes:
+   - /var/log/system:/var/log/system
+repository:
+   build: fb-repository
+   expose:
+   - "8080"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   #command: env
+   volumes:
+   - /var/log/system:/var/log/system
+   environment:
+   - user_email
+   - user_apiKey
+#redis:
+#   image: redis

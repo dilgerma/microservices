@@ -11,6 +11,13 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+  }
+}
 //
 //project(':fb-repository') {
 //    apply plugin: 'java'
@@ -56,3 +63,6 @@ dependencies {
     testCompile "junit:junit:4.11"
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}

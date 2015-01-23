@@ -29,10 +29,18 @@
 package de.effectivetrainings.fastbill.rest;
 
 
+import de.effectivetrainings.fastbill.json.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
@@ -41,10 +49,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/invoices")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class InvoiceResource extends BaseResource  {
+public class InvoiceResource extends BaseResource {
+
+    private RestTemplate restTemplate;
+
+    private String invoiceUri;
+
+    @Autowired
+    public InvoiceResource(@Value("${fastbill.invoice.uri}") String invoiceUri, RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        this.invoiceUri = invoiceUri;
+    }
 
     @RequestMapping("/foo")
-    public String foo() {
-        return "foo";
+    public Invoices foo() {
+        HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
+        ResponseEntity<Invoices> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Invoices.class);
+        return invoice.getBody();
     }
 }

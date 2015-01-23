@@ -34,6 +34,7 @@ import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.ServiceType;
 import de.effectivetrainings.fastbill.json.Filter;
 import de.effectivetrainings.fastbill.json.Invoice;
+import de.effectivetrainings.fastbill.json.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,21 +63,22 @@ public class InvoiceResource extends BaseResource  {
     }
 
     @RequestMapping(value = "/invoice")
-    public List<Invoice> invoices( @RequestParam(required = false, value = "month") Integer month, @RequestParam(required = false, value = "year") Integer year) {
+    public Invoices invoices( @RequestParam(required = false, value = "month") Integer month, @RequestParam(required = false, value = "year") Integer year) {
         /*
         * Currently Fastbill only allows to Filter by Invoice Date / Month.
         * What we want is to filter by Paid-Date / Month, so we need to load all invoices and filter manually...
         * */
         FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, Filter.NONE);
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();
-        return invoices.stream().filter(invoice -> invoice.paidIn(month, year)).collect(Collectors.toList());
+        List<Invoice> invoiceList =  invoices.stream().filter(invoice -> invoice.paidIn(month, year)).collect(Collectors.toList());
+        return new Invoices(invoiceList);
     }
 
     @RequestMapping(value = "/invoice/{invoiceNumber}")
-    public List<Invoice> invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
+    public Invoices invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
         FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();
-        return invoices;
+        return new Invoices(invoices);
     }
 
 }

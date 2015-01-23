@@ -114,7 +114,7 @@ public class InvoiceResourceTest extends BaseTest {
 
         when(fastbillRepository.request(any(FastbillRequestParameter.class))).thenReturn(fbResponse);
 
-        List<Invoice> invoices = getInvoiceResource().invoices(4, 2014);
+        List<Invoice> invoices = getInvoiceResource().invoices(4, 2014).getInvoices();
         assertEquals(1, invoices.size());
         assertEquals(new Long(2L) ,invoices.get(0).getInvoiceId());
 

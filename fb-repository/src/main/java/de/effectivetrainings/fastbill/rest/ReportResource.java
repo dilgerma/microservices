@@ -71,7 +71,7 @@ public class ReportResource extends BaseResource  {
         int monthOrDefault = (month == null || month == -1) ? -1 : month + 1;
         int yearOrDefault = year != null ? year : date.getYear();
 
-        List<Invoice> invoices = invoiceResource.invoices(monthOrDefault, yearOrDefault);
+        List<Invoice> invoices = invoiceResource.invoices(monthOrDefault, yearOrDefault).getInvoices();
 
         List<Expense> expenses = expenseResource.expenses(monthOrDefault, yearOrDefault);
 

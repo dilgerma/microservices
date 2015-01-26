@@ -1,9 +1,9 @@
-web: 
+web:
    build: fb-invoices
    ports:
    - "8081:8081"
-   links: 
-   - repository
+   links:
+   - repository:repository
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    #command: env
    volumes:
@@ -19,5 +19,28 @@ repository:
    environment:
    - user_email
    - user_apiKey
+lsf:
+   build: logstash-forwarder
+   volumes_from: ['logstash']
+   links:
+   - logstash
+elasticsearch:
+  image: clusterhq/elasticsearch
+  ports:
+   - "9200:9200"
+  volumes:
+   - /var/lib/elasticsearch
+logstash:
+  build: logstash
+  ports:
+   - "5000:5000"
+  links:
+   - elasticsearch:es
+  volumes:
+   - /etc/pki/tls/certs:/etc/pki/tls/certs
+kibana:
+  image: clusterhq/kibana
+  ports:
+   - "80:8088"
 #redis:
 #   image: redis

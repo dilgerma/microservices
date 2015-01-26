@@ -37,6 +37,7 @@ import de.effectivetrainings.fastbill.json.Invoice;
 import de.effectivetrainings.fastbill.json.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/rest/fastbill")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Slf4j
 public class InvoiceResource extends BaseResource  {
 
     private FastbillRepository fastbillRepository;
@@ -64,6 +66,7 @@ public class InvoiceResource extends BaseResource  {
 
     @RequestMapping(value = "/invoice")
     public Invoices invoices( @RequestParam(required = false, value = "month") Integer month, @RequestParam(required = false, value = "year") Integer year) {
+        log.debug("Requesting Invoices for Month: {} and Year: {}", month, year);
         /*
         * Currently Fastbill only allows to Filter by Invoice Date / Month.
         * What we want is to filter by Paid-Date / Month, so we need to load all invoices and filter manually...
@@ -76,6 +79,8 @@ public class InvoiceResource extends BaseResource  {
 
     @RequestMapping(value = "/invoice/{invoiceNumber}")
     public Invoices invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
+        log.debug("Requesting Invoices for Invoice Number ", invoiceNumber);
+
         FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();
         return new Invoices(invoices);

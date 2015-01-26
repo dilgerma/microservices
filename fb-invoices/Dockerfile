@@ -15,8 +15,5 @@ ENV PATH $PATH:$JAVA_HOME/bin
 #run apt-get install -y unzip
 run apt-get install -y curl
 COPY /build/libs/fb-invoices-0.1.0.jar /sources/app.jar
-#expose 8080
 # Install tools
-#CMD service tomcat7 start && tail -f /var/lib/tomcat7/logs/catalina.out
-#CMD java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 CMD java -jar /sources/app.jar

@@ -32,6 +32,7 @@ package de.effectivetrainings.fastbill.rest;
 import de.effectivetrainings.fastbill.json.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -49,6 +50,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/invoices")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Slf4j
 public class InvoiceResource extends BaseResource {
 
     private RestTemplate restTemplate;
@@ -61,8 +63,9 @@ public class InvoiceResource extends BaseResource {
         this.invoiceUri = invoiceUri;
     }
 
-    @RequestMapping("/foo")
+    @RequestMapping
     public Invoices foo() {
+        log.debug("Requesting all invoices");
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Invoices> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Invoices.class);
         return invoice.getBody();

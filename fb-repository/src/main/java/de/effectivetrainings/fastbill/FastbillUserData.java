@@ -49,4 +49,13 @@ public class FastbillUserData {
     public String getApiKey() {
         return apiKey;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FastbillUserData{");
+        sb.append("email='").append(email).append('\'');
+        sb.append(", apiKey='").append(apiKey).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

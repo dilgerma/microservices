@@ -9,8 +9,8 @@ input {
 
 output {
   elasticsearch {
-    host => "es"
-    port => 9200
+    host => es
+    port => 9300
   }
   stdout { codec => rubydebug }
 }

@@ -10,4 +10,10 @@ RUN git clone git://github.com/elasticsearch/logstash-forwarder.git /opt/logstas
 RUN cd /opt/logstash-forwarder && go build
 COPY logstash-forwarder-config.json /etc/logstash-forwarder/
 
+RUN mkdir -p /etc/pki/tls/certs
+COPY logstash-forwarder.crt /etc/pki/tls/certs/
+RUN chmod 0400 /etc/pki/tls/certs/logstash-forwarder.crt
+
+#all the application logs are here
+RUN mkdir -p /var/log/app
 CMD [ "/opt/logstash-forwarder/logstash-forwarder", "-config", "/etc/logstash-forwarder/logstash-forwarder-config.json" ]

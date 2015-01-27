@@ -6,41 +6,52 @@ web:
    - repository:repository
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    #command: env
-   volumes:
-   - /var/log/system:/var/log/system
+   volumes_from: ['lsf']
 repository:
    build: fb-repository
    expose:
    - "8080"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    #command: env
-   volumes:
-   - /var/log/system:/var/log/system
+   volumes_from: ['lsf']
    environment:
    - user_email
    - user_apiKey
 lsf:
    build: logstash-forwarder
-   volumes_from: ['logstash']
+#   volumes_from: ['logstash']
    links:
    - logstash
+   volumes:
+   - /var/log/app
 elasticsearch:
   image: clusterhq/elasticsearch
+  expose:
+  #dont use ports, use expose
+  - "9200"
+  - "9300"
   ports:
-   - "9200:9200"
+  - "9200:9200"
+  - "9300:9300"
   volumes:
    - /var/lib/elasticsearch
 logstash:
   build: logstash
-  ports:
-   - "5000:5000"
+  expose:
+  #dont use ports, use expose
+  - "5000"
   links:
    - elasticsearch:es
-  volumes:
-   - /etc/pki/tls/certs:/etc/pki/tls/certs
+#  volumes:
+#   - /etc/pki/tls/certs/
 kibana:
-  image: clusterhq/kibana
+  build: kibana
+#wird nicht gebraucht
+#  links:
+#  - elasticsearch
+  expose:
+  - "80"
   ports:
-   - "80:8088"
+   - "80:80"
 #redis:
 #   image: redis

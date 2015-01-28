@@ -11,7 +11,7 @@ repository:
    build: fb-repository
    expose:
    - "8080"
-   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   command: java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=mock -jar /sources/app.jar
    #command: env
    volumes_from: ['lsf']
    environment:

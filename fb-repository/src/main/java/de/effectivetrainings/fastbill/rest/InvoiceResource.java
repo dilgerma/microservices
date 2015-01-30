@@ -79,7 +79,7 @@ public class InvoiceResource extends BaseResource  {
 
     @RequestMapping(value = "/invoice/{invoiceNumber}")
     public Invoices invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
-        log.debug("Requesting Invoices for Invoice Number ", invoiceNumber);
+        log.info("Requesting Invoices for Invoice Number ", invoiceNumber);
 
         FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();

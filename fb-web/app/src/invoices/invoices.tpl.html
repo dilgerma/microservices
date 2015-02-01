@@ -1,0 +1,10 @@
+<div class="container" ui-view>
+    <a ng-click="load()">Load Invoices</a>
+    <pre>
+    {{invoices | json}}
+    </pre>
+
+    <div>
+        {{response | json}}
+    </div>
+</div>

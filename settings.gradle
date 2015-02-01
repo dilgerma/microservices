@@ -17,5 +17,5 @@ include 'services:webservice'
 */
 
 rootProject.name = 'fb-micro-services'
-include 'fb-repository', 'fb-invoices'
+include 'fb-repository', 'fb-invoices', 'fb-web'
 

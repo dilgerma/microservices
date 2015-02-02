@@ -1,4 +1,14 @@
-web:
+ui:
+   build: fb-web
+   hostname: fb-web
+   ports:
+   - "8081:8089"
+   links:
+   - invoices
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   #command: env
+   volumes_from: ['lsf']
+invoices:
    build: fb-invoices
    hostname: fb-invoice
    ports:

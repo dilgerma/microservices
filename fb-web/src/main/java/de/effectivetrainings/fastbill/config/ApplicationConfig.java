@@ -1,6 +1,7 @@
 package de.effectivetrainings.fastbill.config;
 
 import de.effectivetrainings.fastbill.rest.ServicesConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public ServicesConfig servicesConfig() {
-        return new ServicesConfig(null);
+    public ServicesConfig servicesConfig(@Value("${invoiceservice.uri}") String invoiceServiceUri) {
+        return new ServicesConfig(invoiceServiceUri);
     }
 }

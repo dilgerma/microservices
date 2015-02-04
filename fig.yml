@@ -2,7 +2,8 @@ ui:
    build: fb-web
    hostname: fb-web
    ports:
-   - "8081:8081"
+   #expose container port 8084 to port 80 to the world
+   - "80:8080"
    links:
    - invoices
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
@@ -45,8 +46,7 @@ elasticsearch:
   ports:
   - "9200:9200"
   - "9300:9300"
-  volumes:
-   - /var/lib/elasticsearch
+
 logstash:
   build: logstash
   expose:
@@ -64,6 +64,7 @@ kibana:
   expose:
   - "80"
   ports:
-   - "80:80"
+  #expose container port 80 to port 8090 to the world
+   - "8090:80"
 #redis:
 #   image: redis

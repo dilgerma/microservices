@@ -29,19 +29,18 @@
 package de.effectivetrainings.fastbill.rest;
 
 
-import de.effectivetrainings.fastbill.json.Amount;
-import de.effectivetrainings.fastbill.json.Invoice;
 import de.effectivetrainings.fastbill.json.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
@@ -58,18 +57,16 @@ public class FbFacade {
     private ServicesConfig servicesConfig;
 
     @Autowired
-    public FbFacade(RestTemplate restTemplate) {
+    public FbFacade(ServicesConfig servicesConfig, RestTemplate restTemplate) {
+        this.servicesConfig = servicesConfig;
         this.restTemplate = restTemplate;
     }
 
     @RequestMapping(value = "invoices")
     public Invoices invoices() {
-//        log.info("Requesting all invoices");
-//        HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
-//        ResponseEntity<Invoices> invoice = restTemplate.exchange(servicesConfig.getInvoiceBackendUri(), HttpMethod.GET, requestEntity, Invoices.class);
-//        return invoice.getBody();
-
-        Invoice invoice = new Invoice(1L, 2L, new Amount(5d,6d,7d), "effective trainings", new Date(), new Date(), "payment info", 0);
-        return new Invoices(Arrays.asList(invoice));
+        log.info("Requesting all invoices");
+        HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
+        ResponseEntity<Invoices> invoice = restTemplate.exchange(servicesConfig.getInvoiceBackendUri(), HttpMethod.GET, requestEntity, Invoices.class);
+        return invoice.getBody();
     }
 }

@@ -38,6 +38,8 @@ lsf:
    volumes:
    - /var/log/app
 elasticsearch:
+  #overwrite user from elasticsearch docker file, as this user cannot create the directory
+  user: root
   image: clusterhq/elasticsearch
   expose:
   #dont use ports, use expose
@@ -46,7 +48,8 @@ elasticsearch:
   ports:
   - "9200:9200"
   - "9300:9300"
-
+  volumes:
+  - ~/.elastic:/var/lib/elasticsearch
 logstash:
   build: logstash
   expose:

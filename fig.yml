@@ -1,3 +1,10 @@
+dockerui:
+  image: dockerui/dockerui
+  privileged: true
+  ports:
+  - "9000:9000"
+  volumes:
+  - /var/run/docker.sock:/var/run/docker.sock
 ui:
    build: fb-web
    hostname: fb-web

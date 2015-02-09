@@ -1,7 +1,6 @@
 FROM jordan/icinga2
 ADD database-ido.xml /etc/icinga-web/conf.d/database-ido.xml
-#ADD hosts.cfg /etc/icinga2/conf.d/hosts.cfg
-#ADD services.cfg
+ADD hosts-invoices-ui.conf /etc/icinga2/conf.d/hosts-invoices-ui.conf
 USER root
 ADD run /opt/run2
 RUN chmod u+x /opt/run2

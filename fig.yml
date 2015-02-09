@@ -20,6 +20,8 @@ icinga:
    hostname: icinga-host
    ports:
    - "8092:80"
+   links:
+   - ui:invoices-ui
 ui:
    build: fb-web
    hostname: fb-web

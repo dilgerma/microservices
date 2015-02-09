@@ -5,6 +5,23 @@ dockerui:
   - "9000:9000"
   volumes:
   - /var/run/docker.sock:/var/run/docker.sock
+#zabbix:
+#  image: berngp/docker-zabbix
+#  ports:
+#  - "8094:80"
+#  expose:
+#  - "10051"
+#  - "10052"
+#  - "2812"
+#  links:
+#  - invoices
+icinga:
+   build: icinga
+   ports:
+   - "8092:80"
+   environment:
+   - ICINGA_PASSWORD=icinga
+   - ICINGA_WEB_PASSWORD=icinga_web
 ui:
    build: fb-web
    hostname: fb-web

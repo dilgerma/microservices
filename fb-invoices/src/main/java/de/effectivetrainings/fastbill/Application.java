@@ -1,5 +1,6 @@
 package de.effectivetrainings.fastbill;
 
+import de.effectivetrainings.fastbill.config.MetricsConfig;
 import de.effectivetrainings.fastbill.config.RestConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableWebMvc
-@Import(RestConfig.class)
+@Import({RestConfig.class, MetricsConfig.class})
 public class Application
 {
 

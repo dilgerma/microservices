@@ -22,6 +22,8 @@ icinga:
    - "8092:80"
    links:
    - ui:invoices-ui
+   - invoices:fb-invoices-service
+   - repository:fb-backend
 ui:
    build: fb-web
    hostname: fb-web

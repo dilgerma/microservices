@@ -1,6 +1,6 @@
 FROM jordan/icinga2
 ADD database-ido.xml /etc/icinga-web/conf.d/database-ido.xml
-ADD hosts.cfg /etc/icinga-web/conf.d/hosts.cfg
+#ADD hosts.cfg /etc/icinga2/conf.d/hosts.cfg
 #ADD services.cfg
 USER root
 ADD run /opt/run2

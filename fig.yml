@@ -17,11 +17,9 @@ dockerui:
 #  - invoices
 icinga:
    build: icinga
+   hostname: icinga-host
    ports:
    - "8092:80"
-   environment:
-   - ICINGA_PASSWORD=icinga
-   - ICINGA_WEB_PASSWORD=icinga_web
 ui:
    build: fb-web
    hostname: fb-web

@@ -7,7 +7,8 @@
   "files": [
     {
       "paths": [
-        "/var/log/app/*.log"
+        "/var/log/app/*.log",
+        "/var/log/icinga2/*.log"
        ]
     }
    ]

@@ -24,6 +24,7 @@ icinga:
    - ui:invoices-ui
    - invoices:fb-invoices-service
    - repository:fb-backend
+   volumes_from: ['repository', 'ui','invoices']
 ui:
    build: fb-web
    hostname: fb-web

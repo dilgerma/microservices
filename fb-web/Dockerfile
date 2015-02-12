@@ -15,5 +15,9 @@ ENV PATH $PATH:$JAVA_HOME/bin
 #run apt-get install -y unzip
 run apt-get install -y curl
 COPY /build/libs/fb-web-0.1.0.jar /sources/app.jar
+#configure metrics
+ADD metrics/hosts-invoices-ui.conf /opt/metrics/invoices-ui/
+VOLUME /opt/metrics/invoices-ui
+
 # Install tools
 CMD java -jar /sources/app.jar

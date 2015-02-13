@@ -29,9 +29,9 @@
 package de.effectivetrainings.fastbill.rest;
 
 
-import de.effectivetrainings.fastbill.json.Expense;
-import de.effectivetrainings.fastbill.json.Invoice;
-import de.effectivetrainings.fastbill.json.Report;
+import de.effectivetrainings.billing.domain.Expense;
+import de.effectivetrainings.billing.domain.Invoice;
+import de.effectivetrainings.billing.domain.Report;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,7 @@ public class ReportResource extends BaseResource  {
 
         List<Invoice> invoices = invoiceResource.invoices(monthOrDefault, yearOrDefault).getInvoices();
 
-        List<Expense> expenses = expenseResource.expenses(monthOrDefault, yearOrDefault);
+        List<Expense> expenses = expenseResource.expenses(monthOrDefault, yearOrDefault).getExpenses();
 
         Report report = new Report(invoices, expenses, monthOrDefault, yearOrDefault);
         return report;

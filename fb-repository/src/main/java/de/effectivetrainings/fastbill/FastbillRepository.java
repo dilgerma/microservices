@@ -1,6 +1,6 @@
 package de.effectivetrainings.fastbill;
 
-import de.effectivetrainings.fastbill.json.FastbillResponse;
+import de.effectivetrainings.billing.domain.FastbillResponse;
 
 /**
  *

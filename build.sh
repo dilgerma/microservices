@@ -1,4 +1,5 @@
 #!/bin/bash
 gradle build
+fig rm --force
 fig build
-fig up
+fig up -d

@@ -24,7 +24,8 @@ icinga:
    - ui:invoices-ui
    - invoices:fb-invoices-service
    - repository:fb-backend
-   volumes_from: ['repository', 'ui','invoices']
+   - expenses:fb-expenses-service
+   volumes_from: ['repository', 'ui','invoices', 'expenses']
 ui:
    build: fb-web
    hostname: fb-web
@@ -33,12 +34,25 @@ ui:
    - "80:8080"
    links:
    - invoices
+   - expenses
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    #command: env
    volumes_from: ['lsf']
 invoices:
    build: fb-invoices
    hostname: fb-invoice
+   expose:
+   - "8081"
+   links:
+   - repository:repository
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   #command: env
+   volumes_from: ['lsf']
+expenses:
+   build: fb-expenses
+   hostname: fb-expense
+   ports:
+   - "8990:8081"
    expose:
    - "8081"
    links:

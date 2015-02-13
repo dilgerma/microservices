@@ -30,7 +30,7 @@ package de.effectivetrainings.fastbill.fastbill;
 
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.ServiceType;
-import de.effectivetrainings.fastbill.json.Filter;
+import de.effectivetrainings.billing.domain.Filter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

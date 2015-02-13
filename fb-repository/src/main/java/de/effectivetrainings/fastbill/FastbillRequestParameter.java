@@ -33,8 +33,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
-import de.effectivetrainings.fastbill.json.Filter;
-import de.effectivetrainings.fastbill.json.Filters;
+import de.effectivetrainings.billing.domain.Filter;
+import de.effectivetrainings.billing.domain.Filters;
 import lombok.Getter;
 
 import java.util.Arrays;

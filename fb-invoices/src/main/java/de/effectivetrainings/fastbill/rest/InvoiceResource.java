@@ -29,7 +29,7 @@
 package de.effectivetrainings.fastbill.rest;
 
 
-import de.effectivetrainings.fastbill.json.Invoices;
+import de.effectivetrainings.billing.domain.Invoices;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

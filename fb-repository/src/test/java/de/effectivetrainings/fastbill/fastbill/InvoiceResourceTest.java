@@ -31,10 +31,10 @@ package de.effectivetrainings.fastbill.fastbill;
 
 import com.google.common.collect.Lists;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.fastbill.json.FastbillResponse;
-import de.effectivetrainings.fastbill.json.Filter;
-import de.effectivetrainings.fastbill.json.Invoice;
-import de.effectivetrainings.fastbill.json.Response;
+import de.effectivetrainings.billing.domain.FastbillResponse;
+import de.effectivetrainings.billing.domain.Filter;
+import de.effectivetrainings.billing.domain.Invoice;
+import de.effectivetrainings.billing.domain.Response;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.test.web.servlet.MvcResult;

@@ -30,9 +30,9 @@ package de.effectivetrainings.fastbill.fastbill;
 
 
 import com.google.common.collect.Lists;
+import de.effectivetrainings.billing.domain.*;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.fastbill.json.*;
 import de.effectivetrainings.fastbill.rest.ExpenseResource;
 import de.effectivetrainings.fastbill.rest.InvoiceResource;
 import de.effectivetrainings.fastbill.rest.ReportResource;

@@ -3,7 +3,7 @@ require('angular');
 require('angular-ui-router');
 
 // home module
-angular.module('home', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
     /*config path for home page*/
     $stateProvider.state('rechnung', {
         url: '/',

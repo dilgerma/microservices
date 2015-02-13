@@ -32,7 +32,7 @@ import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.FastbillUserData;
 import de.effectivetrainings.fastbill.config.Profiles;
-import de.effectivetrainings.fastbill.json.FastbillResponse;
+import de.effectivetrainings.billing.domain.FastbillResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

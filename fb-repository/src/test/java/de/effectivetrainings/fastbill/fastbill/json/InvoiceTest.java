@@ -28,7 +28,7 @@
 
 package de.effectivetrainings.fastbill.fastbill.json;
 
-import de.effectivetrainings.fastbill.json.Invoice;
+import de.effectivetrainings.billing.domain.Invoice;
 import org.junit.Test;
 
 import java.time.Instant;

@@ -29,10 +29,10 @@
 package de.effectivetrainings.fastbill.rest;
 
 
+import de.effectivetrainings.billing.domain.*;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.ServiceType;
-import de.effectivetrainings.fastbill.json.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

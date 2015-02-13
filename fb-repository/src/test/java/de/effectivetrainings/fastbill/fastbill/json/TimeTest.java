@@ -1,7 +1,7 @@
 package de.effectivetrainings.fastbill.fastbill.json;
 
 
-import de.effectivetrainings.fastbill.json.Time;
+import de.effectivetrainings.billing.domain.Time;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

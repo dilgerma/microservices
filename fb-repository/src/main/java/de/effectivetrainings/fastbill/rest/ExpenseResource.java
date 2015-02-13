@@ -31,8 +31,9 @@ package de.effectivetrainings.fastbill.rest;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.ServiceType;
-import de.effectivetrainings.fastbill.json.Expense;
-import de.effectivetrainings.fastbill.json.Filter;
+import de.effectivetrainings.billing.domain.Expense;
+import de.effectivetrainings.billing.domain.Expenses;
+import de.effectivetrainings.billing.domain.Filter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +61,14 @@ public class ExpenseResource extends BaseResource {
     }
 
     @RequestMapping(value = "/expenses")
-    public List<Expense> expenses(@RequestParam(required = false, value = "month") Integer month, @RequestParam(required = false, value = "year") Integer year) {
+    public Expenses expenses(@RequestParam(required = false, value = "month") Integer month, @RequestParam(required = false, value = "year") Integer year) {
 
         Filter monthFilter = month != null ? new Filter(Filter.MONTH, String.valueOf(month)) : Filter.NONE;
         Filter yearFilter = year != null ? new Filter(Filter.YEAR, String.valueOf(year)) : Filter.NONE;
 
         FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.EXPENSES, -1, monthFilter, yearFilter);
         List<Expense> expenses = fastbillRepository.request(parameter).getResponse().getExpenses();
-        return expenses;
+        return new Expenses(expenses);
     }
 
     @RequestMapping(value = "/expenses/{invoiceNumber}")

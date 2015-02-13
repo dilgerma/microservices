@@ -30,7 +30,7 @@ package de.effectivetrainings.fastbill.fastbill;
 
 
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.fastbill.json.Filter;
+import de.effectivetrainings.billing.domain.Filter;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.test.web.servlet.MvcResult;

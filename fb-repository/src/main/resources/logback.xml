@@ -9,15 +9,15 @@
         </encoder>
     </appender>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%msg%n</pattern>
-        </encoder>
+    <appender name="LOGSTASH" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/app/fb-repository.json</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 
-    <root level="INFO">
+    <root level="info">
         <appender-ref ref="FILE"/>
-        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="LOGSTASH"/>-->
     </root>
+
 
 </configuration>

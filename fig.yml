@@ -5,16 +5,6 @@ dockerui:
   - "9000:9000"
   volumes:
   - /var/run/docker.sock:/var/run/docker.sock
-#zabbix:
-#  image: berngp/docker-zabbix
-#  ports:
-#  - "8094:80"
-#  expose:
-#  - "10051"
-#  - "10052"
-#  - "2812"
-#  links:
-#  - invoices
 icinga:
    build: icinga
    hostname: icinga-host
@@ -30,35 +20,32 @@ ui:
    build: fb-web
    hostname: fb-web
    ports:
-   #expose container port 8084 to port 80 to the world
    - "80:8080"
    links:
    - invoices
    - expenses
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   #command: env
    volumes_from: ['lsf']
 invoices:
    build: fb-invoices
-   hostname: fb-invoice
+   hostname: fb-invoices
    expose:
    - "8081"
    links:
    - repository:repository
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   #command: env
    volumes_from: ['lsf']
 expenses:
    build: fb-expenses
-   hostname: fb-expense
+   hostname: fb-expenses
    ports:
    - "8990:8081"
    expose:
    - "8081"
    links:
    - repository:repository
+   - logstash
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   #command: env
    volumes_from: ['lsf']
 repository:
    build: fb-repository
@@ -66,24 +53,20 @@ repository:
    expose:
    - "8080"
    command: java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=mock -jar /sources/app.jar
-   #command: env
    volumes_from: ['lsf']
    environment:
    - user_email
    - user_apiKey
 lsf:
    build: logstash-forwarder
-#   volumes_from: ['logstash']
    links:
    - logstash
    volumes:
    - /var/log/app
 elasticsearch:
-  #overwrite user from elasticsearch docker file, as this user cannot create the directory
   user: root
-  image: clusterhq/elasticsearch
+  build: elasticsearch
   expose:
-  #dont use ports, use expose
   - "9200"
   - "9300"
   ports:
@@ -94,21 +77,12 @@ elasticsearch:
 logstash:
   build: logstash
   expose:
-  #dont use ports, use expose
   - "5000"
   links:
    - elasticsearch:es
-#  volumes:
-#   - /etc/pki/tls/certs/
 kibana:
   build: kibana
-#wird nicht gebraucht
-#  links:
-#  - elasticsearch
   expose:
   - "80"
   ports:
-  #expose container port 80 to port 8090 to the world
    - "8090:80"
-#redis:
-#   image: redis

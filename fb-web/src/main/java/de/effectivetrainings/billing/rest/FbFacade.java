@@ -40,6 +40,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -83,5 +84,9 @@ public class FbFacade {
         return expenseResponse.getBody();
     }
 
+    @ExceptionHandler
+    public void handle(Exception ex) {
+        log.error("Error in UI",ex);
+    }
 
 }

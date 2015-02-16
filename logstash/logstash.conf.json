@@ -4,6 +4,12 @@ input {
     type => "logs"
     ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
     ssl_key => "/etc/pki/tls/priv/logstash-forwarder.key"
+    codec => multiline {
+          # Grok pattern names are valid! :)
+          pattern => "^%{TIMESTAMP_ISO8601} "
+          negate => true
+          what => previous
+        }
   }
 }
 

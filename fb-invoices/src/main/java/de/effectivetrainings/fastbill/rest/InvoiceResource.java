@@ -64,7 +64,7 @@ public class InvoiceResource extends BaseResource {
     }
 
     @RequestMapping
-    public Invoices foo() {
+    public Invoices invoices() {
         log.info("Requesting all invoices");
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Invoices> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Invoices.class);

@@ -28,6 +28,7 @@
 
 package de.effectivetrainings.fastbill.repository;
 
+import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.FastbillUserData;
@@ -59,6 +60,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
 
     //TODO extract to external spring config, and check why it does not work with @Value
     private static final String FASTBILL_API_URI = "https://my.fastbill.com/api/1.0/api.php";
+    private final CorrelationId correlationId;
 
     private RestTemplate restTemplate;
 
@@ -70,9 +72,10 @@ public class FastbillRepositoryImpl implements FastbillRepository {
 
 
     @Autowired
-    public FastbillRepositoryImpl(RestTemplate restTemplate, FastbillUserData userData) {
+    public FastbillRepositoryImpl(RestTemplate restTemplate, FastbillUserData userData, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.userData = userData;
+        this.correlationId = correlationId;
 
     }
 
@@ -94,6 +97,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
         String auth = "Basic " + new String(Base64.getEncoder().encode((userData.getEmail() + ":" + userData.getApiKey()).getBytes()));
         HttpHeaders headers = new HttpHeaders();
         headers.put("Authorization", Arrays.asList(auth));
+        headers.add(CorrelationId.CORRELATION_ID_HEADER_KEY, correlationId.getCorrelationId());
         return headers;
     }
 

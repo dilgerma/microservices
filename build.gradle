@@ -30,7 +30,7 @@ buildscript {
 
 allprojects {
     group = "de.effectivetrainings"
-    version = "1.0"
+    version = "0.1.0"
 
     repositories {
         // Use 'maven central' for resolving your dependencies.

@@ -16,7 +16,6 @@ apply plugin: 'spring-boot'
 
 jar {
     baseName = 'fb-repository'
-    version = '0.1.0'
 }
 
 repositories {
@@ -25,6 +24,12 @@ repositories {
 
 
 dependencies {
+
+    /**
+     * libs
+     */
+    compile project(":correlation-id")
+
 
     compile "org.projectlombok:lombok:1.14.8"
     compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"

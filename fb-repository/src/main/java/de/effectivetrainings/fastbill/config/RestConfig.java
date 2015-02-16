@@ -1,6 +1,7 @@
 package de.effectivetrainings.fastbill.config;
 
 import com.google.common.collect.Lists;
+import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.repository.FastbillRepositoryImpl;
 import de.effectivetrainings.fastbill.FastbillUserData;
@@ -23,8 +24,8 @@ public class RestConfig {
 
     @Profile(Profiles.PROD)
     @Bean
-    public FastbillRepository fastbillRepository(FastbillUserData fastbillUserData) {
-        return new FastbillRepositoryImpl(restTemplate(), fastbillUserData);
+    public FastbillRepository fastbillRepository(FastbillUserData fastbillUserData, CorrelationId correlationId) {
+        return new FastbillRepositoryImpl(restTemplate(), fastbillUserData, correlationId);
     }
 
     @Profile(Profiles.MOCK)

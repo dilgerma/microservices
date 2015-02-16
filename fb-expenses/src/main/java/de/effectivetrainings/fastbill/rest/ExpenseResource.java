@@ -29,6 +29,7 @@
 package de.effectivetrainings.fastbill.rest;
 
 
+import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.domain.Expenses;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,15 +58,18 @@ public class ExpenseResource extends BaseResource {
 
     private String expenseUri;
 
+    private CorrelationId correlationId;
+
     @Autowired
-    public ExpenseResource(@Value("${fastbill.expense.uri}") String expenseUri, RestTemplate restTemplate) {
+    public ExpenseResource(@Value("${fastbill.expense.uri}") String expenseUri, RestTemplate restTemplate, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.expenseUri = expenseUri;
+        this.correlationId = correlationId;
     }
 
     @RequestMapping
     public Expenses expenses() {
-        log.info("Requesting all expenses");
+        log.info("Requesting all expenses for correlation id : {}", correlationId.getCorrelationId());
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Expenses> expenses = restTemplate.exchange(expenseUri, HttpMethod.GET, requestEntity, Expenses.class);
         return expenses.getBody();

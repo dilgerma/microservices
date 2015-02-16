@@ -63,6 +63,8 @@ lsf:
    - logstash
    volumes:
    - /var/log/app
+elasticvolume:
+   build: elasticsearch-volume
 elasticsearch:
   user: root
   build: elasticsearch
@@ -72,8 +74,7 @@ elasticsearch:
   ports:
   - "9200:9200"
   - "9300:9300"
-  volumes:
-  - ~/.elastic:/var/lib/elasticsearch
+  volumes_from: ['elasticvolume']
 logstash:
   build: logstash
   expose:

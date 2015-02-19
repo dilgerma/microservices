@@ -91,12 +91,12 @@ kibana:
   expose:
   - "80"
   ports:
-   - "8090:80"
+  - "8090:80"
 graphite:
   image: hopsoft/graphite-statsd
   ports:
   #graphite itself
   - "8080:80"
-  #socker port
-  - "2004:2004"
-  - "8125:8125/udp"
+  expose:
+  #carbon port
+  - "2003"

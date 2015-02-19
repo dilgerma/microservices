@@ -4,6 +4,8 @@ import de.effectivetrainings.billing.rest.CorrelationIdInterceptor;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
+import de.effectivetrainings.spring.metrics.MetricsProvider;
+import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -21,15 +23,20 @@ import java.util.Arrays;
 public class ApplicationConfig {
 
     @Bean
-    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor) {
+    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor, RestRequestTimerInterceptor restRequestTimerInterceptor) {
         final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor));
+        restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor));
         return restTemplate;
     }
 
     @Bean
     public CorrelationIdInterceptor correlationIdInterceptor(CorrelationId correlationId) {
         return new CorrelationIdInterceptor(correlationId);
+    }
+
+    @Bean
+    public RestRequestTimerInterceptor restRequestTimerInterceptor(MetricsProvider metricsProvider) {
+        return new RestRequestTimerInterceptor("fb-ui", metricsProvider);
     }
 
     @Bean

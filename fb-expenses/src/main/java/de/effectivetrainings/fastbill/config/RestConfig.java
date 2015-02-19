@@ -17,8 +17,7 @@ import java.util.Arrays;
 public class RestConfig {
 
     @Bean
-    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor,RestRequestTimerInterceptor restRequestTimerInterceptor)
-    {
+    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor, RestRequestTimerInterceptor restRequestTimerInterceptor) {
         final RestTemplate restTemplate = new RestTemplate();
         restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor));
         return restTemplate;
@@ -30,7 +29,8 @@ public class RestConfig {
     }
 
     @Bean
-      public RestRequestTimerInterceptor restRequestTimerInterceptor(MetricsProvider metricsProvider) {
-          return new RestRequestTimerInterceptor(metricsProvider);
-      }
+    public RestRequestTimerInterceptor restRequestTimerInterceptor(MetricsProvider metricsProvider) {
+        //TODO dilgerm - fix magic string
+        return new RestRequestTimerInterceptor("expenses", metricsProvider);
+    }
 }

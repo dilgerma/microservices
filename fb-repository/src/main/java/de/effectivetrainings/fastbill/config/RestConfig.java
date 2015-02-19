@@ -61,7 +61,8 @@ public class RestConfig {
 
     @Bean
     public RestRequestTimerInterceptor restRequestTimerInterceptor(MetricsProvider metricsProvider) {
-        return new RestRequestTimerInterceptor(metricsProvider);
+        //TODO dilgerm - fix magic string
+        return new RestRequestTimerInterceptor("fb-repository", metricsProvider);
     }
 
 }

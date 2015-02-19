@@ -2,6 +2,7 @@ package de.effectivetrainings.fastbill.config;
 
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
@@ -10,23 +11,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
-public class MetricsConfig  {
+public class MetricsConfig {
 
     @Bean
-    public MetricRegistry metricRegistry() {
+    public MetricRegistry metricRegistry(List<ScheduledReporter> reporterList) {
         MetricRegistry registry =  new MetricRegistry();
         return registry;
     }
 
     @Bean
-    public GraphiteReporter reporter(MetricRegistry registry) {
+    public GraphiteReporter reporter() {
+        MetricRegistry registry = new MetricRegistry();
         final Graphite graphite = new Graphite(new InetSocketAddress("graphite", 8080));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                                                          .prefixedWith("invoices")
+                                                          .prefixedWith("fb-repository")
                                                           .convertRatesTo(TimeUnit.SECONDS)
                                                           .convertDurationsTo(TimeUnit.MILLISECONDS)
                                                           .filter(MetricFilter.ALL)

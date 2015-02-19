@@ -1,6 +1,7 @@
 package de.effectivetrainings.billing;
 
 import de.effectivetrainings.billing.config.ApplicationConfig;
+import de.effectivetrainings.billing.config.MetricsConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-@Import(ApplicationConfig.class)
+@Import({ApplicationConfig.class, MetricsConfig.class})
 public class Application
 {
 

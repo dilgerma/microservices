@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
-public class MetricsConfig  {
+public class MetricsConfig {
 
     @Bean
     public MetricRegistry metricRegistry() {
@@ -26,12 +26,11 @@ public class MetricsConfig  {
     public GraphiteReporter reporter(MetricRegistry registry) {
         final Graphite graphite = new Graphite(new InetSocketAddress("graphite", 8080));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                                                          .prefixedWith("invoices")
+                                                          .prefixedWith("expenses")
                                                           .convertRatesTo(TimeUnit.SECONDS)
                                                           .convertDurationsTo(TimeUnit.MILLISECONDS)
                                                           .filter(MetricFilter.ALL)
                                                           .build(graphite);
-        reporter.start(1l, TimeUnit.MINUTES);
         return reporter;
     }
 
@@ -39,4 +38,5 @@ public class MetricsConfig  {
     public MetricsProvider metricsProvider(MetricRegistry metricRegistry) {
         return new MetricsProvider(metricRegistry);
     }
+
 }

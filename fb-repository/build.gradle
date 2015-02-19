@@ -29,6 +29,7 @@ dependencies {
      * libs
      */
     compile project(":correlation-id")
+    compile project(":spring-metrics")
 
 
     compile "org.projectlombok:lombok:1.14.8"
@@ -38,6 +39,10 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
+
+    compile('com.codahale.metrics:metrics-graphite:3.0.1')
+
+
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("net.logstash.logback:logstash-logback-encoder:4.1")

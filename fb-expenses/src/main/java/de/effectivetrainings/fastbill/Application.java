@@ -1,8 +1,9 @@
 package de.effectivetrainings.fastbill;
 
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
+import de.effectivetrainings.correlation.request.CorrelationIdFilter;
+import de.effectivetrainings.fastbill.config.MetricsConfig;
 import de.effectivetrainings.fastbill.config.RestConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableWebMvc
-@Import({RestConfig.class})
+@Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 
     public static void main(String[] args) {

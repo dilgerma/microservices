@@ -1,4 +1,4 @@
-package de.effectivetrainings.fastbill.config;
+package de.effectivetrainings.billing.config;
 
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
-public class MetricsConfig  {
+public class MetricsConfig {
 
     @Bean
     public MetricRegistry metricRegistry() {
@@ -26,7 +26,7 @@ public class MetricsConfig  {
     public GraphiteReporter reporter(MetricRegistry registry) {
         final Graphite graphite = new Graphite(new InetSocketAddress("graphite", 8080));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                                                          .prefixedWith("invoices")
+                                                          .prefixedWith("fb-ui")
                                                           .convertRatesTo(TimeUnit.SECONDS)
                                                           .convertDurationsTo(TimeUnit.MILLISECONDS)
                                                           .filter(MetricFilter.ALL)

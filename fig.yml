@@ -5,6 +5,7 @@ dockerui:
   - "9000:9000"
   volumes:
   - /var/run/docker.sock:/var/run/docker.sock
+  mem_limit: 128m
 icinga:
    build: icinga
    hostname: icinga-host
@@ -16,6 +17,7 @@ icinga:
    - repository:fb-backend
    - expenses:fb-expenses-service
    volumes_from: ['repository', 'ui','invoices', 'expenses']
+   mem_limit: 1g
 ui:
    build: fb-web
    hostname: fb-web
@@ -27,6 +29,7 @@ ui:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
+   mem_limit: 512m
 invoices:
    build: fb-invoices
    hostname: fb-invoices
@@ -37,6 +40,7 @@ invoices:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
+   mem_limit: 512m
 expenses:
    build: fb-expenses
    hostname: fb-expenses
@@ -50,6 +54,7 @@ expenses:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
+   mem_limit: 512m
 repository:
    build: fb-repository
    hostname: fb-repository
@@ -62,6 +67,7 @@ repository:
    - user_apiKey
    links:
    - graphite
+   mem_limit: 512m
 lsf:
    build: logstash-forwarder
    links:
@@ -70,6 +76,7 @@ lsf:
    - /var/log/app
 elasticvolume:
    build: elasticsearch-volume
+   mem_limit: 512m
 elasticsearch:
   user: root
   build: elasticsearch
@@ -80,18 +87,21 @@ elasticsearch:
   - "9200:9200"
   - "9300:9300"
   volumes_from: ['elasticvolume']
+  mem_limit: 1g
 logstash:
   build: logstash
   expose:
   - "5000"
   links:
    - elasticsearch:es
+  mem_limit: 1g
 kibana:
   build: kibana
   expose:
   - "80"
   ports:
   - "8090:80"
+  mem_limit: 256m
 graphite:
   image: hopsoft/graphite-statsd
   ports:
@@ -100,3 +110,10 @@ graphite:
   expose:
   #carbon port
   - "2003"
+  mem_limit: 1g
+#mongo:
+#  image: dockerfile/mongodb
+#  volumes:
+#  - /data/db
+#  expose:
+#  - "27017"

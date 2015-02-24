@@ -1,3 +1,5 @@
+gradlew*
+gradle
 .tmp
 .sass*
 .gitconfig

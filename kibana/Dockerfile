@@ -1,5 +1,5 @@
 FROM nginx:1.7
-WORKDIR /tml
+WORKDIR /tmp
 #does work with docker but not with fig?
 #ADD https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz /tmp/kibana.tar.gz
 RUN apt-get update

@@ -26,33 +26,25 @@
  */
 
 
-package de.effectivetrainings.billing.domain;
+package de.effectivetrainings.fastbill.rest;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 24.04.14
+ * @since: 02.04.14
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+public class BaseResource {
 
-    @JsonProperty(value = "CUSTOMER_ID")
-    private String customerId;
+    private static final Logger LOG = LoggerFactory.getLogger(BaseResource.class);
 
-    @JsonProperty(value = "CUSTOMER_NUMBER")
-    private String customerNumber;
-
-    @JsonProperty(value = "ORGANIZATION")
-    private String organization;
-
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler
+    protected void handle(Exception e) {
+        LOG.warn("Resource ERROR", e);
+    }
 }

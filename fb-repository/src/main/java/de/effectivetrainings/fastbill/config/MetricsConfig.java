@@ -26,7 +26,7 @@ public class MetricsConfig {
     public GraphiteReporter reporter(MetricRegistry registry) {
         final Graphite graphite = new Graphite(new InetSocketAddress("graphite", 2003));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                                                          .prefixedWith("fb-repository")
+                                                          .prefixedWith("repository")
                                                           .convertRatesTo(TimeUnit.SECONDS)
                                                           .convertDurationsTo(TimeUnit.MILLISECONDS)
                                                           .filter(MetricFilter.ALL)

@@ -30,6 +30,7 @@ package de.effectivetrainings.billing.rest;
 
 
 import de.effectivetrainings.billing.config.ServicesConfig;
+import de.effectivetrainings.billing.domain.Customers;
 import de.effectivetrainings.billing.domain.Expenses;
 import de.effectivetrainings.billing.domain.Invoices;
 import lombok.AccessLevel;
@@ -75,6 +76,12 @@ public class FbFacade {
         log.info("Requesting all expenses");
         return request(servicesConfig.getExpenseBackendURI(), Expenses.class);
     }
+
+    @RequestMapping(value = "customers")
+        public Customers customers() {
+            log.info("Requesting all customers");
+            return request(servicesConfig.getCustomersBackendURI(), Customers.class);
+        }
 
     private <T> T request(String uri, Class<T> target) {
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());

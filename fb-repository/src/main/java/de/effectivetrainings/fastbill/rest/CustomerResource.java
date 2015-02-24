@@ -26,33 +26,44 @@
  */
 
 
-package de.effectivetrainings.billing.domain;
+package de.effectivetrainings.fastbill.rest;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import de.effectivetrainings.billing.domain.Customer;
+import de.effectivetrainings.billing.domain.Customers;
+import de.effectivetrainings.billing.domain.Filter;
+import de.effectivetrainings.fastbill.FastbillRepository;
+import de.effectivetrainings.fastbill.FastbillRequestParameter;
+import de.effectivetrainings.fastbill.ServiceType;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 24.04.14
+ * @since: 28.03.14
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+@RestController
+@RequestMapping("/rest/fastbill")
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+public class CustomerResource extends BaseResource {
 
-    @JsonProperty(value = "CUSTOMER_ID")
-    private String customerId;
+    private FastbillRepository fastbillRepository;
 
-    @JsonProperty(value = "CUSTOMER_NUMBER")
-    private String customerNumber;
+    @Autowired
+    public CustomerResource(FastbillRepository repository) {
+        this.fastbillRepository = repository;
+    }
 
-    @JsonProperty(value = "ORGANIZATION")
-    private String organization;
+    @RequestMapping(value = "/customers")
+    public Customers customers() {
+
+        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.CUSTOMER, -1, Filter.NONE);
+        List<Customer> expenses = fastbillRepository.request(parameter).getResponse().getCustomers();
+        return new Customers(expenses);
+    }
 
 }

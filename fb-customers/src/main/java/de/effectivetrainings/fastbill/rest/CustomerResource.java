@@ -26,33 +26,48 @@
  */
 
 
-package de.effectivetrainings.billing.domain;
+package de.effectivetrainings.fastbill.rest;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+
+import de.effectivetrainings.customermanagement.domain.Customers;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 24.04.14
+ * @since: 28.03.14
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+@RestController
+@RequestMapping("/customers")
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Slf4j
+public class CustomerResource extends BaseResource {
 
-    @JsonProperty(value = "CUSTOMER_ID")
-    private String customerId;
+    private RestTemplate restTemplate;
 
-    @JsonProperty(value = "CUSTOMER_NUMBER")
-    private String customerNumber;
+    private String invoiceUri;
 
-    @JsonProperty(value = "ORGANIZATION")
-    private String organization;
+    @Autowired
+    public CustomerResource(@Value("${fastbill.customer.uri}") String customerUri, RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        this.invoiceUri = customerUri;
+    }
 
+    @RequestMapping
+    public Customers invoices() {
+        log.info("Requesting all customers");
+        HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
+        ResponseEntity<Customers> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Customers.class);
+        return invoice.getBody();
+    }
 }

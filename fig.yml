@@ -5,7 +5,7 @@ dockerui:
   - "9000:9000"
   volumes:
   - /var/run/docker.sock:/var/run/docker.sock
-  mem_limit: 128m
+  mem_limit: 56m
 icinga:
    build: icinga
    hostname: icinga-host
@@ -16,7 +16,8 @@ icinga:
    - invoices:fb-invoices-service
    - repository:fb-backend
    - expenses:fb-expenses-service
-   volumes_from: ['repository', 'ui','invoices', 'expenses']
+   - customers:fb-customer-service
+   volumes_from: ['repository', 'ui','invoices', 'expenses', 'customers']
    mem_limit: 1g
 ui:
    build: fb-web
@@ -26,10 +27,11 @@ ui:
    links:
    - invoices
    - expenses
+   - customers
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   mem_limit: 512m
+   mem_limit: 324m
 invoices:
    build: fb-invoices
    hostname: fb-invoices
@@ -40,12 +42,10 @@ invoices:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   mem_limit: 512m
+   mem_limit: 324m
 expenses:
    build: fb-expenses
    hostname: fb-expenses
-   ports:
-   - "8990:8081"
    expose:
    - "8081"
    links:
@@ -54,7 +54,19 @@ expenses:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   mem_limit: 512m
+   mem_limit: 324m
+customers:
+   build: fb-customers
+   hostname: fb-customers
+   expose:
+   - "8081"
+   links:
+   - repository:repository
+   - logstash
+   - graphite
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   volumes_from: ['lsf']
+   mem_limit: 324m
 repository:
    build: fb-repository
    hostname: fb-repository
@@ -67,7 +79,7 @@ repository:
    - user_apiKey
    links:
    - graphite
-   mem_limit: 512m
+   mem_limit: 324m
 lsf:
    build: logstash-forwarder
    links:
@@ -101,7 +113,7 @@ kibana:
   - "80"
   ports:
   - "8090:80"
-  mem_limit: 256m
+  mem_limit: 128m
 graphite:
   image: hopsoft/graphite-statsd
   ports:
@@ -118,7 +130,7 @@ grafana:
   links:
   - elasticsearch
   - graphite
-  mem_limit: 128m
+  mem_limit: 56m
 #dockerode:
 #  build: node-base-image
 #  volumes:

@@ -40,8 +40,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public ServicesConfig servicesConfig(@Value("${invoiceservice.uri}") String invoiceServiceUri, @Value("${expenseservice.uri}") String expenseServiceUri) {
-        return new ServicesConfig(invoiceServiceUri, expenseServiceUri);
+    public ServicesConfig servicesConfig(@Value("${invoiceservice.uri}") String invoiceServiceUri, @Value("${expenseservice.uri}") String expenseServiceUri, @Value("${customerservice.uri}") String customerServiceUri) {
+        return new ServicesConfig(invoiceServiceUri, expenseServiceUri, customerServiceUri);
     }
 
     @Bean

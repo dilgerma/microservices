@@ -22,8 +22,23 @@ public class FastbillMockRepository implements FastbillRepository {
             return retrieveMockedInvoices();
         } else if (ServiceType.EXPENSES.getServicesType().equals(parameter.getServiceType())) {
             return retrieveMockedExpenses();
+        } else if (ServiceType.CUSTOMER.getServicesType().equals(parameter.getServiceType())) {
+            return retrieveMockedCustomers();
         }
         throw new IllegalStateException(parameter.getServiceType() + " currently not supported by mock");
+    }
+
+    private FastbillResponse retrieveMockedCustomers() {
+        FastbillResponse fastbillResponse = new FastbillResponse();
+        fastbillResponse.setResponse(new Response());
+
+        List<Customer> customerList = new ArrayList<>();
+
+        Customer customer = new Customer("4711", "1111", "effective trainings & consulting");
+        customerList.add(customer);
+
+        fastbillResponse.getResponse().setCustomers(customerList);
+        return fastbillResponse;
     }
 
     private FastbillResponse retrieveMockedExpenses() {
@@ -32,7 +47,7 @@ public class FastbillMockRepository implements FastbillRepository {
 
         List<Expense> expenseList = new ArrayList<>();
 
-        Expense expense = new Expense("effective trainings", "4711", new Date(), new Date(), new Amount(25.0, 5.0,30.0), "comment");
+        Expense expense = new Expense("effective trainings", "4711", new Date(), new Date(), new Amount(25.0, 5.0, 30.0), "comment");
         expenseList.add(expense);
 
         fastbillResponse.getResponse().setExpenses(expenseList);

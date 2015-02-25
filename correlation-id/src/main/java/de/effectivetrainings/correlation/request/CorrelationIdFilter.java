@@ -2,7 +2,6 @@ package de.effectivetrainings.correlation.request;
 
 import com.google.common.base.Strings;
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.correlation.request.CorrelationIdServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 

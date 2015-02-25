@@ -28,15 +28,16 @@
 
 package de.effectivetrainings.fastbill.repository;
 
+import de.effectivetrainings.billing.domain.FastbillResponse;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.FastbillRepository;
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.FastbillUserData;
 import de.effectivetrainings.fastbill.config.Profiles;
-import de.effectivetrainings.billing.domain.FastbillResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -59,23 +60,21 @@ public class FastbillRepositoryImpl implements FastbillRepository {
     private static final Logger LOG = LoggerFactory.getLogger(FastbillRepositoryImpl.class);
 
     //TODO extract to external spring config, and check why it does not work with @Value
-    private static final String FASTBILL_API_URI = "https://my.fastbill.com/api/1.0/api.php";
     private final CorrelationId correlationId;
 
     private RestTemplate restTemplate;
 
     private FastbillUserData userData;
 
-    //TODO why the heck does this not work???
-    //@Value("${app.fastbill.uri}")
-//    private String apiURI =
+    private String apiURI;
 
 
     @Autowired
-    public FastbillRepositoryImpl(RestTemplate restTemplate, FastbillUserData userData, CorrelationId correlationId) {
+    public FastbillRepositoryImpl( @Value("${app.fastbill.uri}") String apiUri, RestTemplate restTemplate, FastbillUserData userData, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.userData = userData;
         this.correlationId = correlationId;
+        this.apiURI = apiUri;
 
     }
 
@@ -84,7 +83,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
         try {
             HttpHeaders headers = getHttpHeaders();
             HttpEntity entity = new HttpEntity(parameter.toJson(), headers);
-            ResponseEntity<FastbillResponse> exchange = restTemplate.exchange(FASTBILL_API_URI, HttpMethod.POST, entity, FastbillResponse.class);
+            ResponseEntity<FastbillResponse> exchange = restTemplate.exchange(apiURI, HttpMethod.POST, entity, FastbillResponse.class);
             return exchange.getBody();
         } catch (Exception e)
         {

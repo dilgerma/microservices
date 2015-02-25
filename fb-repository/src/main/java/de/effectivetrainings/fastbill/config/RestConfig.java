@@ -3,11 +3,12 @@ package de.effectivetrainings.fastbill.config;
 import com.google.common.collect.Lists;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.FastbillRepository;
-import de.effectivetrainings.fastbill.repository.FastbillRepositoryImpl;
 import de.effectivetrainings.fastbill.FastbillUserData;
 import de.effectivetrainings.fastbill.repository.FastbillMockRepository;
+import de.effectivetrainings.fastbill.repository.FastbillRepositoryImpl;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +17,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,8 +29,8 @@ public class RestConfig {
 
     @Profile(Profiles.PROD)
     @Bean
-    public FastbillRepository fastbillRepository(FastbillUserData fastbillUserData, CorrelationId correlationId, RestRequestTimerInterceptor restRequestTimerInterceptor) {
-        return new FastbillRepositoryImpl(restTemplate(restRequestTimerInterceptor), fastbillUserData, correlationId);
+    public FastbillRepository fastbillRepository(@Value("${fastbill.api.uri}") URI fastbillApiUri, FastbillUserData fastbillUserData, CorrelationId correlationId, RestRequestTimerInterceptor restRequestTimerInterceptor) {
+        return new FastbillRepositoryImpl(fastbillApiUri.toString(), restTemplate(restRequestTimerInterceptor), fastbillUserData, correlationId);
     }
 
     @Profile(Profiles.MOCK)

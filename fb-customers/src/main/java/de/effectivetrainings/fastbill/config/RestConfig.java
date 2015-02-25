@@ -24,7 +24,7 @@ public class RestConfig {
     @Bean
     public RestRequestTimerInterceptor requestTimer(MetricsProvider metricsProvider) {
         //TODO dilgerm - fix magic string
-        return new RestRequestTimerInterceptor("customers", metricsProvider);
+        return new RestRequestTimerInterceptor(metricsProvider);
     }
 
     @Bean

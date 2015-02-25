@@ -36,7 +36,7 @@ public class ApplicationConfig {
 
     @Bean
     public RestRequestTimerInterceptor restRequestTimerInterceptor(MetricsProvider metricsProvider) {
-        return new RestRequestTimerInterceptor("fb-ui", metricsProvider);
+        return new RestRequestTimerInterceptor(metricsProvider);
     }
 
     @Bean

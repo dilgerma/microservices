@@ -16,11 +16,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MetricsConfig  {
 
-    @Bean
-    public MetricRegistry metricRegistry() {
-        MetricRegistry registry =  new MetricRegistry();
-        return registry;
-    }
 
     @Bean
     public GraphiteReporter reporter(MetricRegistry registry) {

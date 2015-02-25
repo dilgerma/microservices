@@ -17,12 +17,6 @@ import java.util.concurrent.TimeUnit;
 public class MetricsConfig {
 
     @Bean
-    public MetricRegistry metricRegistry() {
-        MetricRegistry registry =  new MetricRegistry();
-        return registry;
-    }
-
-    @Bean
     public GraphiteReporter reporter(MetricRegistry registry) {
         final Graphite graphite = new Graphite(new InetSocketAddress("graphite", 2003));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)

@@ -1,7 +1,9 @@
 package de.effectivetrainings.spring.metrics;
 
-import com.codahale.metrics.*;
-import com.google.common.base.Joiner;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,9 +11,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MetricsProvider {
-
-    private static final String COUNTER_SUFFIX = "counter";
-    private static final String METER_SUFFIX = "requestCount";
 
     private MetricRegistry metricRegistry;
 
@@ -23,11 +22,11 @@ public class MetricsProvider {
         return metricRegistry.timer(serviceName);
     }
 
-    public Counter counter(String serviceName, String call) {
-        return metricRegistry.counter(Joiner.on(".").join(serviceName, call, COUNTER_SUFFIX));
+    public Counter counter(String call) {
+        return metricRegistry.counter(call);
     }
 
-    public Meter meter(String serviceName, String call) {
-        return metricRegistry.meter(Joiner.on(".").join(serviceName, call, METER_SUFFIX));
+    public Meter meter(String call) {
+        return metricRegistry.meter(call);
     }
 }

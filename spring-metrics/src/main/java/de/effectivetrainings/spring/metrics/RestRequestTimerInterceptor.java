@@ -16,18 +16,15 @@ public class RestRequestTimerInterceptor implements ClientHttpRequestInterceptor
 
     private MetricsProvider metricsProvider;
 
-    private String serviceName;
-
-    public RestRequestTimerInterceptor(String serviceName, MetricsProvider metricsProvider) {
+    public RestRequestTimerInterceptor(MetricsProvider metricsProvider) {
         this.metricsProvider = metricsProvider;
-        this.serviceName = serviceName;
     }
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        Timer timer = metricsProvider.timer(serviceName);
+        Timer timer = metricsProvider.timer("request-timer");
         Timer.Context context = timer.time();
-        Meter meter = metricsProvider.meter(serviceName, request.getURI().getPath());
+        Meter meter = metricsProvider.meter(request.getURI().getPath());
 
         try {
             ClientHttpResponse response = execution.execute(request, body);

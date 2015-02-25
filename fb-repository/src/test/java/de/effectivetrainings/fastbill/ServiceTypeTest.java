@@ -26,7 +26,7 @@
  */
 
 
-package de.effectivetrainings.fastbill.fastbill;
+package de.effectivetrainings.fastbill;
 
 import de.effectivetrainings.fastbill.FastbillRequestParameter;
 import de.effectivetrainings.fastbill.ServiceType;
@@ -37,13 +37,20 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 02.04.14
+ * @since: 28.03.14
  */
-public class FastbillRequestParameterTest {
+public class ServiceTypeTest {
 
     @Test
-    public void testToJson() {
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, 0, new Filter("name", "value"), new Filter("name2", "value2"), Filter.NONE);
-        assertEquals("{\"service\":\"invoice.get\",\"Limit\":0,\"Filter\":{\"name\":\"value\",\"name2\":\"value2\"}}", parameter.toJson());
+    public void invoiceServiceTypeWithFilter() {
+        ServiceType type = ServiceType.EXPENSES;
+        Filter filter = new Filter(Filter.INVOICE_NUMBER, "12");
+        FastbillRequestParameter parameter = new FastbillRequestParameter(type, -1, filter);
+
+        assertEquals("{\"service\":\"" + type.getServicesType() +
+            "\",\"Limit\":-1,\"Filter\":{\""
+            + Filter.INVOICE_NUMBER + "\":\""
+            + filter.getFilterValue()
+            + "\"}}", parameter.toJson());
     }
 }

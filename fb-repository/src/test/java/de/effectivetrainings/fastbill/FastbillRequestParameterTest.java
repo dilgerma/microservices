@@ -26,53 +26,24 @@
  */
 
 
-package de.effectivetrainings.fastbill.fastbill.json;
+package de.effectivetrainings.fastbill;
 
-import de.effectivetrainings.billing.domain.Invoice;
+import de.effectivetrainings.fastbill.FastbillRequestParameter;
+import de.effectivetrainings.fastbill.ServiceType;
+import de.effectivetrainings.billing.domain.Filter;
 import org.junit.Test;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.util.Date;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 03.04.14
+ * @since: 02.04.14
  */
-public class InvoiceTest {
+public class FastbillRequestParameterTest {
 
     @Test
-    public void paidInOnlyAppliesIfFilterSet() {
-        assertTrue(new Invoice().paidIn(null,null));
+    public void testToJson() {
+        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, 0, new Filter("name", "value"), new Filter("name2", "value2"), Filter.NONE);
+        assertEquals("{\"service\":\"invoice.get\",\"Limit\":0,\"Filter\":{\"name\":\"value\",\"name2\":\"value2\"}}", parameter.toJson());
     }
-
-    @Test
-    public void paidInOnlyAppliesIfInvoicePaid() {
-        Invoice invoice = new Invoice();
-        assertFalse(invoice.isPaid());
-        assertFalse(invoice.paidIn(1, 2013));
-    }
-
-    @Test
-    public void paidInChecksForMonthAndYear() {
-        Invoice invoice = new Invoice();
-
-        LocalDateTime ldt = LocalDateTime.of(2014, Month.APRIL, 1, 0, 0);
-
-        Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
-        invoice.setPaidDate(new Date().from(instant));
-
-        assertTrue(invoice.isPaid());
-        assertTrue(invoice.paidIn(4, 2014));
-        assertTrue(invoice.paidIn(null, 2014));
-        assertTrue(invoice.paidIn(4, null));
-    }
-
-
-
 }

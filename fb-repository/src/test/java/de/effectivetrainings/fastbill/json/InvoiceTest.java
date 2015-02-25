@@ -26,31 +26,53 @@
  */
 
 
-package de.effectivetrainings.fastbill.fastbill;
+package de.effectivetrainings.fastbill.json;
 
-import de.effectivetrainings.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.fastbill.ServiceType;
-import de.effectivetrainings.billing.domain.Filter;
+import de.effectivetrainings.billing.domain.Invoice;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 28.03.14
+ * @since: 03.04.14
  */
-public class ServiceTypeTest {
+public class InvoiceTest {
 
     @Test
-    public void invoiceServiceTypeWithFilter() {
-        ServiceType type = ServiceType.EXPENSES;
-        Filter filter = new Filter(Filter.INVOICE_NUMBER, "12");
-        FastbillRequestParameter parameter = new FastbillRequestParameter(type, -1, filter);
-
-        assertEquals("{\"service\":\"" + type.getServicesType() +
-            "\",\"Limit\":-1,\"Filter\":{\""
-            + Filter.INVOICE_NUMBER + "\":\""
-            + filter.getFilterValue()
-            + "\"}}", parameter.toJson());
+    public void paidInOnlyAppliesIfFilterSet() {
+        assertTrue(new Invoice().paidIn(null,null));
     }
+
+    @Test
+    public void paidInOnlyAppliesIfInvoicePaid() {
+        Invoice invoice = new Invoice();
+        assertFalse(invoice.isPaid());
+        assertFalse(invoice.paidIn(1, 2013));
+    }
+
+    @Test
+    public void paidInChecksForMonthAndYear() {
+        Invoice invoice = new Invoice();
+
+        LocalDateTime ldt = LocalDateTime.of(2014, Month.APRIL, 1, 0, 0);
+
+        Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
+        invoice.setPaidDate(new Date().from(instant));
+
+        assertTrue(invoice.isPaid());
+        assertTrue(invoice.paidIn(4, 2014));
+        assertTrue(invoice.paidIn(null, 2014));
+        assertTrue(invoice.paidIn(4, null));
+    }
+
+
+
 }

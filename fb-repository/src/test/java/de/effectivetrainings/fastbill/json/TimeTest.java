@@ -1,4 +1,4 @@
-package de.effectivetrainings.fastbill.fastbill.json;
+package de.effectivetrainings.fastbill.json;
 
 
 import de.effectivetrainings.billing.domain.Time;

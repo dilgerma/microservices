@@ -26,49 +26,39 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-package de.effectivetrainings.fastbill.fastbill;
+package de.effectivetrainings.fastbill;
 
 
-import com.google.common.collect.Lists;
-import de.effectivetrainings.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billing.domain.FastbillResponse;
 import de.effectivetrainings.billing.domain.Filter;
-import de.effectivetrainings.billing.domain.Invoice;
-import de.effectivetrainings.billing.domain.Response;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
 * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
-* @since: 28.03.14
+* @since: 01.04.14
 */
-public class InvoiceResourceTest extends BaseTest {
+public class ExpenseResourceTest extends BaseTest {
 
     @Test
-    public void requestInvoices() throws Exception {
-        MvcResult result = getMockMVC().perform(get("/rest/fastbill/invoice"))
+    public void requestExpenses() throws Exception {
+        MvcResult result = getMockMVC().perform(get("/rest/fastbill/expenses"))
             .andExpect(status().isOk()).andReturn();
         verify(fastbillRepository).request(any(FastbillRequestParameter.class));
     }
 
-
-
     @Test
-    public void requestInvoicesWithId() throws Exception {
-        MvcResult result = getMockMVC().perform(get("/rest/fastbill/invoice/2"))
+    public void requestExpensesWithId() throws Exception {
+        MvcResult result = getMockMVC().perform(get("/rest/fastbill/expenses/2"))
             .andExpect(status().isOk()).andReturn();
         ArgumentCaptor<FastbillRequestParameter> filterCaptor = ArgumentCaptor.forClass(FastbillRequestParameter.class);
         verify(fastbillRepository).request(filterCaptor.capture());
@@ -78,45 +68,18 @@ public class InvoiceResourceTest extends BaseTest {
     }
 
     @Test
-    public void requestInvoicesByMonth() throws Exception {
-        MvcResult result = getMockMVC().perform(get("/rest/fastbill/invoice?month=1&year=2014"))
+    public void requestExpensesForMonth() throws Exception {
+        MvcResult result = getMockMVC().perform(get("/rest/fastbill/expenses?month=1&year=2014"))
             .andExpect(status().isOk()).andReturn();
-
         ArgumentCaptor<FastbillRequestParameter> filterCaptor = ArgumentCaptor.forClass(FastbillRequestParameter.class);
         verify(fastbillRepository).request(filterCaptor.capture());
 
-        FastbillRequestParameter parameter = filterCaptor.getValue();
-        //only Filter.NONE is passed
-        assertEquals(1, parameter.getFilters().getFilters().size());
-        assertEquals(Filter.NONE, parameter.getFilters().getFilters().get(0));
+        FastbillRequestParameter captured = filterCaptor.getValue();
+        List<Filter> requestFilters = captured.getFilters().getFilters();
+
+        assertTrue(requestFilters.contains(new Filter(Filter.MONTH, "1")));
+        assertTrue(requestFilters.contains(new Filter(Filter.YEAR, "2014")));
     }
 
 
-    @Test
-    public void invoicesByMonth() {
-
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceId(1L);
-        Invoice validPaidInvoice = new Invoice();
-        validPaidInvoice.setInvoiceId(2L);
-        //paid on january 1st
-        validPaidInvoice.setPaidDate(Date.from(LocalDateTime.of(2014, 4, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
-
-        Invoice invalidPaidInvoice = new Invoice();
-        invalidPaidInvoice.setInvoiceId(3L);
-        //paid on january 1st
-        invalidPaidInvoice.setPaidDate(Date.from(LocalDateTime.of(2014, 3, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
-
-        FastbillResponse fbResponse = new FastbillResponse();
-        Response response = new Response();
-        fbResponse.setResponse(response);
-        response.setInvoices(Lists.newArrayList(validPaidInvoice, invalidPaidInvoice, invoice));
-
-        when(fastbillRepository.request(any(FastbillRequestParameter.class))).thenReturn(fbResponse);
-
-        List<Invoice> invoices = getInvoiceResource().invoices(4, 2014).getInvoices();
-        assertEquals(1, invoices.size());
-        assertEquals(new Long(2L) ,invoices.get(0).getInvoiceId());
-
-    }
 }

@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-package de.effectivetrainings.fastbill.fastbill;
+package de.effectivetrainings.fastbill;
 
 
 import com.google.common.collect.Lists;

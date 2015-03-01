@@ -65,7 +65,7 @@ public class MetricsConfig {
             log.info("Running Invoice Service Health Check");
             final boolean healthy = healthChecks.entrySet().stream().filter((h) -> !h.getValue().isHealthy()).findFirst().isPresent();
             log.info("Service Health Check : {}", healthy);
-            return healthy;
+            return healthy ? 1 : 0;
         });
     }
 }

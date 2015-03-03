@@ -18,5 +18,5 @@ output {
     host => es
     port => 9300
   }
-  stdout { codec => rubydebug }
+#  stdout { codec => rubydebug }
 }

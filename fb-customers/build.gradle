@@ -1,3 +1,6 @@
+
+def projectName = "fb-customers"
+
 buildscript {
     repositories {
         mavenCentral()
@@ -8,12 +11,11 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'fb-customers'
+    baseName = projectName
 }
 
 repositories {

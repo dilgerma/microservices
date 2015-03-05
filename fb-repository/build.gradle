@@ -1,9 +1,13 @@
+def projectName = 'fb-repository'
+
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+
     }
 }
 
@@ -12,7 +16,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'fb-repository'
+    baseName = projectName
 }
 
 repositories {

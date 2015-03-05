@@ -1,3 +1,5 @@
+def projectName = "fb-web"
+
 buildscript {
     repositories {
         mavenCentral()
@@ -13,7 +15,7 @@ apply plugin: 'spring-boot'
 //apply plugin: 'war'
 
 jar {
-    baseName = 'fb-web'
+    baseName = projectName
 }
 
 repositories {
@@ -50,4 +52,3 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
-

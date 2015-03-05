@@ -88,7 +88,7 @@ lsf:
    - /var/log/app
 elasticvolume:
    build: elasticsearch-volume
-   mem_limit: 512m
+   mem_limit: 4m
 elasticsearch:
   user: root
   build: elasticsearch

@@ -128,7 +128,7 @@ grafana:
   ports:
   - "8091:80"
   links:
-  - elasticsearch
+#  - elasticsearch
   - graphite
   mem_limit: 56m
 #dockerode:

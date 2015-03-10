@@ -43,7 +43,7 @@ define(['settings'], function(Settings) {
       },
 
       // Change window title prefix from 'Grafana - <dashboard title>'
-      window_title_prefix: 'Grafana - ',
+      window_title_prefix: 'FB Micro Services - ',
 
       // Add your own custom panels
       plugins: {
@@ -51,7 +51,7 @@ define(['settings'], function(Settings) {
         panels: [],
         // requirejs modules in plugins folder that should be loaded
         // for example custom datasources
-        dependencies: [],
+        dependencies: []
       }
 
     });

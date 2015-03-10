@@ -1,0 +1,56 @@
+
+def projectName = "fb-template"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = projectName
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+    /**
+     * libs
+     */
+    compile project(":correlation-id")
+    compile project(":spring-metrics")
+
+    compile "org.projectlombok:lombok:1.14.8"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
+    compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
+    compile "com.google.guava:guava:17.0"
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    compile("net.logstash.logback:logstash-logback-encoder:4.1")
+
+    compile('com.codahale.metrics:metrics-graphite:3.0.1')
+
+    testCompile("junit:junit")
+    testCompile("org.springframework:spring-test:4.1.3.RELEASE")
+    testCompile("org.mockito:mockito-all:1.9.5")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+

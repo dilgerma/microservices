@@ -30,10 +30,16 @@ ext {
 
 allprojects {
 
-    apply plugin: "de.gesellix.docker"
-
     group = "de.effectivetrainings"
     version = "0.1.0"
+
+    docker {
+        def dockerEnv = System.env.DOCKER_HOST;
+        dockerHost = dockerEnv ? dockerEnv.replaceAll("^tcp://", "http://") : null
+        authConfigPlain = ["username": "dilgerm",
+                           "password": "-password-",
+                           "email"   : "martin@effectivetrainings.de"]
+    }
 
     repositories {
         // Use 'maven central' for resolving your dependencies.
@@ -41,15 +47,12 @@ allprojects {
         mavenCentral()
     }
 
-    docker {
-        dockerHost = System.env.DOCKER_HOST.replaceAll("^tcp://", "http://")
-        authConfigPlain = ["username": "dilgerm",
-                           "password": "-password-",
-                           "email": "martin@effectivetrainings.de"]
-    }
+
 }
 
 subprojects {
+
+    apply plugin: "de.gesellix.docker"
 
     task buildImage(type: DockerBuildTask) {
         imageName = "dilgerm/" + project.name

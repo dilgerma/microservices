@@ -21,10 +21,15 @@ public class MongoHealthCheck extends HealthCheck {
 
     @Override
     protected Result check() throws Exception {
-        log.info("Running Mongo Health Check");
-        DB db =  mongoClient.getDB(TemplateDB.DB_NAME);
-        CommandResult commandResult  =db.command("ping");
-        log.info("Mongo Health Check is ok : {}", commandResult.ok());
-        return commandResult.ok() ? Result.healthy() : Result.unhealthy("Mongo not responding");
+        try {
+            log.info("Running Mongo Health Check");
+            DB db = mongoClient.getDB(TemplateDB.DB_NAME);
+            CommandResult commandResult = db.command("ping");
+            log.info("Mongo Health Check is ok : {}", commandResult.ok());
+            return commandResult.ok() ? Result.healthy() : Result.unhealthy("Mongo not responding");
+        } catch (Exception e) {
+            log.error("error in mongo health check", e);
+            return Result.unhealthy(e.getMessage());
+        }
     }
 }

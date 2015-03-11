@@ -131,8 +131,11 @@ graphite:
   image: hopsoft/graphite-statsd
   ports:
   - "8080:80"
+  - "2003:2003"
+  - "2004:2004"
   expose:
   - "2003"
+  - "8080"
   mem_limit: 1g
 grafana:
   build: grafana

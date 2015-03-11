@@ -7,6 +7,7 @@ import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.template.config.MetricsConfig;
 import de.effectivetrainings.template.config.RestConfig;
 import de.effectivetrainings.template.db.TemplateDB;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
@@ -33,6 +34,11 @@ public class Application extends AbstractMongoConfiguration {
         SpringApplication.run(Application.class, args);
     }
 
+    @Value("${mongo.host}")
+    String mongoHost;
+    @Value("${mongo.port}")
+    Integer mongoPort;
+
     @Bean
     public Filter correlationIdFilter() {
         return new CorrelationIdFilter();
@@ -52,6 +58,6 @@ public class Application extends AbstractMongoConfiguration {
     @Override
     @Bean
     public MongoClient mongo() throws Exception {
-        return new MongoClient();
+        return new MongoClient(mongoHost, mongoPort);
     }
 }

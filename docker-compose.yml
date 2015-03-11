@@ -150,4 +150,14 @@ mongo:
   ports:
   - "27017:27017"
   mem_limit: 512m
+#mongographite:
+#  image: tenshi/mongodb-graphite
+#  links:
+#  - mongo:mongo
+#  - graphite:graphite
+#  environment:
+#  - MONGO_HOST=mongo
+#  - GRAPHITE_PORT=2003
+#  - GRAPHITE_HOST=graphite
+#  - REPORT_INTERVAL="1 minute"
 

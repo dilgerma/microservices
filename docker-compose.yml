@@ -17,7 +17,8 @@ icinga:
    - repository:fb-backend
    - expenses:fb-expenses-service
    - customers:fb-customer-service
-   volumes_from: ['repository', 'ui','invoices', 'expenses', 'customers']
+   - templates:fb-templates-service
+   volumes_from: ['repository', 'ui','invoices', 'expenses', 'customers', 'templates']
    mem_limit: 1g
 ui:
    build: fb-web
@@ -146,3 +147,7 @@ mongo:
   - /data/db
   expose:
   - "27017"
+  ports:
+  - "27017:27017"
+  mem_limit: 512m
+

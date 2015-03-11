@@ -1,12 +1,12 @@
 package de.effectivetrainings.template;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.template.config.MetricsConfig;
 import de.effectivetrainings.template.config.RestConfig;
+import de.effectivetrainings.template.db.TemplateDB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
@@ -46,11 +46,12 @@ public class Application extends AbstractMongoConfiguration {
 
     @Override
     protected String getDatabaseName() {
-        return "effectivetrainings.fb.templates";
+        return TemplateDB.DB_NAME;
     }
 
     @Override
-    public Mongo mongo() throws Exception {
+    @Bean
+    public MongoClient mongo() throws Exception {
         return new MongoClient();
     }
 }

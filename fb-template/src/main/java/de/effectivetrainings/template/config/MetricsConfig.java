@@ -7,7 +7,9 @@ import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.mongodb.MongoClient;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
+import de.effectivetrainings.template.metrics.MongoHealthCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,15 +39,20 @@ public class MetricsConfig {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .filter(MetricFilter.ALL)
                 .build(graphite);
-        reporter.start(1l, TimeUnit.MINUTES);
+        reporter.start(1l, TimeUnit.SECONDS);
         return reporter;
     }
 
     @Bean
-    public HealthCheckRegistry healthChecks() {
+    public HealthCheckRegistry healthChecks(MongoHealthCheck mongoHealthCheck) {
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
-        //TODO register mongo
+        healthCheckRegistry.register("mongo", mongoHealthCheck);
         return healthCheckRegistry;
+    }
+
+    @Bean
+    public MongoHealthCheck mongoHealthCheck(MongoClient mongoClient) {
+        return new MongoHealthCheck(mongoClient);
     }
 
     @Bean

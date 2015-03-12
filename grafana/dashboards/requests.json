@@ -16,91 +16,9 @@
       "collapse": false,
       "panels": [
         {
-          "id": 4,
-          "span": 6,
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "scale": 1,
-          "y_formats": [
-            "short",
-            "short"
-          ],
-          "grid": {
-            "max": null,
-            "min": null,
-            "leftMax": 250,
-            "rightMax": null,
-            "leftMin": 0,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold2": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "resolution": 100,
-          "lines": true,
-          "fill": 1,
-          "linewidth": 2,
-          "points": false,
-          "pointradius": 5,
-          "bars": false,
-          "stack": true,
-          "spyable": true,
-          "options": false,
-          "legend": {
-            "show": true,
-            "values": false,
-            "min": false,
-            "max": false,
-            "current": false,
-            "total": false,
-            "avg": false
-          },
-          "interactive": true,
-          "legend_counts": true,
-          "timezone": "browser",
-          "percentage": false,
-          "nullPointMode": "connected",
-          "steppedLine": false,
-          "tooltip": {
-            "value_type": "cumulative",
-            "query_as_alias": true,
-            "shared": false
-          },
-          "targets": [
-            {
-              "target": "customers.counter.status.*.select metric"
-            },
-            {
-              "target": "expenses.counter.status.*.select metric"
-            },
-            {
-              "target": "invoices.counter.status.*.select metric"
-            },
-            {
-              "target": "repository.counter.status.*.select metric"
-            },
-            {
-              "target": "ui.counter.status.*.select metric"
-            }
-          ],
-          "aliasColors": {},
-          "aliasYAxis": {},
-          "title": "Request by Status Code",
-          "datasource": "graphite",
-          "renderer": "flot",
-          "annotate": {
-            "enable": false
-          },
-          "seriesOverrides": [],
-          "links": [],
-          "leftYAxisLabel": "Requests / Status Code"
-        },
-        {
           "title": "Request Duration",
           "error": false,
-          "span": 6,
+          "span": 4,
           "editable": true,
           "type": "graph",
           "id": 5,
@@ -183,6 +101,150 @@
             }
           ],
           "leftYAxisLabel": "Requests / MS"
+        },
+        {
+          "title": "Request Duration",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 9,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "ms",
+            "short"
+          ],
+          "grid": {
+            "leftMax": 1000,
+            "rightMax": null,
+            "leftMin": 0,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 1,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "null as zero",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "customers.request-timer.mean"
+            },
+            {
+              "target": "customers.request-timer.max"
+            },
+            {
+              "target": "expenses.request-timer.mean"
+            },
+            {
+              "target": "expenses.request-timer.max"
+            },
+            {
+              "target": "invoices.request-timer.mean"
+            },
+            {
+              "target": "invoices.request-timer.max"
+            },
+            {
+              "target": "repository.request-timer.mean"
+            },
+            {
+              "target": "repository.request-timer.max"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
+        },
+        {
+          "title": "Requests Counts",
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "graph",
+          "id": 10,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "customers.rest.fastbill.customers.count"
+            },
+            {
+              "target": "expenses.rest.fastbill.expenses.count"
+            },
+            {
+              "target": "invoices.rest.fastbill.invoice.count"
+            },
+            {
+              "target": "repository.api.*.*.api.*.count"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
         }
       ]
     },
@@ -208,7 +270,7 @@
             "short"
           ],
           "grid": {
-            "leftMax": 1000,
+            "leftMax": 150,
             "rightMax": null,
             "leftMin": 0,
             "rightMin": null,
@@ -383,12 +445,89 @@
             },
             {
               "target": "ui.service-health-checks"
+            },
+            {
+              "target": "template.service-health-checks"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
           "links": [],
           "leftYAxisLabel": "1 ALIVE / 0 DOWN"
+        }
+      ]
+    },
+    {
+      "title": "New row",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "title": "# Requests / Status",
+          "error": false,
+          "span": 12,
+          "editable": true,
+          "type": "graph",
+          "id": 11,
+          "datasource": null,
+          "renderer": "flot",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "short",
+            "short"
+          ],
+          "grid": {
+            "leftMax": null,
+            "rightMax": null,
+            "leftMin": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold2": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "lines": true,
+          "fill": 0,
+          "linewidth": 1,
+          "points": false,
+          "pointradius": 5,
+          "bars": false,
+          "stack": false,
+          "percentage": false,
+          "legend": {
+            "show": true,
+            "values": false,
+            "min": false,
+            "max": false,
+            "current": false,
+            "total": false,
+            "avg": false
+          },
+          "nullPointMode": "connected",
+          "steppedLine": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "shared": false
+          },
+          "targets": [
+            {
+              "target": "customers.counter.status.*.customers.*"
+            },
+            {
+              "target": "expenses.counter.status.*.expenses.*"
+            },
+            {
+              "target": "invoices.counter.status.*.invoices.select metric"
+            },
+            {
+              "target": "repository.counter.status.*.rest.*.*.*"
+            }
+          ],
+          "aliasColors": {},
+          "seriesOverrides": [],
+          "links": []
         }
       ]
     }
@@ -427,7 +566,7 @@
     }
   ],
   "time": {
-    "from": "now-12h",
+    "from": "now-5m",
     "to": "now"
   },
   "templating": {

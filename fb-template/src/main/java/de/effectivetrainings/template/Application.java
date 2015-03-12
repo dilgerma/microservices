@@ -34,10 +34,10 @@ public class Application extends AbstractMongoConfiguration {
         SpringApplication.run(Application.class, args);
     }
 
-    @Value("${mongo.host}")
-    String mongoHost;
-    @Value("${mongo.port}")
-    Integer mongoPort;
+    @Value("${mongoDb.host}")
+    private String mongoHost;
+    @Value("${mongoDb.port}")
+    private Integer mongoPort;
 
     @Bean
     public Filter correlationIdFilter() {

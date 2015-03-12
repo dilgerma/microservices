@@ -65,7 +65,7 @@ public class MetricsConfig {
         metricRegistry.register("service-health-checks", (Gauge<Integer>) () -> {
             final SortedMap<String, HealthCheck.Result> healthChecks = healthCheckRegistry.runHealthChecks();
             log.info("Running UI Service Health Check");
-            final boolean healthy = healthChecks.entrySet().stream().filter((h) -> !h.getValue().isHealthy()).findFirst().isPresent();
+            final boolean healthy = !healthChecks.entrySet().stream().filter((h) -> !h.getValue().isHealthy()).findFirst().isPresent();
             log.info("Service Health Check : {}", healthy);
             return healthy ? 1 : 0;
         });

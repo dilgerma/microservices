@@ -24,7 +24,7 @@ public class RestRequestTimerInterceptor implements ClientHttpRequestInterceptor
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         Timer timer = metricsProvider.timer("request-timer");
         Timer.Context context = timer.time();
-        Meter meter = metricsProvider.meter(request.getURI().getPath());
+        Meter meter = metricsProvider.meter("request-meter");
 
         try {
             ClientHttpResponse response = execution.execute(request, body);

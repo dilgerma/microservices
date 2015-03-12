@@ -39,7 +39,7 @@ public class MetricsConfig {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .filter(MetricFilter.ALL)
                 .build(graphite);
-        reporter.start(1l, TimeUnit.SECONDS);
+        reporter.start(1l, TimeUnit.MINUTES);
         return reporter;
     }
 
@@ -65,7 +65,7 @@ public class MetricsConfig {
         metricRegistry.register("service-health-checks", (Gauge<Integer>) () -> {
             final SortedMap<String, HealthCheck.Result> healthChecks = healthCheckRegistry.runHealthChecks();
             log.info("Running Template Service Health Check");
-            final boolean healthy = healthChecks.entrySet().stream().filter((h) -> !h.getValue().isHealthy()).findFirst().isPresent();
+            final boolean healthy = !healthChecks.entrySet().stream().filter((h) -> !h.getValue().isHealthy()).findFirst().isPresent();
             log.info("Service Health Check : {}", healthy);
             return healthy ? 1 : 0;
         });

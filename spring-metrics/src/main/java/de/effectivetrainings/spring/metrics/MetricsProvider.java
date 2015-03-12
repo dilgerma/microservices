@@ -22,8 +22,8 @@ public class MetricsProvider {
         return metricRegistry.timer(serviceName);
     }
 
-    public Counter counter(String call) {
-        return metricRegistry.counter(call);
+    public Counter counter(String name) {
+        return metricRegistry.counter(name);
     }
 
     public Meter meter(String call) {

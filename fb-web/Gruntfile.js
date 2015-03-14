@@ -27,7 +27,8 @@ module.exports = function(grunt) {
                 port: 9000,
                 livereload: 35729,
                 // Change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: 'localhost',
+                app: 'chrome'
             },
             livereload: {
                 options: {
@@ -330,8 +331,19 @@ module.exports = function(grunt) {
         'clean:afterBuild',
         'copy:dist',
         'copy:html',
-        'uglify',
-        'usemin',
+        //'uglify',
+        'usemin'
+    ]);
+
+    grunt.registerTask('watchme', [
+        'clean:dist',
+               'concurrent:dist',
+               'autoprefixer',
+               'browserify:dist',
+               'clean:afterBuild',
+               'copy:dist',
+               'copy:html',
+               'watch'
     ]);
 
     grunt.registerTask('default', [

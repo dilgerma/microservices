@@ -1,0 +1,15 @@
+<div class="container" ui-view>
+    Templates:
+    <div><input required type="text" ng-model="templateName">
+        <button class="button" ng-file-select ng-file-change="upload($files, templateName)" ng-multiple="false">Template Datei</button>
+    </div>
+    Template: {{templateName}}
+
+    <div>
+        Templates
+        <div ng-repeat="template in templates">
+            Template-File: {{template.name}}
+        </div>
+    </div>
+
+</div>

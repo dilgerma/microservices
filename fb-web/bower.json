@@ -8,7 +8,7 @@
     "angular-mocks": "*",
     "angular-ui-router": "~0.2.13",
     "jquery": "~2.1.2",
-    "modernizr": "*"
+    "modernizr": "*",
+    "ng-file-upload": "~3.2.4"
   }
 }
-

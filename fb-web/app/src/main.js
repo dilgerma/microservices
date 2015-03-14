@@ -15,30 +15,119 @@ require('angular-ui-router');
 //load src module
 //require home module
 require('./invoices/invoices');
+require('./expenses/expenses');
+require('./customers/customers');
+require('./templates/templates');
 
 angular.module('app', [
     'ui.router',
     'ngResource',
-    'home'
+    'invoices',
+    'expenses',
+    'customers',
+    'templates',
 ]).controller('MainController', ['$scope', function ($scope) {
-    $scope.navElements = [{display: 'rechnung', href: 'rechnung'}]
+    $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}, {display: 'formulare', href: 'formulare'}]
 }]);
-},{"./invoices/invoices":3,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],2:[function(require,module,exports){
-module.exports = function($http) {
+},{"./customers/customers":3,"./expenses/expenses":5,"./invoices/invoices":7,"./templates/templates":9,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],2:[function(require,module,exports){
+/*wichtig,
+gegen minificatino hier array zurückliefern!
+*/
+module.exports = ['$http',function($http) {
   return {
-      loadInvoices : function() {
-          $http.get('/invoices');
+      loadCustomers : function() {
+         return $http.get('/customers');
       }
 
   };
-};
+}];
 },{}],3:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
 
 // home module
-angular.module('home', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+angular.module('customers', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+    /*config path for home page*/
+    $stateProvider.state('kunden', {
+        url: '/',
+        templateUrl: 'src/customers/customers.tpl.html',
+        controller: 'CustomerController'
+    });
+}]).controller('CustomerController', [
+    '$scope',
+    'customerService',
+    function($scope, customerService) {
+        /* initialize */
+        $scope.load = function() {
+            customerService.loadCustomers().success(function(data) {
+                $scope.customers = data.customers;
+            }).error(function(response) {
+                $scope.response = response;
+            });
+        };
+    }
+]).factory('customerService', require('./CustomerService'));
+
+},{"./CustomerService":2,"angular":"angular","angular-ui-router":"angular-ui-router"}],4:[function(require,module,exports){
+/*wichtig,
+gegen minificatino hier array zurückliefern!
+*/
+module.exports = ['$http',function($http) {
+  return {
+      loadExpenses : function() {
+         return $http.get('/expenses');
+      }
+
+  };
+}];
+},{}],5:[function(require,module,exports){
+'use strict';
+require('angular');
+require('angular-ui-router');
+
+// home module
+angular.module('expenses', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+    /*config path for home page*/
+    $stateProvider.state('ausgaben', {
+        url: '/ausgaben',
+        templateUrl: 'src/expenses/expenses.tpl.html',
+        controller: 'ExpenseController'
+    });
+}]).controller('ExpenseController', [
+    '$scope',
+    'expenseService',
+    function($scope, expenseService) {
+        /* initialize */
+        $scope.load = function() {
+            expenseService.loadExpenses().success(function(data) {
+                $scope.expenses = data.expenses;
+            }).error(function(response) {
+                $scope.response = response;
+            });
+        };
+    }
+]).factory('expenseService', require('./ExpenseService'));
+
+},{"./ExpenseService":4,"angular":"angular","angular-ui-router":"angular-ui-router"}],6:[function(require,module,exports){
+/*wichtig,
+gegen minificatino hier array zurückliefern!
+*/
+module.exports = ['$http',function($http) {
+  return {
+      loadInvoices : function() {
+         return $http.get('/invoices');
+      }
+
+  };
+}];
+},{}],7:[function(require,module,exports){
+'use strict';
+require('angular');
+require('angular-ui-router');
+
+// home module
+angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
     /*config path for home page*/
     $stateProvider.state('rechnung', {
         url: '/',
@@ -50,13 +139,96 @@ angular.module('home', ['ui.router']).config(['$stateProvider', function($stateP
     'invoiceService',
     function($scope, invoiceService) {
         /* initialize */
-        $scope.invoices = invoiceService.loadInvoices();
+        $scope.load = function() {
+            invoiceService.loadInvoices().success(function(data) {
+                $scope.invoices = data.invoices;
+            }).error(function(response) {
+                $scope.response = response;
+            });
+        };
     }
 ]).factory('invoiceService', require('./InvoiceService'));
 
-},{"./InvoiceService":2,"angular":"angular","angular-ui-router":"angular-ui-router"}],"angular-mocks":[function(require,module,exports){
+},{"./InvoiceService":6,"angular":"angular","angular-ui-router":"angular-ui-router"}],8:[function(require,module,exports){
+/*wichtig,
+ gegen minificatino hier array zurückliefern!
+ */
+
+module.exports = ['$upload', '$q', '$http', function ($upload, $q, $http) {
+
+    //TODO - refactor to config
+    var templateURI = "http://192.168.59.103/templates";
+
+
+    return {
+        upload: function (files, templateName) {
+
+            //TODO implement error handling.
+            if (!files) {
+                return $q.reject("no files provided");
+            }
+            if (files.length !== 1) {
+                return $q.reject("too many files provided");
+            }
+
+            //only allow one file
+            var file = files[0];
+            return $upload.upload({
+                url: templateURI,
+                file: file,
+                fields: {'templateName': templateName}
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+                console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+            });
+        },
+
+        findAll: function () {
+            return $http.get(templateURI);
+        }
+    };
+
+}];
+},{}],9:[function(require,module,exports){
+'use strict';
+require('angular');
+require('angular-ui-router');
+require('ng-file-upload');
+
+// home module
+angular.module('templates', ['ui.router', 'angularFileUpload']).config(['$stateProvider', function ($stateProvider) {
+    /*config path for home page*/
+    $stateProvider.state('formulare', {
+        url: '/',
+        templateUrl: 'src/templates/templates.tpl.html',
+        controller: 'TemplateController'
+    });
+}]).controller('TemplateController', [
+    '$scope',
+    'templateService',
+    function ($scope, templateService) {
+        $scope.templateName = '';
+        $scope.templates = [];
+        templateService.findAll().then(function(dataResponse) {
+            $scope.templates = dataResponse.data;
+        });
+        $scope.upload = function (files, templateName) {
+            console.log("upoading files " + files + " , " + templateName);
+            templateService.upload(files, templateName).then(function () {
+                return templateService.findAll();
+            }).then(function (templateResponse) {
+                    $scope.templates = templateResponse.data;
+            });
+        }
+
+    }
+]).factory('templateService', require('./TemplateService'));
+
+},{"./TemplateService":8,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
 /**
- * @license AngularJS v1.3.11
+ * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -2191,17 +2363,31 @@ angular.mock.$RootScopeDecorator = ['$delegate', function($delegate) {
 if (window.jasmine || window.mocha) {
 
   var currentSpec = null,
+      annotatedFunctions = [],
       isSpecRunning = function() {
         return !!currentSpec;
       };
 
+  angular.mock.$$annotate = angular.injector.$$annotate;
+  angular.injector.$$annotate = function(fn) {
+    if (typeof fn === 'function' && !fn.$inject) {
+      annotatedFunctions.push(fn);
+    }
+    return angular.mock.$$annotate.apply(this, arguments);
+  };
+
 
   (window.beforeEach || window.setup)(function() {
+    annotatedFunctions = [];
     currentSpec = this;
   });
 
   (window.afterEach || window.teardown)(function() {
     var injector = currentSpec.$injector;
+
+    annotatedFunctions.forEach(function(fn) {
+      delete fn.$inject;
+    });
 
     angular.forEach(currentSpec.$modules, function(module) {
       if (module && module.$$hashKey) {
@@ -2440,7 +2626,7 @@ if (window.jasmine || window.mocha) {
 
 },{}],"angular-resource":[function(require,module,exports){
 /**
- * @license AngularJS v1.3.11
+ * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -2653,6 +2839,7 @@ function shallowClearAndCopy(src, dst) {
  *   - HTTP GET "class" actions: `Resource.action([parameters], [success], [error])`
  *   - non-GET "class" actions: `Resource.action([parameters], postData, [success], [error])`
  *   - non-GET instance actions:  `instance.$action([parameters], [success], [error])`
+ *
  *
  *   Success callback is called with (value, responseHeaders) arguments. Error callback is called
  *   with (httpResponse) argument.
@@ -7342,7 +7529,7 @@ angular.module('ui.router.state')
 })(window, window.angular);
 },{}],"angular":[function(require,module,exports){
 /**
- * @license AngularJS v1.3.11
+ * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -7397,7 +7584,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.3.11/' +
+    message = message + '\nhttp://errors.angularjs.org/1.3.14/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
@@ -7724,8 +7911,7 @@ function nextUid() {
 function setHashKey(obj, h) {
   if (h) {
     obj.$$hashKey = h;
-  }
-  else {
+  } else {
     delete obj.$$hashKey;
   }
 }
@@ -8034,7 +8220,7 @@ function isElement(node) {
 function makeMap(str) {
   var obj = {}, items = str.split(","), i;
   for (i = 0; i < items.length; i++)
-    obj[ items[i] ] = true;
+    obj[items[i]] = true;
   return obj;
 }
 
@@ -8815,8 +9001,12 @@ function bootstrap(element, modules, config) {
     forEach(extraModules, function(module) {
       modules.push(module);
     });
-    doBootstrap();
+    return doBootstrap();
   };
+
+  if (isFunction(angular.resumeDeferredBootstrap)) {
+    angular.resumeDeferredBootstrap();
+  }
 }
 
 /**
@@ -9461,11 +9651,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.3.11',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.3.14',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 3,
-  dot: 11,
-  codeName: 'spiffy-manatee'
+  dot: 14,
+  codeName: 'instantaneous-browserification'
 };
 
 
@@ -11500,7 +11690,7 @@ function createInjector(modulesToLoad, strictDi) {
       }
 
       var args = [],
-          $inject = annotate(fn, strictDi, serviceName),
+          $inject = createInjector.$$annotate(fn, strictDi, serviceName),
           length, i,
           key;
 
@@ -11539,7 +11729,7 @@ function createInjector(modulesToLoad, strictDi) {
       invoke: invoke,
       instantiate: instantiate,
       get: getService,
-      annotate: annotate,
+      annotate: createInjector.$$annotate,
       has: function(name) {
         return providerCache.hasOwnProperty(name + providerSuffix) || cache.hasOwnProperty(name);
       }
@@ -15213,8 +15403,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           afterTemplateChildLinkFn,
           beforeTemplateCompileNode = $compileNode[0],
           origAsyncDirective = directives.shift(),
-          // The fact that we have to copy and patch the directive seems wrong!
-          derivedSyncDirective = extend({}, origAsyncDirective, {
+          derivedSyncDirective = inherit(origAsyncDirective, {
             templateUrl: null, transclude: null, replace: null, $$originalDirective: origAsyncDirective
           }),
           templateUrl = (isFunction(origAsyncDirective.templateUrl))
@@ -15667,6 +15856,8 @@ function removeComments(jqNodes) {
   return jqNodes;
 }
 
+var $controllerMinErr = minErr('$controller');
+
 /**
  * @ngdoc provider
  * @name $controllerProvider
@@ -15754,7 +15945,12 @@ function $ControllerProvider() {
       }
 
       if (isString(expression)) {
-        match = expression.match(CNTRL_REG),
+        match = expression.match(CNTRL_REG);
+        if (!match) {
+          throw $controllerMinErr('ctrlfmt',
+            "Badly formed controller string '{0}'. " +
+            "Must match `__name__ as __id__` or `__name__`.", expression);
+        }
         constructor = match[1],
         identifier = identifier || match[3];
         expression = controllers.hasOwnProperty(constructor)
@@ -18705,7 +18901,7 @@ function $LocationProvider() {
 
 
     // rewrite hashbang url <> html5 url
-    if ($location.absUrl() != initialUrl) {
+    if (trimEmptyHash($location.absUrl()) != trimEmptyHash(initialUrl)) {
       $browser.url($location.absUrl(), true);
     }
 
@@ -19679,6 +19875,11 @@ Parser.prototype = {
             ? fn.apply(context, args)
             : fn(args[0], args[1], args[2], args[3], args[4]);
 
+      if (args) {
+        // Free-up the memory (arguments of the last function call).
+        args.length = 0;
+      }
+
       return ensureSafeObject(v, expressionText);
       };
   },
@@ -20550,8 +20751,7 @@ function qFactory(nextTick, exceptionHandler) {
           'qcycle',
           "Expected promise to be resolved with value other than itself '{0}'",
           val));
-      }
-      else {
+      } else {
         this.$$resolve(val);
       }
 
@@ -25184,20 +25384,23 @@ var htmlAnchorDirective = valueFn({
  *
  * @description
  *
- * We shouldn't do this, because it will make the button enabled on Chrome/Firefox but not on IE8 and older IEs:
+ * This directive sets the `disabled` attribute on the element if the
+ * {@link guide/expression expression} inside `ngDisabled` evaluates to truthy.
+ *
+ * A special directive is necessary because we cannot use interpolation inside the `disabled`
+ * attribute.  The following example would make the button enabled on Chrome/Firefox
+ * but not on older IEs:
+ *
  * ```html
- * <div ng-init="scope = { isDisabled: false }">
- *  <button disabled="{{scope.isDisabled}}">Disabled</button>
+ * <div ng-init="isDisabled = false">
+ *  <button disabled="{{isDisabled}}">Disabled</button>
  * </div>
  * ```
  *
- * The HTML specification does not require browsers to preserve the values of boolean attributes
- * such as disabled. (Their presence means true and their absence means false.)
+ * This is because the HTML specification does not require browsers to preserve the values of
+ * boolean attributes such as `disabled` (Their presence means true and their absence means false.)
  * If we put an Angular interpolation expression into such an attribute then the
  * binding information would be lost when the browser removes the attribute.
- * The `ngDisabled` directive solves this problem for the `disabled` attribute.
- * This complementary directive is not removed by the browser and so provides
- * a permanent reliable place to store the binding information.
  *
  * @example
     <example>
@@ -25216,7 +25419,7 @@ var htmlAnchorDirective = valueFn({
  *
  * @element INPUT
  * @param {expression} ngDisabled If the {@link guide/expression expression} is truthy,
- *     then special attribute "disabled" will be set on the element
+ *     then the `disabled` attribute will be set on the element
  */
 
 
@@ -27218,7 +27421,7 @@ function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
     return value;
   });
 
-  if (attr.min || attr.ngMin) {
+  if (isDefined(attr.min) || attr.ngMin) {
     var minVal;
     ctrl.$validators.min = function(value) {
       return ctrl.$isEmpty(value) || isUndefined(minVal) || value >= minVal;
@@ -27234,7 +27437,7 @@ function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
     });
   }
 
-  if (attr.max || attr.ngMax) {
+  if (isDefined(attr.max) || attr.ngMax) {
     var maxVal;
     ctrl.$validators.max = function(value) {
       return ctrl.$isEmpty(value) || isUndefined(maxVal) || value <= maxVal;
@@ -30040,6 +30243,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
       ngModelGet = parsedNgModel,
       ngModelSet = parsedNgModelAssign,
       pendingDebounce = null,
+      parserValid,
       ctrl = this;
 
   this.$$setOptions = function(options) {
@@ -30312,16 +30516,12 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     // the model although neither viewValue nor the model on the scope changed
     var modelValue = ctrl.$$rawModelValue;
 
-    // Check if the there's a parse error, so we don't unset it accidentially
-    var parserName = ctrl.$$parserName || 'parse';
-    var parserValid = ctrl.$error[parserName] ? false : undefined;
-
     var prevValid = ctrl.$valid;
     var prevModelValue = ctrl.$modelValue;
 
     var allowInvalid = ctrl.$options && ctrl.$options.allowInvalid;
 
-    ctrl.$$runValidators(parserValid, modelValue, viewValue, function(allValid) {
+    ctrl.$$runValidators(modelValue, viewValue, function(allValid) {
       // If there was no change in validity, don't update the model
       // This prevents changing an invalid modelValue to undefined
       if (!allowInvalid && prevValid !== allValid) {
@@ -30339,12 +30539,12 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
 
   };
 
-  this.$$runValidators = function(parseValid, modelValue, viewValue, doneCallback) {
+  this.$$runValidators = function(modelValue, viewValue, doneCallback) {
     currentValidationRunId++;
     var localValidationRunId = currentValidationRunId;
 
     // check parser error
-    if (!processParseErrors(parseValid)) {
+    if (!processParseErrors()) {
       validationDone(false);
       return;
     }
@@ -30354,21 +30554,22 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     }
     processAsyncValidators();
 
-    function processParseErrors(parseValid) {
+    function processParseErrors() {
       var errorKey = ctrl.$$parserName || 'parse';
-      if (parseValid === undefined) {
+      if (parserValid === undefined) {
         setValidity(errorKey, null);
       } else {
-        setValidity(errorKey, parseValid);
-        if (!parseValid) {
+        if (!parserValid) {
           forEach(ctrl.$validators, function(v, name) {
             setValidity(name, null);
           });
           forEach(ctrl.$asyncValidators, function(v, name) {
             setValidity(name, null);
           });
-          return false;
         }
+        // Set the parse error last, to prevent unsetting it, should a $validators key == parserName
+        setValidity(errorKey, parserValid);
+        return parserValid;
       }
       return true;
     }
@@ -30463,7 +30664,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   this.$$parseAndValidate = function() {
     var viewValue = ctrl.$$lastCommittedViewValue;
     var modelValue = viewValue;
-    var parserValid = isUndefined(modelValue) ? undefined : true;
+    parserValid = isUndefined(modelValue) ? undefined : true;
 
     if (parserValid) {
       for (var i = 0; i < ctrl.$parsers.length; i++) {
@@ -30489,7 +30690,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
 
     // Pass the $$lastCommittedViewValue here, because the cached viewValue might be out of date.
     // This can happen if e.g. $setViewValue is called from inside a parser
-    ctrl.$$runValidators(parserValid, modelValue, ctrl.$$lastCommittedViewValue, function(allValid) {
+    ctrl.$$runValidators(modelValue, ctrl.$$lastCommittedViewValue, function(allValid) {
       if (!allowInvalid) {
         // Note: Don't check ctrl.$valid here, as we could have
         // external validators (e.g. calculated on the server),
@@ -30610,6 +30811,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     // TODO(perf): why not move this to the action fn?
     if (modelValue !== ctrl.$modelValue) {
       ctrl.$modelValue = ctrl.$$rawModelValue = modelValue;
+      parserValid = undefined;
 
       var formatters = ctrl.$formatters,
           idx = formatters.length;
@@ -30622,7 +30824,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
         ctrl.$viewValue = ctrl.$$lastCommittedViewValue = viewValue;
         ctrl.$render();
 
-        ctrl.$$runValidators(undefined, modelValue, viewValue, noop);
+        ctrl.$$runValidators(modelValue, viewValue, noop);
       }
     }
 
@@ -31438,6 +31640,55 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
  * when keys are deleted and reinstated.
  *
  *
+ * # Tracking and Duplicates
+ *
+ * When the contents of the collection change, `ngRepeat` makes the corresponding changes to the DOM:
+ *
+ * * When an item is added, a new instance of the template is added to the DOM.
+ * * When an item is removed, its template instance is removed from the DOM.
+ * * When items are reordered, their respective templates are reordered in the DOM.
+ *
+ * By default, `ngRepeat` does not allow duplicate items in arrays. This is because when
+ * there are duplicates, it is not possible to maintain a one-to-one mapping between collection
+ * items and DOM elements.
+ *
+ * If you do need to repeat duplicate items, you can substitute the default tracking behavior
+ * with your own using the `track by` expression.
+ *
+ * For example, you may track items by the index of each item in the collection, using the
+ * special scope property `$index`:
+ * ```html
+ *    <div ng-repeat="n in [42, 42, 43, 43] track by $index">
+ *      {{n}}
+ *    </div>
+ * ```
+ *
+ * You may use arbitrary expressions in `track by`, including references to custom functions
+ * on the scope:
+ * ```html
+ *    <div ng-repeat="n in [42, 42, 43, 43] track by myTrackingFunction(n)">
+ *      {{n}}
+ *    </div>
+ * ```
+ *
+ * If you are working with objects that have an identifier property, you can track
+ * by the identifier instead of the whole object. Should you reload your data later, `ngRepeat`
+ * will not have to rebuild the DOM elements for items it has already rendered, even if the
+ * JavaScript objects in the collection have been substituted for new ones:
+ * ```html
+ *    <div ng-repeat="model in collection track by model.id">
+ *      {{model.name}}
+ *    </div>
+ * ```
+ *
+ * When no `track by` expression is provided, it is equivalent to tracking by the built-in
+ * `$id` function, which tracks items by their identity:
+ * ```html
+ *    <div ng-repeat="obj in collection track by $id(obj)">
+ *      {{obj.prop}}
+ *    </div>
+ * ```
+ *
  * # Special repeat start and end points
  * To repeat a series of elements instead of just one parent element, ngRepeat (as well as other ng directives) supports extending
  * the range of the repeater by defining explicit start and end points by using **ng-repeat-start** and **ng-repeat-end** respectively.
@@ -31505,12 +31756,12 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
  *
  *     For example: `(name, age) in {'adam':10, 'amalie':12}`.
  *
- *   * `variable in expression track by tracking_expression` – You can also provide an optional tracking function
- *     which can be used to associate the objects in the collection with the DOM elements. If no tracking function
- *     is specified the ng-repeat associates elements by identity in the collection. It is an error to have
- *     more than one tracking function to resolve to the same key. (This would mean that two distinct objects are
- *     mapped to the same DOM element, which is not possible.)  Filters should be applied to the expression,
- *     before specifying a tracking expression.
+ *   * `variable in expression track by tracking_expression` – You can also provide an optional tracking expression
+ *     which can be used to associate the objects in the collection with the DOM elements. If no tracking expression
+ *     is specified, ng-repeat associates elements by identity. It is an error to have
+ *     more than one tracking expression value resolve to the same key. (This would mean that two distinct objects are
+ *     mapped to the same DOM element, which is not possible.)  If filters are used in the expression, they should be
+ *     applied before the tracking expression.
  *
  *     For example: `item in items` is equivalent to `item in items track by $id(item)`. This implies that the DOM elements
  *     will be associated by item identity in the array.
@@ -31894,10 +32145,11 @@ var NG_HIDE_IN_PROGRESS_CLASS = 'ng-hide-animate';
  *
  * By default, the `.ng-hide` class will style the element with `display: none!important`. If you wish to change
  * the hide behavior with ngShow/ngHide then this can be achieved by restating the styles for the `.ng-hide`
- * class in CSS:
+ * class CSS. Note that the selector that needs to be used is actually `.ng-hide:not(.ng-hide-animate)` to cope
+ * with extra animation classes that can be added.
  *
  * ```css
- * .ng-hide {
+ * .ng-hide:not(.ng-hide-animate) {
  *   /&#42; this is just another form of hiding an element &#42;/
  *   display: block!important;
  *   position: absolute;
@@ -33413,7 +33665,7 @@ var maxlengthDirective = function() {
         ctrl.$validate();
       });
       ctrl.$validators.maxlength = function(modelValue, viewValue) {
-        return (maxlength < 0) || ctrl.$isEmpty(modelValue) || (viewValue.length <= maxlength);
+        return (maxlength < 0) || ctrl.$isEmpty(viewValue) || (viewValue.length <= maxlength);
       };
     }
   };
@@ -44667,5 +44919,585 @@ if ( typeof noGlobal === strundefined ) {
 return jQuery;
 
 }));
+
+},{}],"ng-file-upload":[function(require,module,exports){
+/**!
+ * AngularJS file upload/drop directive and service with progress and abort
+ * @author  Danial  <danial.farid@gmail.com>
+ * @version 3.2.4
+ */
+(function () {
+
+var key, i;
+function patchXHR(fnName, newFn) {
+    window.XMLHttpRequest.prototype[fnName] = newFn(window.XMLHttpRequest.prototype[fnName]);
+}
+
+if (window.XMLHttpRequest && !window.XMLHttpRequest.__isFileAPIShim) {
+    patchXHR('setRequestHeader', function (orig) {
+        return function (header, value) {
+            if (header === '__setXHR_') {
+                var val = value(this);
+                // fix for angular < 1.2.0
+                if (val instanceof Function) {
+                    val(this);
+                }
+            } else {
+                orig.apply(this, arguments);
+            }
+        }
+    });
+}
+
+var angularFileUpload = angular.module('angularFileUpload', []);
+
+angularFileUpload.version = '3.2.4';
+angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
+    function sendHttp(config) {
+        config.method = config.method || 'POST';
+        config.headers = config.headers || {};
+        config.transformRequest = config.transformRequest || function (data, headersGetter) {
+            if (window.ArrayBuffer && data instanceof window.ArrayBuffer) {
+                return data;
+            }
+            return $http.defaults.transformRequest[0](data, headersGetter);
+        };
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+
+        config.headers['__setXHR_'] = function () {
+            return function (xhr) {
+                if (!xhr) return;
+                config.__XHR = xhr;
+                config.xhrFn && config.xhrFn(xhr);
+                xhr.upload.addEventListener('progress', function (e) {
+                    e.config = config;
+                    deferred.notify ? deferred.notify(e) : promise.progress_fn && $timeout(function () {
+                        promise.progress_fn(e)
+                    });
+                }, false);
+                //fix for firefox not firing upload progress end, also IE8-9
+                xhr.upload.addEventListener('load', function (e) {
+                    if (e.lengthComputable) {
+                        e.config = config;
+                        deferred.notify ? deferred.notify(e) : promise.progress_fn && $timeout(function () {
+                            promise.progress_fn(e)
+                        });
+                    }
+                }, false);
+            };
+        };
+
+        $http(config).then(function (r) {
+            deferred.resolve(r)
+        }, function (e) {
+            deferred.reject(e)
+        }, function (n) {
+            deferred.notify(n)
+        });
+
+        promise.success = function (fn) {
+            promise.then(function (response) {
+                fn(response.data, response.status, response.headers, config);
+            });
+            return promise;
+        };
+
+        promise.error = function (fn) {
+            promise.then(null, function (response) {
+                fn(response.data, response.status, response.headers, config);
+            });
+            return promise;
+        };
+
+        promise.progress = function (fn) {
+            promise.progress_fn = fn;
+            promise.then(null, null, function (update) {
+                fn(update);
+            });
+            return promise;
+        };
+        promise.abort = function () {
+            if (config.__XHR) {
+                $timeout(function () {
+                    config.__XHR.abort();
+                });
+            }
+            return promise;
+        };
+        promise.xhr = function (fn) {
+            config.xhrFn = (function (origXhrFn) {
+                return function () {
+                    origXhrFn && origXhrFn.apply(promise, arguments);
+                    fn.apply(promise, arguments);
+                }
+            })(config.xhrFn);
+            return promise;
+        };
+
+        return promise;
+    }
+
+    this.upload = function (config) {
+        config.headers = config.headers || {};
+        config.headers['Content-Type'] = undefined;
+        config.transformRequest = config.transformRequest ?
+            (Object.prototype.toString.call(config.transformRequest) === '[object Array]' ?
+                config.transformRequest : [config.transformRequest]) : [];
+        config.transformRequest.push(function (data) {
+            var formData = new FormData();
+            var allFields = {};
+            for (key in config.fields) {
+                if (config.fields.hasOwnProperty(key)) {
+                    allFields[key] = config.fields[key];
+                }
+            }
+            if (data) allFields['data'] = data;
+
+            if (config.formDataAppender) {
+                for (key in allFields) {
+                    if (allFields.hasOwnProperty(key)) {
+                        config.formDataAppender(formData, key, allFields[key]);
+                    }
+                }
+            } else {
+                for (key in allFields) {
+                    if (allFields.hasOwnProperty(key)) {
+                        var val = allFields[key];
+                        if (val !== undefined) {
+                            if (Object.prototype.toString.call(val) === '[object String]') {
+                                formData.append(key, val);
+                            } else {
+                                if (config.sendObjectsAsJsonBlob && typeof val === 'object') {
+                                    formData.append(key, new Blob([val], {type: 'application/json'}));
+                                } else {
+                                    formData.append(key, JSON.stringify(val));
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            if (config.file != null) {
+                var fileFormName = config.fileFormDataName || 'file';
+
+                if (Object.prototype.toString.call(config.file) === '[object Array]') {
+                    var isFileFormNameString = Object.prototype.toString.call(fileFormName) === '[object String]';
+                    for (i = 0; i < config.file.length; i++) {
+                        formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i],
+                            (config.fileName && config.fileName[i]) || config.file[i].name);
+                    }
+                } else {
+                    formData.append(fileFormName, config.file, config.fileName || config.file.name);
+                }
+            }
+            return formData;
+        });
+
+        return sendHttp(config);
+    };
+
+    this.http = function (config) {
+        return sendHttp(config);
+    };
+}]);
+
+angularFileUpload.directive('ngFileSelect', ['$parse', '$timeout', '$compile',
+    function ($parse, $timeout, $compile) {
+        return {
+            restrict: 'AEC',
+            require: '?ngModel',
+            link: function (scope, elem, attr, ngModel) {
+                linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile);
+            }
+        }
+    }]);
+
+function linkFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile) {
+    function isInputTypeFile() {
+        return elem[0].tagName.toLowerCase() === 'input' && elem.attr('type') && elem.attr('type').toLowerCase() === 'file';
+    }
+
+    var isUpdating = false;
+    function changeFn(evt) {
+        if (!isUpdating) {
+            isUpdating = true;
+            try {
+                var fileList = evt.__files_ || (evt.target && evt.target.files);
+                var files = [], rejFiles = [];
+
+                var accept = $parse(attr.ngAccept);
+                for (i = 0; i < fileList.length; i++) {
+                    var file = fileList.item(i);
+                    if (isAccepted(scope, accept, file, evt)) {
+                        files.push(file);
+                    } else {
+                        rejFiles.push(file);
+                    }
+                }
+                updateModel($parse, $timeout, scope, ngModel, attr,
+                    attr.ngFileChange || attr.ngFileSelect, files, rejFiles, evt);
+                if (files.length == 0) evt.target.value = files;
+                if (evt.target && evt.target.getAttribute('__ngf_gen__')) {
+                    angular.element(evt.target).remove();
+                }
+            } finally {
+                isUpdating = false;
+            }
+        }
+    }
+
+    function bindAttrToFileInput(fileElem) {
+        if (attr.ngMultiple) fileElem.attr('multiple', $parse(attr.ngMultiple)(scope));
+        if (attr['accept']) fileElem.attr('accept', attr['accept']);
+        if (attr.ngCapture) fileElem.attr('capture', $parse(attr.ngCapture)(scope));
+        if (attr.ngDisabled) fileElem.attr('disabled', $parse(attr.ngDisabled)(scope));
+
+        fileElem.bind('change', changeFn);
+    }
+
+    function createFileInput(evt) {
+        if (elem.attr('disabled')) {
+            return;
+        }
+        var fileElem = angular.element('<input type="file">');
+
+        for (var i = 0; i < elem[0].attributes.length; i++) {
+            var attribute = elem[0].attributes[i];
+            fileElem.attr(attribute.name, attribute.value);
+        }
+
+        if (isInputTypeFile()) {
+            elem.replaceWith(fileElem);
+            elem = fileElem;
+        } else {
+            fileElem.css('width', '0px').css('height', '0px').css('position', 'absolute')
+                .css('padding', 0).css('margin', 0).css('overflow', 'hidden')
+                .attr('tabindex', '-1').css('opacity', 0).attr('__ngf_gen__', true);
+            if (elem.__ngf_ref_elem__) elem.__ngf_ref_elem__.remove();
+            elem.__ngf_ref_elem__ = fileElem;
+            elem.parent()[0].insertBefore(fileElem[0], elem[0]);
+            elem.css('overflow', 'hidden');
+        }
+
+        bindAttrToFileInput(fileElem);
+
+        return fileElem;
+    }
+
+    function resetModel(evt) {
+        updateModel($parse, $timeout, scope, ngModel, attr,
+            attr.ngFileChange || attr.ngFileSelect, [], [], evt, true);
+    }
+
+    function clickHandler(evt) {
+        var fileElem = createFileInput(evt);
+        if (fileElem) {
+            resetModel(evt);
+
+            fileElem[0].click();
+        }
+        if (isInputTypeFile()) {
+            elem.bind('click', clickHandler);
+            evt.preventDefault()
+        }
+    }
+
+    if (window.FileAPI && window.FileAPI.ngfFixIE) {
+        window.FileAPI.ngfFixIE(elem, createFileInput, changeFn, resetModel);
+    } else {
+        elem.bind('click', clickHandler);
+    }
+}
+
+angularFileUpload.directive('ngFileDrop', ['$parse', '$timeout', '$location', function ($parse, $timeout, $location) {
+    return {
+        restrict: 'AEC',
+        require: '?ngModel',
+        link: function (scope, elem, attr, ngModel) {
+            linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location);
+        }
+    }
+}]);
+
+angularFileUpload.directive('ngNoFileDrop', function () {
+    return function (scope, elem) {
+        if (dropAvailable()) elem.css('display', 'none')
+    }
+});
+
+//for backward compatibility
+angularFileUpload.directive('ngFileDropAvailable', ['$parse', '$timeout', function ($parse, $timeout) {
+    return function (scope, elem, attr) {
+        if (dropAvailable()) {
+            var fn = $parse(attr['ngFileDropAvailable']);
+            $timeout(function () {
+                fn(scope);
+            });
+        }
+    }
+}]);
+
+function linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location) {
+    var available = dropAvailable();
+    if (attr['dropAvailable']) {
+        $timeout(function () {
+            scope.dropAvailable ? scope.dropAvailable.value = available :
+                scope.dropAvailable = available;
+        });
+    }
+    if (!available) {
+        if ($parse(attr.hideOnDropNotAvailable)(scope) == true) {
+            elem.css('display', 'none');
+        }
+        return;
+    }
+    var leaveTimeout = null;
+    var stopPropagation = $parse(attr.stopPropagation);
+    var dragOverDelay = 1;
+    var accept = $parse(attr.ngAccept);
+    var disabled = $parse(attr.ngDisabled);
+    var actualDragOverClass;
+
+    elem[0].addEventListener('dragover', function (evt) {
+        if (disabled(scope)) return;
+        evt.preventDefault();
+        if (stopPropagation(scope)) evt.stopPropagation();
+        // handling dragover events from the Chrome download bar
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            var b = evt.dataTransfer.effectAllowed;
+            evt.dataTransfer.dropEffect = ('move' === b || 'linkMove' === b) ? 'move' : 'copy';
+        }
+        $timeout.cancel(leaveTimeout);
+        if (!scope.actualDragOverClass) {
+            actualDragOverClass = calculateDragOverClass(scope, attr, evt);
+        }
+        elem.addClass(actualDragOverClass);
+    }, false);
+    elem[0].addEventListener('dragenter', function (evt) {
+        if (disabled(scope)) return;
+        evt.preventDefault();
+        if (stopPropagation(scope)) evt.stopPropagation();
+    }, false);
+    elem[0].addEventListener('dragleave', function () {
+        if (disabled(scope)) return;
+        leaveTimeout = $timeout(function () {
+            elem.removeClass(actualDragOverClass);
+            actualDragOverClass = null;
+        }, dragOverDelay || 1);
+    }, false);
+    elem[0].addEventListener('drop', function (evt) {
+        if (disabled(scope)) return;
+        evt.preventDefault();
+        if (stopPropagation(scope)) evt.stopPropagation();
+        elem.removeClass(actualDragOverClass);
+        actualDragOverClass = null;
+        extractFiles(evt, function (files, rejFiles) {
+            updateModel($parse, $timeout, scope, ngModel, attr,
+                attr.ngFileChange || attr.ngFileDrop, files, rejFiles, evt)
+        }, $parse(attr.allowDir)(scope) != false, attr.multiple || $parse(attr.ngMultiple)(scope));
+    }, false);
+
+    function calculateDragOverClass(scope, attr, evt) {
+        var accepted = true;
+        var items = evt.dataTransfer.items;
+        if (items != null) {
+            for (i = 0; i < items.length && accepted; i++) {
+                accepted = accepted
+                    && (items[i].kind == 'file' || items[i].kind == '')
+                    && isAccepted(scope, accept, items[i], evt);
+            }
+        }
+        var clazz = $parse(attr.dragOverClass)(scope, {$event: evt});
+        if (clazz) {
+            if (clazz.delay) dragOverDelay = clazz.delay;
+            if (clazz.accept) clazz = accepted ? clazz.accept : clazz.reject;
+        }
+        return clazz || attr['dragOverClass'] || 'dragover';
+    }
+
+    function extractFiles(evt, callback, allowDir, multiple) {
+        var files = [], rejFiles = [], items = evt.dataTransfer.items, processing = 0;
+
+        function addFile(file) {
+            if (isAccepted(scope, accept, file, evt)) {
+                files.push(file);
+            } else {
+                rejFiles.push(file);
+            }
+        }
+
+        if (items && items.length > 0 && $location.protocol() != 'file') {
+            for (i = 0; i < items.length; i++) {
+                if (items[i].webkitGetAsEntry && items[i].webkitGetAsEntry() && items[i].webkitGetAsEntry().isDirectory) {
+                    var entry = items[i].webkitGetAsEntry();
+                    if (entry.isDirectory && !allowDir) {
+                        continue;
+                    }
+                    if (entry != null) {
+                        traverseFileTree(files, entry);
+                    }
+                } else {
+                    var f = items[i].getAsFile();
+                    if (f != null) addFile(f);
+                }
+                if (!multiple && files.length > 0) break;
+            }
+        } else {
+            var fileList = evt.dataTransfer.files;
+            if (fileList != null) {
+                for (i = 0; i < fileList.length; i++) {
+                    addFile(fileList.item(i));
+                    if (!multiple && files.length > 0) break;
+                }
+            }
+        }
+        var delays = 0;
+        (function waitForProcess(delay) {
+            $timeout(function () {
+                if (!processing) {
+                    if (!multiple && files.length > 1) {
+                        i = 0;
+                        while (files[i].type == 'directory') i++;
+                        files = [files[i]];
+                    }
+                    callback(files, rejFiles);
+                } else {
+                    if (delays++ * 10 < 20 * 1000) {
+                        waitForProcess(10);
+                    }
+                }
+            }, delay || 0)
+        })();
+
+        function traverseFileTree(files, entry, path) {
+            if (entry != null) {
+                if (entry.isDirectory) {
+                    var filePath = (path || '') + entry.name;
+                    addFile({name: entry.name, type: 'directory', path: filePath});
+                    var dirReader = entry.createReader();
+                    var entries = [];
+                    processing++;
+                    var readEntries = function () {
+                        dirReader.readEntries(function (results) {
+                            try {
+                                if (!results.length) {
+                                    for (i = 0; i < entries.length; i++) {
+                                        traverseFileTree(files, entries[i], (path ? path : '') + entry.name + '/');
+                                    }
+                                    processing--;
+                                } else {
+                                    entries = entries.concat(Array.prototype.slice.call(results || [], 0));
+                                    readEntries();
+                                }
+                            } catch (e) {
+                                processing--;
+                                console.error(e);
+                            }
+                        }, function () {
+                            processing--;
+                        });
+                    };
+                    readEntries();
+                } else {
+                    processing++;
+                    entry.file(function (file) {
+                        try {
+                            processing--;
+                            file.path = (path ? path : '') + file.name;
+                            addFile(file);
+                        } catch (e) {
+                            processing--;
+                            console.error(e);
+                        }
+                    }, function () {
+                        processing--;
+                    });
+                }
+            }
+        }
+    }
+}
+
+function dropAvailable() {
+    var div = document.createElement('div');
+    return ('draggable' in div) && ('ondrop' in div);
+}
+
+function updateModel($parse, $timeout, scope, ngModel, attr, fileChange, files, rejFiles, evt, noDelay) {
+    function update() {
+        if (ngModel) {
+            $parse(attr.ngModel).assign(scope, files);
+            $timeout(function () {
+                ngModel && ngModel.$setViewValue(files != null && files.length == 0 ? null : files);
+            });
+        }
+        if (attr.ngModelRejected) {
+            $parse(attr.ngModelRejected).assign(scope, rejFiles);
+        }
+        if (fileChange) {
+            $parse(fileChange)(scope, {
+                $files: files,
+                $rejectedFiles: rejFiles,
+                $event: evt
+            });
+
+        }
+    }
+    if (noDelay) {
+        update();
+    } else {
+        $timeout(function () {
+            update();
+        });
+    }
+}
+
+function isAccepted(scope, accept, file, evt) {
+    var val = accept(scope, {$file: file, $event: evt});
+    if (val == null) {
+        return true;
+    }
+    if (angular.isString(val)) {
+        var regexp = new RegExp(globStringToRegex(val), 'gi')
+        val = (file.type != null && file.type.match(regexp)) ||
+        (file.name != null && file.name.match(regexp));
+    }
+    return val;
+}
+
+function globStringToRegex(str) {
+    if (str.length > 2 && str[0] === '/' && str[str.length - 1] === '/') {
+        return str.substring(1, str.length - 1);
+    }
+    var split = str.split(','), result = '';
+    if (split.length > 1) {
+        for (i = 0; i < split.length; i++) {
+            result += '(' + globStringToRegex(split[i]) + ')';
+            if (i < split.length - 1) {
+                result += '|'
+            }
+        }
+    } else {
+        if (str.indexOf('.') == 0) {
+            str = '*' + str;
+        }
+        result = '^' + str.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + '-]', 'g'), '\\$&') + '$';
+        result = result.replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+    }
+    return result;
+}
+
+var ngFileUpload = angular.module('ngFileUpload', []);
+
+for (key in angularFileUpload) {
+    if (angularFileUpload.hasOwnProperty(key)) {
+        ngFileUpload[key] = angularFileUpload[key];
+    }
+}
+
+})();
 
 },{}]},{},[1]);

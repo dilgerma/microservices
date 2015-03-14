@@ -30,19 +30,22 @@ package de.effectivetrainings.billing.rest;
 
 
 import de.effectivetrainings.billing.config.ServicesConfig;
-import de.effectivetrainings.billing.domain.Customers;
-import de.effectivetrainings.billing.domain.Expenses;
-import de.effectivetrainings.billing.domain.Invoices;
+import de.effectivetrainings.billing.domain.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
@@ -57,6 +60,9 @@ public class FbFacade {
     private RestTemplate restTemplate;
 
     private ServicesConfig servicesConfig;
+
+    //TODO retrieve customer id - currently just here statically defined.
+    private static final String customerId = "default";
 
     @Autowired
     public FbFacade(ServicesConfig servicesConfig, RestTemplate restTemplate) {
@@ -78,10 +84,38 @@ public class FbFacade {
     }
 
     @RequestMapping(value = "customers")
-        public Customers customers() {
-            log.info("Requesting all customers");
-            return request(servicesConfig.getCustomersBackendURI(), Customers.class);
-        }
+    public Customers customers() {
+        log.info("Requesting all customers");
+        return request(servicesConfig.getCustomersBackendURI(), Customers.class);
+    }
+
+    @RequestMapping(value = "templates", method = RequestMethod.POST)
+    public void upload(@RequestPart("file") MultipartFile upload, @RequestParam(value = "templateName") String templateName) throws Exception {
+        log.info("Receiving template request : {}, size: {}", templateName, upload.getSize());
+
+
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
+        parts.add("file", new ByteArrayResource(upload.getBytes()) {
+            @Override
+            public String getFilename() {
+                return templateName;
+            }
+        });
+        parts.add("templateName", templateName);
+
+        Map<String, String> uriVars = new HashMap<>();
+        uriVars.put("customerId", customerId);
+        restTemplate.postForLocation(servicesConfig.getTemplateServiceURI(), parts, uriVars);
+    }
+
+    @RequestMapping(value = "templates", method = RequestMethod.GET)
+    public List<TemplateDocument> documents() {
+        log.info("loading template-documents for {}", customerId);
+
+        Map<String, String> uriVars = new HashMap<>();
+        uriVars.put("customerId", customerId);
+        return restTemplate.getForEntity(servicesConfig.getTemplateServiceURI(), TemplateDocuments.class, uriVars).getBody().getTemplateDocuments();
+    }
 
     private <T> T request(String uri, Class<T> target) {
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
@@ -91,12 +125,13 @@ public class FbFacade {
 
     /**
      * TODO handle client exceptions correctly...
+     *
      * @param ex
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public void handle(Exception ex) {
-        log.error("Error in UI",ex);
+        log.error("Error in UI", ex);
     }
 
 }

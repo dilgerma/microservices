@@ -16,13 +16,15 @@ require('angular-ui-router');
 require('./invoices/invoices');
 require('./expenses/expenses');
 require('./customers/customers');
+require('./templates/templates');
 
 angular.module('app', [
     'ui.router',
     'ngResource',
     'invoices',
     'expenses',
-    'customers'
+    'customers',
+    'templates',
 ]).controller('MainController', ['$scope', function ($scope) {
-    $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}]
+    $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}, {display: 'formulare', href: 'formulare'}]
 }]);

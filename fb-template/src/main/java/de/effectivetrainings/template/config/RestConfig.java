@@ -1,12 +1,14 @@
 package de.effectivetrainings.template.config;
 
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.template.rest.CorrelationIdInterceptor;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
+import de.effectivetrainings.template.rest.CorrelationIdInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.util.Arrays;
 
@@ -32,5 +34,10 @@ public class RestConfig {
         final RestTemplate restTemplate = new RestTemplate();
         restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor));
         return restTemplate;
+    }
+
+    @Bean(name = "multipartResolver")
+    public MultipartResolver multipartResolver() {
+        return new CommonsMultipartResolver();
     }
 }

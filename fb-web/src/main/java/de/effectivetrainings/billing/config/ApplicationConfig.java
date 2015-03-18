@@ -1,6 +1,7 @@
 package de.effectivetrainings.billing.config;
 
 import de.effectivetrainings.billing.rest.CorrelationIdInterceptor;
+import de.effectivetrainings.billing.rest.SimpleCORSFilter;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
@@ -53,5 +54,10 @@ public class ApplicationConfig {
     @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.INTERFACES)
     public CorrelationId correlationId(HttpServletRequest servletRequest) {
         return new DefaultCorrelationId(servletRequest.getHeader(CorrelationId.CORRELATION_ID_HEADER_KEY));
+    }
+
+    @Bean
+    public SimpleCORSFilter corsFilter() {
+        return new SimpleCORSFilter();
     }
 }

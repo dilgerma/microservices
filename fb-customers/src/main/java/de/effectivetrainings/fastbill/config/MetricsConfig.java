@@ -46,7 +46,12 @@ public class MetricsConfig {
     }
 
     @Bean
-    public HealthCheckRegistry healthChecks(@Value("${fastbill.customer.uri}") URI customerUri, RestTemplate restTemplate) {
+    public HealthCheckRegistry healthChecks(@Value("${fastbill.customer.uri}") URI customerUri) {
+
+        //dont reuse the already instrumented rest template, it requires an active request, this one is fired
+        //asynchronosly by the system, there is no request context and thus no MDB.
+        RestTemplate restTemplate = new RestTemplate();
+
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
         final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(customerUri, restTemplate);
         healthCheckRegistry.register("customers/repository", connectionHealthCheck);

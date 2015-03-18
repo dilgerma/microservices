@@ -51,13 +51,19 @@ public class MetricsConfig {
     }
 
     @Bean
-        public HealthCheckRegistry healthChecks(@Value("${invoiceservice.uri}") URI invoiceServiceUri, @Value("${expenseservice.uri}") URI expenseServiceUri, @Value("${customerservice.uri}") URI customerUri, RestTemplate restTemplate) {
-            HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
-            healthCheckRegistry.register("ui/customer", new ConnectionHealthCheck(customerUri, restTemplate));
-            healthCheckRegistry.register("ui/invoice", new ConnectionHealthCheck(invoiceServiceUri, restTemplate));
-            healthCheckRegistry.register("ui/expense", new ConnectionHealthCheck(expenseServiceUri, restTemplate));
-            return healthCheckRegistry;
-        }
+    public HealthCheckRegistry healthChecks(@Value("${invoiceservice.uri}") URI invoiceServiceUri, @Value("${expenseservice.uri}") URI expenseServiceUri, @Value("${customerservice.uri}") URI customerUri) {
+
+        //dont reuse the already instrumented rest template, it requires an active request, this one is fired
+        //asynchronosly by the system, there is no request context and thus no MDB.
+        RestTemplate restTemplate = new RestTemplate();
+
+        HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+
+        healthCheckRegistry.register("ui/customer", new ConnectionHealthCheck(customerUri, restTemplate));
+        healthCheckRegistry.register("ui/invoice", new ConnectionHealthCheck(invoiceServiceUri, restTemplate));
+        healthCheckRegistry.register("ui/expense", new ConnectionHealthCheck(expenseServiceUri, restTemplate));
+        return healthCheckRegistry;
+    }
 
 
     @PostConstruct

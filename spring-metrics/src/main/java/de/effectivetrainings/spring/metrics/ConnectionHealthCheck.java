@@ -27,7 +27,7 @@ public class ConnectionHealthCheck extends HealthCheck {
     protected Result check() throws Exception {
         try {
             log.info("Requesting Service Health Check for {}", uri);
-            HttpHeaders httpHeaders = restTemplate.headForHeaders(uri);
+            restTemplate.headForHeaders(uri);
             log.info("Service Health Check available for {}", uri);
             return Result.healthy(uri + "available");
         } catch (Exception e) {

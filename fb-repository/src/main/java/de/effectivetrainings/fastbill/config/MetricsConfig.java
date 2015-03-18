@@ -54,7 +54,8 @@ public class MetricsConfig {
     public HealthCheckRegistry healthChecks(@Value("${fastbill.api.uri}") URI customerUri, RestTemplate restTemplate) {
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
         final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(customerUri, restTemplate);
-        healthCheckRegistry.register("repository/backend", connectionHealthCheck);
+        //verify how that could work.
+//        healthCheckRegistry.register("repository/backend", connectionHealthCheck);
         return healthCheckRegistry;
     }
 

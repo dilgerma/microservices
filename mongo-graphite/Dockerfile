@@ -1,7 +1,4 @@
-FROM dilgerm/app-base
-RUN apt-get update
-RUN apt-get install nodejs -y
-RUN apt-get install npm -y
+FROM dilgerm/node-app-base
 WORKDIR /etc/mongo-graphite
 RUN wget https://github.com/dilgerma/mongo-graphite/archive/master.zip
 RUN unzip master.zip

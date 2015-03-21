@@ -99,7 +99,7 @@ lsf:
    links:
    - logstash
    volumes:
-   - /var/log/app
+   - /var/log/
 elasticvolume:
    build: elasticsearch-volume
    mem_limit: 4m
@@ -131,7 +131,9 @@ kibana:
 graphite:
   image: hopsoft/graphite-statsd
   ports:
-  - "8080"
+  #keep this port exposed so that grafana can access it from the browser
+  - "8080:80"
+  #keep this port exposed so that systems with static configuration can access it
   - "2003"
   - "2004"
   expose:
@@ -153,14 +155,10 @@ mongo:
   expose:
   - "27017"
   mem_limit: 512m
-#mongographite:
-#  image: tenshi/mongodb-graphite
-#  links:
-#  - mongo:mongo
-#  - graphite:graphite
-#  environment:
-#  - MONGO_HOST=mongo
-#  - GRAPHITE_PORT=2003
-#  - GRAPHITE_HOST=graphite
-#  - REPORT_INTERVAL="1 minute"
+mongographite:
+  build: mongo-graphite
+  links:
+  - graphite
+  - mongo
+  volumes_from: ['lsf']
 

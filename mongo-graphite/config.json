@@ -1,0 +1,173 @@
+{
+  "debugMode": false,
+  "runIntervalSeconds": 60,
+  "graphite": {
+    "host": "http://graphite",
+    "port": "2003"
+  },
+  "commands": [
+    {
+      "targetDb": "effective-tpl",
+      "commandObject": {
+        "serverStatus": 1
+      },
+      "valueToGraphite": [
+        {
+          "location": "globalLock.totalTime"
+        },
+        {
+          "location": "globalLock.lockTime"
+        },
+        {
+          "location": "globalLock.ratio"
+        },
+        {
+          "location": "globalLock.currentQueue.total"
+        },
+        {
+          "location": "globalLock.currentQueue.readers"
+        },
+        {
+          "location": "globalLock.currentQueue.writers"
+        },
+        {
+          "location": "globalLock.activeClients.total"
+        },
+        {
+          "location": "globalLock.activeClients.readers"
+        },
+        {
+          "location": "globalLock.activeClients.writers"
+        },
+        {
+          "location": "mem.resident"
+        },
+        {
+          "location": "mem.virtual"
+        },
+        {
+          "location": "mem.mapped"
+        },
+        {
+          "location": "extra_info.heap_usage_bytes"
+        },
+        {
+          "location": "extra_info.page_faults"
+        },
+        {
+          "location": "indexCounters.btree.accesses"
+        },
+        {
+          "location": "indexCounters.btree.hits"
+        },
+        {
+          "location": "indexCounters.btree.misses"
+        },
+        {
+          "location": "indexCounters.btree.resets"
+        },
+        {
+          "location": "indexCounters.btree.missRatio"
+        },
+        {
+          "location": "backGroundFlushing.flushes"
+        },
+        {
+          "location": "backGroundFlushing.total_ms"
+        },
+        {
+          "location": "backGroundFlushing.average_ms"
+        },
+        {
+          "location": "cursors.timedOut"
+        },
+        {
+          "location": "network.bytesIn"
+        },
+        {
+          "location": "network.bytesOut"
+        },
+        {
+          "location": "network.numRequests"
+        },
+        {
+          "location": "connections.current"
+        },
+        {
+          "location": "connections.available"
+        },
+        {
+          "location": "opcounters.insert"
+        },
+        {
+          "location": "opcounters.update"
+        },
+        {
+          "location": "opcounters.delete"
+        },
+        {
+          "location": "opcounters.query"
+        },
+        {
+          "location": "asserts.regular"
+        },
+        {
+          "location": "asserts.warning"
+        },
+        {
+          "location": "asserts.msg"
+        },
+        {
+          "location": "asserts.user"
+        },
+        {
+          "location": "asserts.rollovers"
+        },
+        {
+          "location": "dur.commits"
+        },
+        {
+          "location": "dur.journaledMB"
+        },
+        {
+          "location": "dur.writeToDataFilesMB"
+        },
+        {
+          "location": "dur.compression"
+        },
+        {
+          "location": "dur.commitsInWriteLock"
+        },
+        {
+          "location": "dur.earlyCommits"
+        },
+        {
+          "location": "dur.timeMs.dt"
+        },
+        {
+          "location": "dur.timeMs.prepLogBuffer"
+        },
+        {
+          "location": "dur.timeMs.writeToJournal"
+        },
+        {
+          "location": "dur.timeMs.writeToDataFiles"
+        },
+        {
+          "location": "dur.timeMs.remapPrivateView"
+        }
+      ]
+    }
+  ],
+  "dbs": [
+    {
+      "name": "effective-tpl",
+      "servers": [
+        {
+          "host": "mongo",
+          "port": 27017
+        }
+      ]
+    }
+  ]
+}

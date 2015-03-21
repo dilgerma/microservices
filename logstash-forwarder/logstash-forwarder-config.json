@@ -8,7 +8,8 @@
     {
       "paths": [
         "/var/log/app/*.log",
-        "/var/log/icinga2/*.log"
+        "/var/log/icinga2/*.log",
+        "/var/log/mongo-graphite/*.log"
        ]
     }
    ]

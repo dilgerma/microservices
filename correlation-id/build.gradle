@@ -29,8 +29,3 @@ dependencies {
     testCompile("junit:junit")
     testCompile("org.mockito:mockito-all:1.9.5")
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
-}
-

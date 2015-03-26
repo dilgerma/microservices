@@ -35,14 +35,14 @@ dependencies {
      * 3rd party
      */
     compile "org.projectlombok:lombok:1.14.8"
-    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
-    compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
     compile "com.google.guava:guava:17.0"
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile ('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
+
 
     compile("io.dropwizard.metrics:metrics-core:3.1.0")
     compile('com.codahale.metrics:metrics-graphite:3.0.1')

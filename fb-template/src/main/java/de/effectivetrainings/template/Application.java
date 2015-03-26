@@ -11,6 +11,7 @@ import de.effectivetrainings.template.db.TemplateDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableWebMvc
+@EnableEurekaClient
 @Import({RestConfig.class, MetricsConfig.class, ServicesConfig.class})
 public class Application extends AbstractMongoConfiguration {
 

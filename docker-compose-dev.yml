@@ -1,3 +1,10 @@
+eurekaserver:
+   build: fb-eureka-server
+   hostname: eurekaserver
+   ports:
+   - "8761"
+   expose:
+   - "8761"
 ui:
    build: fb-web
    hostname: fb-web
@@ -9,6 +16,7 @@ ui:
    - customers
    - templates
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    mem_limit: 324m
 invoices:
@@ -19,6 +27,7 @@ invoices:
    links:
    - repository:repository
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    mem_limit: 324m
 expenses:
@@ -29,6 +38,7 @@ expenses:
    links:
    - repository:repository
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    mem_limit: 324m
 customers:
@@ -39,6 +49,7 @@ customers:
    links:
    - repository:repository
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    mem_limit: 324m
 templates:
@@ -49,6 +60,7 @@ templates:
    links:
    - mongo
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    mem_limit: 324m
 repository:
@@ -58,6 +70,7 @@ repository:
    - "8080"
    links:
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=mock -jar /sources/app.jar
    environment:
    - user_email

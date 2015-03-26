@@ -1,3 +1,10 @@
+eurekaserver:
+   build: fb-eureka-server
+   hostname: eurekaserver
+   ports:
+   - "8761"
+   expose:
+   - "8761"
 dockerui:
   image: dockerui/dockerui
   privileged: true
@@ -31,6 +38,7 @@ ui:
    - customers
    - templates
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
    mem_limit: 324m
@@ -42,6 +50,7 @@ invoices:
    links:
    - repository:repository
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
    mem_limit: 324m
@@ -54,6 +63,7 @@ expenses:
    - repository:repository
    - logstash
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
    mem_limit: 324m
@@ -66,6 +76,7 @@ customers:
    - repository:repository
    - logstash
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
    mem_limit: 324m
@@ -78,6 +89,7 @@ templates:
    - mongo
    - logstash
    - graphite
+   - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
    mem_limit: 324m
@@ -93,6 +105,7 @@ repository:
    - user_apiKey
    links:
    - graphite
+   - eurekaserver
    mem_limit: 324m
 lsf:
    build: logstash-forwarder

@@ -1,11 +1,10 @@
-
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-          classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
-      }
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
+    }
 }
 
 apply plugin: 'java'
@@ -21,23 +20,22 @@ repositories {
 }
 
 configurations {
-    all*.exclude group: 'javax.servlet', module: 'servlet-api'
+    compile.exclude group: 'javax.servlet', module: 'servlet-api'
+    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+springBoot {
+    requiresUnpack = ['com.netflix.eureka:eureka-core', 'com.netflix.eureka:eureka-client']
 }
 
 dependencies {
 
-    /**
-     * libs
-     */
-    compile('org.springframework.boot:spring-boot-starter-web') {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-
-    compile ('org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.0.RELEASE') {
+    compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.0.RELEASE') {
         exclude module: 'javax.servlet:servlet-api'
     }
+
 
     testCompile("junit:junit")
     testCompile("org.springframework.boot:spring-boot-starter-test")

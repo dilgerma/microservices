@@ -8,6 +8,7 @@ import de.effectivetrainings.fastbill.config.RestConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableWebMvc
+@EnableEurekaClient
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 

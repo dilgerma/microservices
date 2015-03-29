@@ -7,7 +7,6 @@ eurekaserver:
    - "8761"
 ui:
    build: fb-web
-   hostname: fb-web
    ports:
    - "80:8080"
    links:
@@ -18,10 +17,9 @@ ui:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 324m
+   mem_limit: 512m
 invoices:
    build: fb-invoices
-   hostname: fb-invoices
    expose:
    - "8081"
    links:
@@ -29,10 +27,9 @@ invoices:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 324m
+   mem_limit: 1024m
 expenses:
    build: fb-expenses
-   hostname: fb-expenses
    expose:
    - "8081"
    links:
@@ -40,10 +37,9 @@ expenses:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 324m
+   mem_limit: 512m
 customers:
    build: fb-customers
-   hostname: fb-customers
    expose:
    - "8081"
    links:
@@ -51,10 +47,9 @@ customers:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 324m
+   mem_limit: 512m
 templates:
    build: fb-template
-   hostname: fb-template
    expose:
    - "8081"
    links:
@@ -62,10 +57,9 @@ templates:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 324m
+   mem_limit: 512m
 repository:
    build: fb-repository
-   hostname: fb-repository
    expose:
    - "8080"
    links:
@@ -75,7 +69,7 @@ repository:
    environment:
    - user_email
    - user_apiKey
-   mem_limit: 324m
+   mem_limit: 512m
 mongo:
   image: dockerfile/mongodb
   volumes:

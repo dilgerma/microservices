@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = Application.class)
 @WebAppConfiguration
 @TestPropertySource({"classpath:application.properties", "classpath:test.properties"})
-public class TemplateSpringContextTest {
+public class StartupTest {
 
     @Autowired
     private TemplateDocumentRepository templateDocumentRepository;

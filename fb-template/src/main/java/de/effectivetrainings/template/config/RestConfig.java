@@ -3,7 +3,7 @@ package de.effectivetrainings.template.config;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.template.rest.CorrelationIdInterceptor;
+import de.effectivetrainings.support.rest.CorrelationIdInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +25,6 @@ public class RestConfig {
 
     @Bean
     public RestRequestTimerInterceptor requestTimer(MetricsProvider metricsProvider) {
-        //TODO dilgerm - fix magic string
         return new RestRequestTimerInterceptor(metricsProvider);
     }
 

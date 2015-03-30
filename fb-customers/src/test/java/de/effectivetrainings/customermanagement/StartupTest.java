@@ -13,7 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
-@TestPropertySource(value = "classpath:test.properties")
+@TestPropertySource({"classpath:application.properties", "classpath:test.properties"})
 @WebAppConfiguration
 public class StartupTest {
 

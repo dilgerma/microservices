@@ -9,12 +9,14 @@ import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import de.effectivetrainings.spring.metrics.ConnectionHealthCheck;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
+import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
@@ -51,17 +53,15 @@ public class MetricsConfig {
     }
 
     @Bean
-    public HealthCheckRegistry healthChecks(@Value("${invoiceservice.uri}") URI invoiceServiceUri, @Value("${expenseservice.uri}") URI expenseServiceUri, @Value("${customerservice.uri}") URI customerUri) {
-
-        //dont reuse the already instrumented rest template, it requires an active request, this one is fired
-        //asynchronosly by the system, there is no request context and thus no MDB.
-        RestTemplate restTemplate = new RestTemplate();
+    public HealthCheckRegistry healthChecks(@SystemRequestTemplate RestTemplate restTemplate, ServicesConfig servicesConfig, @Value("${demo.customer.key}") String demoCustomerKey) {
 
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 
-        healthCheckRegistry.register("ui/customer", new ConnectionHealthCheck(customerUri, restTemplate));
-        healthCheckRegistry.register("ui/invoice", new ConnectionHealthCheck(invoiceServiceUri, restTemplate));
-        healthCheckRegistry.register("ui/expense", new ConnectionHealthCheck(expenseServiceUri, restTemplate));
+        healthCheckRegistry.register("ui/customer", new ConnectionHealthCheck(URI.create(servicesConfig.getCustomersBackendURI()), restTemplate));
+        healthCheckRegistry.register("ui/invoice", new ConnectionHealthCheck(URI.create(servicesConfig.getInvoiceBackendUri()), restTemplate));
+        healthCheckRegistry.register("ui/expense", new ConnectionHealthCheck(URI.create(servicesConfig.getExpenseBackendURI()), restTemplate));
+        URI templatesUri = UriComponentsBuilder.fromUriString(servicesConfig.getTemplateServiceURI()).buildAndExpand(demoCustomerKey).toUri();
+        healthCheckRegistry.register("ui/templates", new ConnectionHealthCheck(templatesUri, restTemplate));
         return healthCheckRegistry;
     }
 

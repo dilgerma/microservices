@@ -6,7 +6,6 @@ import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.template.config.MetricsConfig;
 import de.effectivetrainings.template.config.RestConfig;
-import de.effectivetrainings.template.config.ServicesConfig;
 import de.effectivetrainings.template.db.TemplateDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan
 @EnableWebMvc
 @EnableEurekaClient
-@Import({RestConfig.class, MetricsConfig.class, ServicesConfig.class})
+@Import({RestConfig.class, MetricsConfig.class})
 public class Application extends AbstractMongoConfiguration {
 
     public static void main(String[] args) {

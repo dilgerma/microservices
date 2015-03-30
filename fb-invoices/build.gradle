@@ -28,7 +28,7 @@ dependencies {
     /**
      * libs
      */
-    compile project(":correlation-id")
+    compile project(":rest-support")
     compile project(":spring-metrics")
 
     compile "org.projectlombok:lombok:1.14.8"

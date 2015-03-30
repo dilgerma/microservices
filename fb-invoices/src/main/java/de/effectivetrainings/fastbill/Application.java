@@ -1,8 +1,8 @@
 package de.effectivetrainings.fastbill;
 
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
+import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.fastbill.config.MetricsConfig;
 import de.effectivetrainings.fastbill.config.RestConfig;
 import org.springframework.boot.SpringApplication;
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan
 @EnableWebMvc
+@ComponentScan(basePackages = "de.effectivetrainings.fastbill.rest")
 @EnableEurekaClient
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application {
@@ -40,5 +40,6 @@ public class Application {
     public CorrelationId correlationId(HttpServletRequest servletRequest) {
         return new DefaultCorrelationId(servletRequest.getHeader(CorrelationId.CORRELATION_ID_HEADER_KEY));
     }
+
 
 }

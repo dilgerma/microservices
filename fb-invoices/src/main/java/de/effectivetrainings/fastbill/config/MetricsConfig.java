@@ -9,6 +9,7 @@ import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import de.effectivetrainings.spring.metrics.ConnectionHealthCheck;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
+import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,11 +47,7 @@ public class MetricsConfig {
     }
 
     @Bean
-    public HealthCheckRegistry healthChecks(@Value("${fastbill.invoice.uri}") URI customerUri) {
-
-        //dont reuse the already instrumented rest template, it requires an active request, this one is fired
-        //asynchronosly by the system, there is no request context and thus no MDB.
-        RestTemplate restTemplate = new RestTemplate();
+    public HealthCheckRegistry healthChecks(@SystemRequestTemplate RestTemplate restTemplate, @Value("${fb.repository.invoices}") URI customerUri) {
 
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
         final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(customerUri, restTemplate);

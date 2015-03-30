@@ -30,16 +30,16 @@ package de.effectivetrainings.fastbill.rest;
 
 
 import de.effectivetrainings.customermanagement.domain.Customers;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,14 +51,14 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/customers")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Slf4j
-public class CustomerResource extends BaseResource {
+public class CustomerResource {
 
     private RestTemplate restTemplate;
 
     private String invoiceUri;
 
     @Autowired
-    public CustomerResource(@Value("${fastbill.customer.uri}") String customerUri, RestTemplate restTemplate) {
+    public CustomerResource(@Value("${fb.repository.customer}") String customerUri, @UserRestTemplate RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.invoiceUri = customerUri;
     }
@@ -70,4 +70,10 @@ public class CustomerResource extends BaseResource {
         ResponseEntity<Customers> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Customers.class);
         return invoice.getBody();
     }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+       @ExceptionHandler
+       protected void handle(Exception e) {
+           log.warn("Resource ERROR", e);
+       }
 }

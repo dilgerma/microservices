@@ -31,6 +31,7 @@ package de.effectivetrainings.billing.rest;
 
 import de.effectivetrainings.billing.config.ServicesConfig;
 import de.effectivetrainings.billing.domain.*;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +66,7 @@ public class FbFacade {
     private static final String customerId = "default";
 
     @Autowired
-    public FbFacade(ServicesConfig servicesConfig, RestTemplate restTemplate) {
+    public FbFacade(ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
         this.servicesConfig = servicesConfig;
         this.restTemplate = restTemplate;
     }

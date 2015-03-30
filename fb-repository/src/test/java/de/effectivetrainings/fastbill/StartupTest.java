@@ -16,7 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles(Profiles.MOCK)
-@TestPropertySource("classpath:test.properties")
+@TestPropertySource({"classpath:application.properties", "classpath:test.properties"})
 public class StartupTest {
 
     @Test

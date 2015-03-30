@@ -1,4 +1,4 @@
-package de.effectivetrainings.fastbill.invoices;
+package de.effectivetrainings.fastbill.expenses;
 
 import de.effectivetrainings.fastbill.Application;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
-@TestPropertySource(value = "classpath:test.properties")
+@TestPropertySource(value = "classpath:application.properties")
 @WebAppConfiguration
 public class StartupTest {
 

@@ -51,11 +51,10 @@ public class MetricsConfig {
     }
 
     @Bean
-    public HealthCheckRegistry healthChecks(@Value("${fastbill.api.uri}") URI customerUri, RestTemplate restTemplate) {
+    public HealthCheckRegistry healthChecks(@Value("${fastbill.alive.check.uri}") URI fastbillApiUri, RestTemplate restTemplate) {
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
-        final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(customerUri, restTemplate);
-        //verify how that could work.
-//        healthCheckRegistry.register("repository/backend", connectionHealthCheck);
+        final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(fastbillApiUri, restTemplate);
+        healthCheckRegistry.register("repository/backend", connectionHealthCheck);
         return healthCheckRegistry;
     }
 

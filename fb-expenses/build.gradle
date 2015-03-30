@@ -28,12 +28,14 @@ dependencies {
     /**
      * libs
      */
-    compile project(":correlation-id")
+    compile project(":rest-support")
     compile project(":spring-metrics")
 
     /**
      * 3rd party
      */
+    compile ('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
+
     compile "org.projectlombok:lombok:1.14.8"
     compile "com.google.guava:guava:17.0"
     compile("org.springframework.boot:spring-boot-starter-web") {

@@ -1,0 +1,34 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'spring-rest-support'
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+    compile project(":correlation-id")
+
+    compile "org.projectlombok:lombok:1.14.8"
+    compile "com.google.guava:guava:17.0"
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
+
+    compile("org.springframework:spring-web:${springVersion}")
+
+    testCompile("junit:junit")
+    testCompile("org.springframework:spring-test:${springVersion}")
+    testCompile("org.mockito:mockito-all:1.9.5")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+

@@ -29,7 +29,6 @@ icinga:
    mem_limit: 1g
 ui:
    build: fb-web
-   hostname: ui
    ports:
    - "80:8080"
    links:
@@ -43,7 +42,6 @@ ui:
    volumes_from: ['lsf']
 invoices:
    build: fb-invoices
-   hostname: invoices
    expose:
    - "8081"
    links:
@@ -54,7 +52,6 @@ invoices:
    volumes_from: ['lsf']
 expenses:
    build: fb-expenses
-   hostname: expenses
    expose:
    - "8081"
    links:
@@ -66,7 +63,6 @@ expenses:
    volumes_from: ['lsf']
 customers:
    build: fb-customers
-   hostname: customers
    expose:
    - "8081"
    links:
@@ -78,7 +74,6 @@ customers:
    volumes_from: ['lsf']
 templates:
    build: fb-template
-   hostname: templates
    expose:
    - "8081"
    links:
@@ -90,7 +85,6 @@ templates:
    volumes_from: ['lsf']
 repository:
    build: fb-repository
-   hostname: fb-repository
    expose:
    - "8080"
    command: java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=mock -jar /sources/app.jar
@@ -155,6 +149,7 @@ grafana:
   - graphite
   mem_limit: 56m
 mongo:
+  hostname: mongo
   image: dockerfile/mongodb
   volumes:
   - /data/db

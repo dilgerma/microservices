@@ -1,7 +1,9 @@
 {
   "name": "webapp",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "grunt-cli": "~0.1.13"
+  },
   "devDependencies": {
     "grunt": "*",
     "grunt-contrib-copy": "*",

@@ -1,4 +1,3 @@
-def projectName = "fb-web"
 
 buildscript {
     repositories {
@@ -9,9 +8,16 @@ buildscript {
       }
 }
 
+plugins {
+    id "com.moowork.grunt" version "0.9"
+}
+
+def projectName = "fb-web"
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'com.moowork.grunt'
 //apply plugin: 'war'
 
 jar {
@@ -21,7 +27,6 @@ jar {
 repositories {
     mavenCentral()
 }
-
 
 dependencies {
 
@@ -51,3 +56,5 @@ dependencies {
     testCompile("org.mockito:mockito-all:1.9.5")
 }
 
+//build config
+build.dependsOn grunt_build

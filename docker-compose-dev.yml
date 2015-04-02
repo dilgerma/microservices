@@ -17,7 +17,6 @@ ui:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 512m
 invoices:
    build: fb-invoices
    expose:
@@ -27,7 +26,6 @@ invoices:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 1024m
 expenses:
    build: fb-expenses
    expose:
@@ -37,7 +35,6 @@ expenses:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 512m
 customers:
    build: fb-customers
    expose:
@@ -47,7 +44,6 @@ customers:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 512m
 templates:
    build: fb-template
    expose:
@@ -57,7 +53,6 @@ templates:
    - graphite
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-   mem_limit: 512m
 repository:
    build: fb-repository
    expose:
@@ -69,15 +64,12 @@ repository:
    environment:
    - user_email
    - user_apiKey
-   mem_limit: 512m
 mongo:
   image: dockerfile/mongodb
   volumes:
   - /data/db
   expose:
   - "27017"
-  mem_limit: 512m
-
 #graphite is currently only here as there is a problem in opening the socker (NullPointerException) if the container is not up.
 graphite:
   image: hopsoft/graphite-statsd

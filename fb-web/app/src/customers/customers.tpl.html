@@ -1,10 +1,10 @@
 <div class="container" ui-view>
-    <a href="#" ng-click="load()">Load Customers</a>
+    <a id="customers.load" href="#" ng-click="load()">Load Customers</a>
     <pre>
     {{customers | json}}
     </pre>
 
-    <div>
+    <div id="customer.result">
         {{response | json}}
     </div>
 </div>

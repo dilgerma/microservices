@@ -1,7 +1,7 @@
 <div class="container" ui-view>
     Templates:
     <div><input required type="text" ng-model="templateName">
-        <button class="button" ng-file-select ng-file-change="upload($files, templateName)" ng-multiple="false">Template Datei</button>
+        <button id="templates.put" class="button" ng-file-select ng-file-change="upload($files, templateName)" ng-multiple="false">Template Datei</button>
     </div>
     Template: {{templateName}}
 

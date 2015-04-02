@@ -1,0 +1,25 @@
+{
+  "name": "fb-ui-tests",
+  "version": "0.0.0",
+  "description": "UI Tests for FB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Dilger <martin@effectivetrainings.de>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "protractor": "~2.0.0",
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-init": "~0.3.2",
+    "grunt-ts": "~4.0.1",
+    "protractor-uisref-locator": "~1.1.0",
+    "jasmine-reporters": "~2.0.5"
+  },
+  "devDependencies": {
+    "grunt-tsd": "~0.1.0",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-watch": "~0.6.1"
+  }
+}

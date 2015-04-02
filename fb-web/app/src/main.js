@@ -157,7 +157,7 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
 module.exports = ['$upload', '$q', '$http', function ($upload, $q, $http) {
 
     //TODO - refactor to config
-    var templateURI = "http://192.168.59.103/templates";
+    var templateURI = "/templates";
 
 
     return {

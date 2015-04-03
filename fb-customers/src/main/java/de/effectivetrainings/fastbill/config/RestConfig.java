@@ -3,9 +3,9 @@ package de.effectivetrainings.fastbill.config;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.support.rest.CorrelationIdInterceptor;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import de.effectivetrainings.support.rest.SystemRequestTemplate;
+import de.effectivetrainings.support.rest.UserRestTemplate;
+import de.effectivetrainings.support.rest.correlation.CorrelationIdInterceptor;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +35,9 @@ public class RestConfig {
      */
     @UserRestTemplate
     @Bean
-    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
+    public RestTemplate restTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor, loadBalancerInterceptor));
+        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
         return restTemplate;
 
     }
@@ -54,6 +54,5 @@ public class RestConfig {
         restTemplate.getInterceptors().add(restRequestTimerInterceptor);
         return restTemplate;
     }
-
 
 }

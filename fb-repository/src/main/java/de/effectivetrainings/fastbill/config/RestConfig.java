@@ -8,9 +8,12 @@ import de.effectivetrainings.fastbill.repository.FastbillMockRepository;
 import de.effectivetrainings.fastbill.repository.FastbillRepositoryImpl;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
+import de.effectivetrainings.support.rest.RestSupportAutoConfig;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -25,6 +28,7 @@ import java.util.List;
  *
  */
 @Configuration
+@Import(RestSupportAutoConfig.class)
 public class RestConfig {
 
     @Profile(Profiles.PROD)
@@ -40,6 +44,7 @@ public class RestConfig {
     }
 
     @Bean
+    @UserRestTemplate
     public RestTemplate restTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor) {
 
         RestTemplate template = new RestTemplate();

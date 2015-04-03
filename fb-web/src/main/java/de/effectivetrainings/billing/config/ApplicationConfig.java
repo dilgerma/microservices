@@ -6,9 +6,9 @@ import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.support.rest.CorrelationIdInterceptor;
-import de.effectivetrainings.support.rest.UserRestTemplate;
+import de.effectivetrainings.support.rest.RestSupportAutoConfig;
 import de.effectivetrainings.support.rest.SystemRequestTemplate;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.*;
@@ -22,15 +22,15 @@ import java.util.Arrays;
 /**
  *
  */
-@Import(MetricsConfig.class)
+@Import({MetricsConfig.class,RestSupportAutoConfig.class})
 @Configuration
 public class ApplicationConfig {
 
     @Bean
     @UserRestTemplate
-    public RestTemplate userRestTemplate(CorrelationIdInterceptor correlationIdInterceptor, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
+    public RestTemplate userRestTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
         final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor, loadBalancerInterceptor));
+        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
         return restTemplate;
     }
 
@@ -40,11 +40,6 @@ public class ApplicationConfig {
         final RestTemplate restTemplate = new RestTemplate();
         restTemplate.setInterceptors(Arrays.asList(loadBalancerInterceptor));
         return restTemplate;
-    }
-
-    @Bean
-    public CorrelationIdInterceptor correlationIdInterceptor(CorrelationId correlationId) {
-        return new CorrelationIdInterceptor(correlationId);
     }
 
     @Bean

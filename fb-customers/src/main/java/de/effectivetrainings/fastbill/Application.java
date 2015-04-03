@@ -5,6 +5,8 @@ import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.fastbill.config.MetricsConfig;
 import de.effectivetrainings.fastbill.config.RestConfig;
+import de.effectivetrainings.support.rest.EnableRestSupport;
+import de.effectivetrainings.support.rest.RestSupportAutoConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -23,7 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan
 @EnableWebMvc
 @EnableEurekaClient
-@Import({RestConfig.class, MetricsConfig.class})
+@EnableRestSupport
+@Import({RestConfig.class, MetricsConfig.class, RestSupportAutoConfig.class})
     public class Application {
 
     public static void main(String[] args) {

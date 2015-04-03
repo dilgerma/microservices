@@ -31,7 +31,7 @@
             "short"
           ],
           "grid": {
-            "leftMax": 1000,
+            "leftMax": 4000,
             "rightMax": null,
             "leftMin": 0,
             "rightMin": null,
@@ -181,7 +181,7 @@
           "links": []
         },
         {
-          "title": "Requests Counts",
+          "title": "Discovery Client requets",
           "error": false,
           "span": 4,
           "editable": true,
@@ -203,12 +203,13 @@
             "threshold1": null,
             "threshold2": null,
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            "threshold2Color": "rgba(188, 234, 112, 0.22)",
+            "thresholdLine": true
           },
           "lines": true,
-          "fill": 0,
-          "linewidth": 1,
-          "points": false,
+          "fill": 1,
+          "linewidth": 2,
+          "points": true,
           "pointradius": 5,
           "bars": false,
           "stack": false,
@@ -220,31 +221,46 @@
             "max": false,
             "current": false,
             "total": false,
-            "avg": false
+            "avg": false,
+            "alignAsTable": true,
+            "rightSide": false,
+            "hideEmpty": true,
+            "sortDesc": false
           },
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "steppedLine": false,
           "tooltip": {
-            "value_type": "cumulative",
+            "value_type": "individual",
             "shared": false
           },
           "targets": [
             {
-              "target": "customers.rest.fastbill.customers.count"
+              "target": "customers.counter.servo.discoveryclient-httpclient_request"
             },
             {
-              "target": "expenses.rest.fastbill.expenses.count"
+              "target": "expenses.counter.servo.discoveryclient-httpclient_request"
             },
             {
-              "target": "invoices.rest.fastbill.invoice.count"
+              "target": "invoices.counter.servo.discoveryclient-httpclient_request"
             },
             {
-              "target": "repository.api.*.*.api.*.count"
+              "target": "repository.counter.servo.discoveryclient-httpclient_request"
+            },
+            {
+              "target": "template.counter.servo.discoveryclient-httpclient_request"
+            },
+            {
+              "target": "ui.counter.servo.discoveryclient-httpclient_request"
             }
           ],
           "aliasColors": {},
           "seriesOverrides": [],
-          "links": []
+          "links": [
+            {
+              "type": "dashboard",
+              "name": "Drilldown dashboard"
+            }
+          ]
         }
       ]
     },
@@ -368,7 +384,7 @@
           },
           "targets": [
             {
-              "target": "customers.rest.fastbill.customers.mean_rate"
+              "target": "customers.counter.servo.discoveryclient_failed"
             },
             {
               "target": "invoices.rest.fastbill.invoice.mean_rate"
@@ -523,6 +539,12 @@
             },
             {
               "target": "repository.counter.status.*.rest.*.*.*"
+            },
+            {
+              "target": "ui.counter.status.*.*.select metric"
+            },
+            {
+              "target": "template.counter.status.*.select metric"
             }
           ],
           "aliasColors": {},
@@ -678,13 +700,13 @@
         "2h",
         "1d"
       ],
-      "now": true,
+      "now": false,
       "notice": false
     }
   ],
   "time": {
-    "from": "now-5m",
-    "to": "now"
+    "from": "2015-04-03T21:54:16.765Z",
+    "to": "2015-04-03T21:55:55.152Z"
   },
   "templating": {
     "list": []

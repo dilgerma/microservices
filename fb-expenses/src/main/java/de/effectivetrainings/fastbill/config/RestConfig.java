@@ -4,11 +4,13 @@ import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.fastbill.rest.CorrelationIdInterceptor;
 import de.effectivetrainings.spring.metrics.MetricsProvider;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.support.rest.UserRestTemplate;
+import de.effectivetrainings.support.rest.RestSupportAutoConfig;
 import de.effectivetrainings.support.rest.SystemRequestTemplate;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -17,13 +19,14 @@ import java.util.Arrays;
  *
  */
 @Configuration
+@Import(RestSupportAutoConfig.class)
 public class RestConfig {
 
     @Bean
     @UserRestTemplate
-    public RestTemplate restTemplate(CorrelationIdInterceptor correlationIdInterceptor, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
+    public RestTemplate restTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
         final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(correlationIdInterceptor, restRequestTimerInterceptor, loadBalancerInterceptor));
+        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
         return restTemplate;
     }
 

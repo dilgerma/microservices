@@ -1,4 +1,4 @@
-package de.effectivetrainings.support.rest;
+package de.effectivetrainings.support.rest.correlation;
 
 import de.effectivetrainings.correlation.CorrelationId;
 import lombok.extern.slf4j.Slf4j;

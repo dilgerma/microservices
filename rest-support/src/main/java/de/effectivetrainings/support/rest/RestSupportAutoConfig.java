@@ -1,5 +1,6 @@
 package de.effectivetrainings.support.rest;
 
+import com.codahale.metrics.MetricRegistry;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.support.rest.correlation.CorrelationIdInterceptor;
 import de.effectivetrainings.support.rest.nag.SlowDownRestInterceptor;
@@ -45,8 +46,8 @@ public class RestSupportAutoConfig {
 
     @Bean
     @ConditionalOnProperty(value = "rest.nagging.enabled", matchIfMissing = true)
-    public SlowDownRestInterceptor slowDownRestInterceptor() {
-        return new SlowDownRestInterceptor();
+    public SlowDownRestInterceptor slowDownRestInterceptor(MetricRegistry metricRegistry) {
+        return new SlowDownRestInterceptor(metricRegistry);
     }
 
     @Bean
@@ -65,7 +66,7 @@ public class RestSupportAutoConfig {
             }
             if(slowDownRestInterceptor != null) {
                 log.info("registering nag - slow down interceptor");
-                interceptors.add(new SlowDownRestInterceptor());
+                interceptors.add(slowDownRestInterceptor);
             }
 
             List<ClientHttpRequestInterceptor> availableInterceptors = new ArrayList<>(userRestTemplate.getInterceptors());

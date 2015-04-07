@@ -4,13 +4,9 @@ import com.codahale.metrics.MetricRegistry;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.support.rest.correlation.CorrelationIdInterceptor;
 import de.effectivetrainings.support.rest.nag.SlowDownRestInterceptor;
-import de.effectivetrainings.support.rest.resilience.RetryableRibbonLoadBalancerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -23,7 +19,6 @@ import java.util.List;
 /**
  *
  */
-@ConditionalOnBean(RestTemplate.class)
 @Configuration
 @Slf4j
 public class RestSupportAutoConfig {
@@ -38,22 +33,15 @@ public class RestSupportAutoConfig {
     @Autowired(required = false)
     private SlowDownRestInterceptor slowDownRestInterceptor;
 
-    @ConditionalOnBean(CorrelationId.class)
     @Bean
     public CorrelationIdInterceptor correlationIdInterceptor(CorrelationId correlationId) {
         return new CorrelationIdInterceptor(correlationId);
     }
 
     @Bean
-    @ConditionalOnProperty(value = "rest.nagging.enabled", matchIfMissing = true)
+    @ConditionalOnProperty(value = "rest.nagging.enabled", matchIfMissing = false)
     public SlowDownRestInterceptor slowDownRestInterceptor(MetricRegistry metricRegistry) {
         return new SlowDownRestInterceptor(metricRegistry);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "rest.client.retries", matchIfMissing = false)
-    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries, SpringClientFactory springClientFactory) {
-        return new RetryableRibbonLoadBalancerClient(maxRetries, springClientFactory);
     }
 
     @PostConstruct

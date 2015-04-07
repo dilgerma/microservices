@@ -1,6 +1,7 @@
 package de.effectivetrainings.spring.metrics;
 
 import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -14,17 +15,17 @@ import java.io.IOException;
  */
 public class RestRequestTimerInterceptor implements ClientHttpRequestInterceptor {
 
-    private MetricsProvider metricsProvider;
+    private MetricRegistry metricRegistry;
 
-    public RestRequestTimerInterceptor(MetricsProvider metricsProvider) {
-        this.metricsProvider = metricsProvider;
+    public RestRequestTimerInterceptor(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
     }
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        Timer timer = metricsProvider.timer("request-timer");
+        Timer timer = metricRegistry.timer("request-timer");
         Timer.Context context = timer.time();
-        Meter meter = metricsProvider.meter("request-meter");
+        Meter meter = metricRegistry.meter("request-meter");
 
         try {
             ClientHttpResponse response = execution.execute(request, body);

@@ -186,7 +186,7 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": true,
+            "show": false,
             "values": false,
             "min": false,
             "max": false,
@@ -275,7 +275,7 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": true,
+            "show": false,
             "values": false,
             "min": false,
             "max": false,
@@ -332,7 +332,7 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": true,
+            "show": false,
             "values": false,
             "min": false,
             "max": false,
@@ -573,7 +573,7 @@
           "stack": false,
           "percentage": false,
           "legend": {
-            "show": true,
+            "show": false,
             "values": false,
             "min": false,
             "max": false,
@@ -589,13 +589,7 @@
           },
           "targets": [
             {
-              "target": "expenses.requests.nag.slowDown.mean_rate"
-            },
-            {
-              "target": "invoices.requests.nag.slowDown.mean_rate"
-            },
-            {
-              "target": "customers.requests.nag.slowDown.mean_rate"
+              "target": "*.request.nag.slowDown.count"
             }
           ],
           "aliasColors": {},

@@ -51,7 +51,7 @@ public class StartupTest {
         assertTrue(interceptors.contains(RestRequestTimerInterceptor.class));
         assertTrue(interceptors.contains(LoadBalancerInterceptor.class));
         assertTrue(interceptors.contains(CorrelationIdInterceptor.class));
-        assertFalse(interceptors.contains(SlowDownRestInterceptor.class));
+        assertTrue(interceptors.contains(SlowDownRestInterceptor.class));
     }
 
     @Test

@@ -2,17 +2,17 @@ eurekaserver:
    build: fb-eureka-server
    hostname: eurekaserver
    ports:
-   - "8761"
+   - "8761:8761"
    expose:
    - "8761"
-dockerui:
-  image: dockerui/dockerui
-  privileged: true
-  ports:
-  - "9000:9000"
-  volumes:
-  - /var/run/docker.sock:/var/run/docker.sock
-  mem_limit: 56m
+#dockerui:
+#  image: dockerui/dockerui
+#  privileged: true
+#  ports:
+#  - "9000:9000"
+#  volumes:
+#  - /var/run/docker.sock:/var/run/docker.sock
+#  mem_limit: 56m
 #icinga:
 #   build: icinga
 #   hostname: icinga-host
@@ -150,7 +150,7 @@ grafana:
   mem_limit: 56m
 mongo:
   hostname: mongo
-  image: dockerfile/mongodb
+  image: mongo
   volumes:
   - /data/db
   expose:

@@ -11,6 +11,7 @@ import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import de.effectivetrainings.support.rest.resilience.RetryableRibbonLoadBalancerClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
@@ -18,6 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -35,8 +38,8 @@ public class RestConfig {
 
     @Profile(Profiles.PROD)
     @Bean
-    public FastbillRepository fastbillRepository(@Value("${fastbill.api.uri}") URI fastbillApiUri, FastbillUserData fastbillUserData, CorrelationId correlationId, RestRequestTimerInterceptor restRequestTimerInterceptor) {
-        return new FastbillRepositoryImpl(fastbillApiUri.toString(), restTemplate(restRequestTimerInterceptor), fastbillUserData, correlationId);
+    public FastbillRepository fastbillRepository(@Value("${fastbill.api.uri}") URI fastbillApiUri, FastbillUserData fastbillUserData, CorrelationId correlationId, @UserRestTemplate RestTemplate restTemplate) {
+        return new FastbillRepositoryImpl(fastbillApiUri.toString(), restTemplate, fastbillUserData, correlationId);
     }
 
     @Profile(Profiles.MOCK)
@@ -47,9 +50,9 @@ public class RestConfig {
 
     @Bean
     @UserRestTemplate
-    public RestTemplate restTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor) {
+    public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor) {
 
-        RestTemplate template = new RestTemplate();
+        RestTemplate template = new RestTemplate(clientHttpRequestFactory);
 
         List<HttpMessageConverter<?>> messageConverters = template.getMessageConverters();
             /*
@@ -75,9 +78,17 @@ public class RestConfig {
 
     @Bean
     @ConditionalOnProperty(value = "rest.client.retries", matchIfMissing = false)
-    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries, SpringClientFactory springClientFactory) {
+    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries, SpringClientFactory springClientFactory, MetricRegistry metricRegistry) {
         log.info("Building Retryable Ribbon Loadbalancer. {} Retries configured", maxRetries);
-        return new RetryableRibbonLoadBalancerClient(maxRetries, springClientFactory);
+        return new RetryableRibbonLoadBalancerClient(maxRetries, springClientFactory, metricRegistry);
     }
+
+    @Bean(name = "restClientHttpFactory")
+       public ClientHttpRequestFactory clientHttpRequestFactory(@Value("${rest.client.connectionTimeout:-1}") Integer connectionTimeout, @Value("${rest.client.readTimeout:-1}") Integer readTimeout) {
+           final SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+           simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
+           simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
+           return simpleClientHttpRequestFactory;
+       }
 
 }

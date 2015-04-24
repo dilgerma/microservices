@@ -64,7 +64,7 @@ public class CustomerResource {
     }
 
     @RequestMapping
-    public Customers invoices() {
+    public Customers customers() {
         log.info("Requesting all customers");
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Customers> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Customers.class);

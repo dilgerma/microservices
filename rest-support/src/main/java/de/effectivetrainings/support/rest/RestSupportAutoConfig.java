@@ -46,13 +46,13 @@ public class RestSupportAutoConfig {
 
     @PostConstruct
     public void initialize() {
-        if(userRestTemplate != null) {
+        if (userRestTemplate != null) {
             List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-            if(correlationIdInterceptor != null) {
+            if (correlationIdInterceptor != null) {
                 log.info("registering correlation id interceptor");
                 interceptors.add(correlationIdInterceptor);
             }
-            if(slowDownRestInterceptor != null) {
+            if (slowDownRestInterceptor != null) {
                 log.info("registering nag - slow down interceptor");
                 interceptors.add(slowDownRestInterceptor);
             }

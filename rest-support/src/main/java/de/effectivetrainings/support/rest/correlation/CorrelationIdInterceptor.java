@@ -28,7 +28,7 @@ public class CorrelationIdInterceptor implements ClientHttpRequestInterceptor {
             throws IOException {
         log.debug("Request with Correlation ID : {}", correlationId.getCorrelationId());
         HttpHeaders headers = request.getHeaders();
-        headers.add(CorrelationId.CORRELATION_ID_HEADER_KEY, correlationId.getCorrelationId());
+        headers.set(CorrelationId.CORRELATION_ID_HEADER_KEY, correlationId.getCorrelationId());
         return execution.execute(request, body);
     }
 }

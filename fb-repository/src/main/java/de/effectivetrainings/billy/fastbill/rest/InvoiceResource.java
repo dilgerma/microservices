@@ -31,7 +31,7 @@ package de.effectivetrainings.billy.fastbill.rest;
 
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.ServiceType;
+import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import de.effectivetrainings.billy.fastbill.domain.Filter;
 import de.effectivetrainings.billy.fastbill.domain.Invoice;
 import de.effectivetrainings.billy.fastbill.domain.Invoices;
@@ -71,7 +71,7 @@ public class InvoiceResource extends BaseResource  {
         * Currently Fastbill only allows to Filter by Invoice Date / Month.
         * What we want is to filter by Paid-Date / Month, so we need to load all invoices and filter manually...
         * */
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, Filter.NONE);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.INVOICES, -1, Filter.NONE);
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();
         List<Invoice> invoiceList =  invoices.stream().filter(invoice -> invoice.paidIn(month, year)).collect(Collectors.toList());
         return new Invoices(invoiceList);
@@ -81,7 +81,7 @@ public class InvoiceResource extends BaseResource  {
     public Invoices invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
         log.info("Requesting Invoices for Invoice Number ", invoiceNumber);
 
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.INVOICES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
         List<Invoice> invoices = fastbillRepository.request(parameter).getResponse().getInvoices();
         return new Invoices(invoices);
     }

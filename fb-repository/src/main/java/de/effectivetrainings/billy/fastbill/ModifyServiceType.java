@@ -1,16 +1,18 @@
 package de.effectivetrainings.billy.fastbill;
 
 /**
+ * Services Types that modify data.
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
  * @since: 28.03.14
  */
-public enum ServiceType {
+public enum ModifyServiceType {
 
-    INVOICES("invoice.get"), EXPENSES("expense.get"), TIMES("time.get"), CUSTOMER("customer.get"), PROJECT("project.get");
+    CUSTOMER_CREATE("customer.create"),
+    CUSTOMER_DELETE("customer.delete");
 
     private String servicesType;
 
-    ServiceType(String servicesType) {
+    ModifyServiceType(String servicesType) {
         this.servicesType = servicesType;
     }
 

@@ -61,6 +61,7 @@ public class Filter {
     public static final String MONTH = "MONTH";
     public static final String YEAR = "YEAR";
     public static final String CUSTOMER_ID = "CUSTOMER_ID";
+    public static final String CUSTOMER_SEARCH_TERM = "TERM";
     public static final String PROJECT_ID = "PROJECT_ID";
     public static final String START_DATE = "START_DATE";
     public static final String END_DATE = "END_DATE";

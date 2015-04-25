@@ -30,7 +30,7 @@ package de.effectivetrainings.billy.fastbill.rest;
 
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.ServiceType;
+import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import de.effectivetrainings.billy.fastbill.domain.Expense;
 import de.effectivetrainings.billy.fastbill.domain.Expenses;
 import de.effectivetrainings.billy.fastbill.domain.Filter;
@@ -66,14 +66,14 @@ public class ExpenseResource extends BaseResource {
         Filter monthFilter = month != null ? new Filter(Filter.MONTH, String.valueOf(month)) : Filter.NONE;
         Filter yearFilter = year != null ? new Filter(Filter.YEAR, String.valueOf(year)) : Filter.NONE;
 
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.EXPENSES, -1, monthFilter, yearFilter);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.EXPENSES, -1, monthFilter, yearFilter);
         List<Expense> expenses = fastbillRepository.request(parameter).getResponse().getExpenses();
         return new Expenses(expenses);
     }
 
     @RequestMapping(value = "/expenses/{invoiceNumber}")
     public List<Expense> invoiceByInvoiceNumber(@PathVariable(value = "invoiceNumber") String invoiceNumber) {
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.EXPENSES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.EXPENSES, -1, new Filter(Filter.INVOICE_NUMBER, invoiceNumber));
         List<Expense> expenses = fastbillRepository.request(parameter).getResponse().getExpenses();
         return expenses;
     }

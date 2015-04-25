@@ -49,6 +49,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Response {
 
+    @JsonProperty(value = "STATUS")
+    private Status status;
+
+    @JsonProperty(value = "ERRORS")
+    private List<String> errors = new ArrayList<>();
+
     @JsonProperty(value = "INVOICES")
     private List<Invoice> invoices = new ArrayList<>();
 
@@ -63,4 +69,9 @@ public class Response {
 
     @JsonProperty(value = "PROJECTS")
     private List<Project> projects = new ArrayList<>();
+
+    public boolean isSuccess() {
+        return Status.success.equals(status) && errors.isEmpty();
+    }
+
 }

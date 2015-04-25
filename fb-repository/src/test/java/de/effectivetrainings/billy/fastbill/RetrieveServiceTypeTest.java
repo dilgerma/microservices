@@ -37,11 +37,11 @@ import static org.junit.Assert.assertEquals;
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
  * @since: 28.03.14
  */
-public class ServiceTypeTest {
+public class RetrieveServiceTypeTest {
 
     @Test
     public void invoiceServiceTypeWithFilter() {
-        ServiceType type = ServiceType.EXPENSES;
+        RetrieveServiceType type = RetrieveServiceType.EXPENSES;
         Filter filter = new Filter(Filter.INVOICE_NUMBER, "12");
         FastbillRequestParameter parameter = new FastbillRequestParameter(type, -1, filter);
 

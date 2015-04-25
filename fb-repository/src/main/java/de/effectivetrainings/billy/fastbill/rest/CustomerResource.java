@@ -33,7 +33,7 @@ import de.effectivetrainings.billy.fastbill.domain.Customers;
 import de.effectivetrainings.billy.fastbill.domain.Filter;
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.ServiceType;
+import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class CustomerResource extends BaseResource {
     @RequestMapping(value = "/customers")
     public Customers customers() {
 
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.CUSTOMER, -1, Filter.NONE);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.CUSTOMER, -1, Filter.NONE);
         List<Customer> expenses = fastbillRepository.request(parameter).getResponse().getCustomers();
         return new Customers(expenses);
     }

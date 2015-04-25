@@ -41,7 +41,7 @@ public class FastbillRequestParameterTest {
 
     @Test
     public void testToJson() {
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.INVOICES, 0, new Filter("name", "value"), new Filter("name2", "value2"), Filter.NONE);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.INVOICES, 0, new Filter("name", "value"), new Filter("name2", "value2"), Filter.NONE);
         assertEquals("{\"service\":\"invoice.get\",\"Limit\":0,\"Filter\":{\"name\":\"value\",\"name2\":\"value2\"}}", parameter.toJson());
     }
 }

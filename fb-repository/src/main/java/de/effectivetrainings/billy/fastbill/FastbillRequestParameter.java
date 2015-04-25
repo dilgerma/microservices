@@ -45,7 +45,7 @@ import java.util.Arrays;
  */
 @JsonPropertyOrder(value = {"serviceType", "limit", "filterList"})
 @Getter
-public class FastbillRequestParameter {
+public class FastbillRequestParameter implements FastbillRequest {
 
     @JsonProperty(required = true, value = "service")
     private final String serviceType;
@@ -56,11 +56,11 @@ public class FastbillRequestParameter {
     @JsonProperty(required = true, value = "Limit")
     private final int limit;
 
-    public FastbillRequestParameter(ServiceType serviceType, int limit, Filter... filters) {
+    public FastbillRequestParameter(RetrieveServiceType retrieveServiceType, int limit, Filter... filters) {
 
         Preconditions.checkArgument(filters.length != 0);
 
-        this.serviceType = serviceType.getServicesType();
+        this.serviceType = retrieveServiceType.getServicesType();
         this.filters = new Filters(Arrays.asList(filters));
         this.limit = limit;
     }

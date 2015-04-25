@@ -2,19 +2,16 @@ package de.effectivetrainings.billy.fastbill.config;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
-import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillUserData;
 import de.effectivetrainings.billy.fastbill.repository.FastbillMockRepository;
 import de.effectivetrainings.billy.fastbill.repository.FastbillRepositoryImpl;
+import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import de.effectivetrainings.support.rest.UserRestTemplate;
-import de.effectivetrainings.support.rest.resilience.RetryableRibbonLoadBalancerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -74,13 +71,6 @@ public class RestConfig {
     @Bean
     public RestRequestTimerInterceptor registry(MetricRegistry registry) {
         return new RestRequestTimerInterceptor(registry);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "rest.client.retries", matchIfMissing = false)
-    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries, SpringClientFactory springClientFactory, MetricRegistry metricRegistry) {
-        log.info("Building Retryable Ribbon Loadbalancer. {} Retries configured", maxRetries);
-        return new RetryableRibbonLoadBalancerClient(maxRetries, springClientFactory, metricRegistry);
     }
 
     @Bean(name = "restClientHttpFactory")

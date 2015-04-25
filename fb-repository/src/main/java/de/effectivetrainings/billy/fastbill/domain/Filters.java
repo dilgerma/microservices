@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,5 +62,9 @@ public class Filters {
                 filterMap.put(filter.getFilterName(), filter.getFilterValue());
         }
         return filterMap;
+    }
+
+    public static Filters none() {
+        return new Filters(Collections.emptyList());
     }
 }

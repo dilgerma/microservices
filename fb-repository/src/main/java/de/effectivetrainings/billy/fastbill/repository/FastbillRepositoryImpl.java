@@ -28,12 +28,12 @@
 
 package de.effectivetrainings.billy.fastbill.repository;
 
-import de.effectivetrainings.billy.fastbill.domain.FastbillResponse;
-import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
-import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
+import de.effectivetrainings.billy.fastbill.FastbillRequest;
 import de.effectivetrainings.billy.fastbill.FastbillUserData;
 import de.effectivetrainings.billy.fastbill.config.Profiles;
+import de.effectivetrainings.billy.fastbill.domain.FastbillResponse;
+import de.effectivetrainings.correlation.CorrelationId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
     }
 
     @Override
-    public FastbillResponse request(FastbillRequestParameter parameter){
+    public FastbillResponse request(FastbillRequest parameter){
         try {
             HttpHeaders headers = getHttpHeaders();
             HttpEntity entity = new HttpEntity(parameter.toJson(), headers);

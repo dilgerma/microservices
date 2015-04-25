@@ -31,7 +31,7 @@ package de.effectivetrainings.billy.fastbill.rest;
 
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.ServiceType;
+import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import de.effectivetrainings.billy.fastbill.domain.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -65,7 +65,7 @@ public class ProjectResource extends BaseResource {
                                            @RequestParam(required = false, value = "startDate") Date start,     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @RequestParam(required = false, value = "endDate") Date end, @RequestParam(required = false, value = "projectId") String projectId) {
 
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.TIMES, -1, new Filter(Filter.START_DATE, start), new Filter(Filter.END_DATE, end), new Filter(Filter.PROJECT_ID, projectId));
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.TIMES, -1, new Filter(Filter.START_DATE, start), new Filter(Filter.END_DATE, end), new Filter(Filter.PROJECT_ID, projectId));
 
         List<Time> times = fastbillRepository.request(parameter).getResponse().getTimes();
 
@@ -85,10 +85,10 @@ public class ProjectResource extends BaseResource {
             fullBillableMinutes.put(time.getProjectId(), fullBillableMinutes.get(time.getProjectId())+time.getBillableMinutes());
         }
 
-        List<Customer> customers = fastbillRepository.request(new FastbillRequestParameter(ServiceType.CUSTOMER, -1, Filter.NONE)).getResponse().getCustomers();
+        List<Customer> customers = fastbillRepository.request(new FastbillRequestParameter(RetrieveServiceType.CUSTOMER, -1, Filter.NONE)).getResponse().getCustomers();
         Map<String, Customer> customersById = customers.stream().collect(Collectors.toMap(Customer::getCustomerId, c -> c));
 
-        List<Project> projects = fastbillRepository.request(new FastbillRequestParameter(ServiceType.PROJECT,-1, new Filter(Filter.PROJECT_ID, projectId))).getResponse().getProjects();
+        List<Project> projects = fastbillRepository.request(new FastbillRequestParameter(RetrieveServiceType.PROJECT,-1, new Filter(Filter.PROJECT_ID, projectId))).getResponse().getProjects();
 
         //FAstbill API has a Bug, filter by Project ID does not work
         if(projectId != null) {
@@ -113,7 +113,7 @@ public class ProjectResource extends BaseResource {
 
     @RequestMapping(value = "")
     public List<Project> findProjects() {
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.PROJECT, -1, Filter.NONE);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.PROJECT, -1, Filter.NONE);
 
         List<Project> projects = fastbillRepository.request(parameter).getResponse().getProjects();
 
@@ -126,7 +126,7 @@ public class ProjectResource extends BaseResource {
 
     @RequestMapping(value = "/customers")
     public List<Customer> findCustomers() {
-        FastbillRequestParameter parameter = new FastbillRequestParameter(ServiceType.CUSTOMER, -1, Filter.NONE);
+        FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.CUSTOMER, -1, Filter.NONE);
         List<Customer> customers = fastbillRepository.request(parameter).getResponse().getCustomers();
         return customers;
     }

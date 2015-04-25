@@ -1,8 +1,9 @@
 package de.effectivetrainings.billy.fastbill.repository;
 
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
+import de.effectivetrainings.billy.fastbill.FastbillRequest;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.ServiceType;
+import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import de.effectivetrainings.billy.fastbill.config.Profiles;
 import de.effectivetrainings.billy.fastbill.domain.*;
 import org.springframework.context.annotation.Profile;
@@ -17,15 +18,21 @@ import java.util.List;
 @Profile(Profiles.MOCK)
 public class FastbillMockRepository implements FastbillRepository {
     @Override
-    public FastbillResponse request(FastbillRequestParameter parameter) {
-        if (ServiceType.INVOICES.getServicesType().equals(parameter.getServiceType())) {
-            return retrieveMockedInvoices();
-        } else if (ServiceType.EXPENSES.getServicesType().equals(parameter.getServiceType())) {
-            return retrieveMockedExpenses();
-        } else if (ServiceType.CUSTOMER.getServicesType().equals(parameter.getServiceType())) {
-            return retrieveMockedCustomers();
+    public FastbillResponse request(FastbillRequest parameter) {
+        if (parameter instanceof FastbillRequestParameter) {
+            FastbillRequestParameter fastbillRequestParameter = (FastbillRequestParameter) parameter;
+            if (RetrieveServiceType.INVOICES.getServicesType().equals(fastbillRequestParameter.getServiceType())) {
+                return retrieveMockedInvoices();
+            } else if (RetrieveServiceType.EXPENSES.getServicesType().equals(fastbillRequestParameter.getServiceType())) {
+                return retrieveMockedExpenses();
+            } else if (RetrieveServiceType.CUSTOMER.getServicesType().equals(fastbillRequestParameter.getServiceType())) {
+                return retrieveMockedCustomers();
+            }
+            throw new IllegalStateException(fastbillRequestParameter.getServiceType() + " currently not supported by mock");
+        } else {
+            //ignore payload requests
         }
-        throw new IllegalStateException(parameter.getServiceType() + " currently not supported by mock");
+        throw new IllegalStateException("Invalid parameter type : " + parameter.getClass());
     }
 
     private FastbillResponse retrieveMockedCustomers() {

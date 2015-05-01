@@ -1,6 +1,7 @@
 'use strict';
 require('angular');
 require('angular-ui-router');
+var Customer = require('./Customer');
 
 // home module
 angular.module('customers', ['ui.router']).config(['$stateProvider', function($stateProvider) {
@@ -14,6 +15,10 @@ angular.module('customers', ['ui.router']).config(['$stateProvider', function($s
     '$scope',
     'customerService',
     function($scope, customerService) {
+
+        $scope.customer = new Customer();
+        $scope.customer.firstName = "hans";
+
         /* initialize */
         $scope.load = function() {
             customerService.loadCustomers().success(function(data) {
@@ -22,5 +27,9 @@ angular.module('customers', ['ui.router']).config(['$stateProvider', function($s
                 $scope.response = response;
             });
         };
+
+        $scope.store = function() {
+            customerService.storeCustomer($scope.customer)
+        }
     }
 ]).factory('customerService', require('./CustomerService'));

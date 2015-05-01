@@ -6,8 +6,6 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.interceptor.RetryInterceptorBuilder;
@@ -34,10 +32,9 @@ public class MessagingConfig {
     }
 
     @Bean(name = "eventMessageContainerFactory")
-        public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory, @DefaultMessageConverterQualifier MessageConverter messageConverter) {
+        public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
             SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory = new SimpleRabbitListenerContainerFactory();
             simpleRabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-            simpleRabbitListenerContainerFactory.setMessageConverter(messageConverter);
             simpleRabbitListenerContainerFactory.setDefaultRequeueRejected(false);
             //give handlers 3 attempts
             simpleRabbitListenerContainerFactory.setAdviceChain(RetryInterceptorBuilder.stateless()
@@ -46,9 +43,4 @@ public class MessagingConfig {
             return simpleRabbitListenerContainerFactory;
         }
 
-    @Bean
-       @DefaultMessageConverterQualifier
-       public MessageConverter jsonMessageConverter() {
-           return new Jackson2JsonMessageConverter();
-       }
 }

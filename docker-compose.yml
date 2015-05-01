@@ -38,6 +38,7 @@ ui:
    - templates
    - graphite
    - eurekaserver
+   - rabbitmq:messaging
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
 invoices:
@@ -70,13 +71,14 @@ customers:
    - logstash
    - graphite
    - eurekaserver
+   - rabbitmq:messaging
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-#eventstore:
-#   build: eventstore
-#   links:
-#   - eurekaserver
-#   - rabbitmq
+eventstore:
+   build: eventstore
+   links:
+   - eurekaserver
+   - rabbitmq:messaging
 templates:
    build: fb-template
    expose:
@@ -101,6 +103,7 @@ repository:
    links:
    - graphite
    - eurekaserver
+   - rabbitmq:messaging
 lsf:
    build: logstash-forwarder
    links:

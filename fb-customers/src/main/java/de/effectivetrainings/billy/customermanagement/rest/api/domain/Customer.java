@@ -34,6 +34,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
  * @since: 24.04.14
@@ -44,8 +46,9 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
 
+    //TODO events - implement mongo sequence
     @JsonProperty(value = "CUSTOMER_ID")
-    private String customerId;
+    private String customerId = UUID.randomUUID().toString();
 
     @JsonProperty(value = "CUSTOMER_NUMBER")
     private String customerNumber;

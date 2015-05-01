@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.ui;
 
+import de.effectivetrainings.billy.ui.config.MessaginConnectionConfig;
 import de.effectivetrainings.support.rest.EnableRestSupport;
 import de.effectivetrainings.billy.ui.config.ApplicationConfig;
 import de.effectivetrainings.billy.ui.config.MetricsConfig;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Import;
 @ComponentScan("de.effectivetrainings.billy.ui.rest")
 @EnableEurekaClient
 @EnableRestSupport
-@Import({ApplicationConfig.class, MetricsConfig.class})
+@Import({ApplicationConfig.class, MetricsConfig.class, MessaginConnectionConfig.class})
 public class Application
 {
 

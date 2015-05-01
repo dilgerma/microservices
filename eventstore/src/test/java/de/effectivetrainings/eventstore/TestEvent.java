@@ -1,29 +1,18 @@
 package de.effectivetrainings.eventstore;
 
 import de.effectivetrainings.eventstore.events.Event;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
+@Getter
+@AllArgsConstructor
 class TestEvent implements Event {
 
-    @Getter
-    private String collectionName;
+    protected String aggregateName;
 
-    public TestEvent(String collectionName) {
-        this.collectionName = collectionName;
-    }
+    protected Object payload = "test-payload";
 
-    @Override
-    public String getAggregateId() {
-        return "first";
-    }
-
-    @Override
-    public String getAggregateName() {
-        return collectionName;
-    }
-
-    @Override
-    public Object getPayload() {
-        return "test-payload";
-    }
+    protected String aggregateId = UUID.randomUUID().toString();
 }

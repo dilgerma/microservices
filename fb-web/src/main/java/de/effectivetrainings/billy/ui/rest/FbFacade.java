@@ -29,6 +29,7 @@
 package de.effectivetrainings.billy.ui.rest;
 
 
+import de.effectivetrainings.billy.ui.config.MessagingTemplate;
 import de.effectivetrainings.billy.ui.config.ServicesConfig;
 import de.effectivetrainings.billy.ui.domain.*;
 import de.effectivetrainings.support.rest.UserRestTemplate;
@@ -69,7 +70,7 @@ public class FbFacade {
     private static final String customerId = "default";
 
     @Autowired
-    public FbFacade(AmqpTemplate amqpTemplate, ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
+    public FbFacade(@MessagingTemplate AmqpTemplate amqpTemplate, ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
         this.servicesConfig = servicesConfig;
         this.restTemplate = restTemplate;
         this.amqpTemplate = amqpTemplate;
@@ -95,7 +96,7 @@ public class FbFacade {
 
     @RequestMapping(value = "customer", method = RequestMethod.POST)
     public void storeCustomer(@RequestBody Customer customer) {
-        amqpTemplate.convertAndSend("exchange.handler.customer",null, customer);
+        amqpTemplate.convertAndSend("exchange.handler.customer","queue.commands.customer", customer);
     }
 
     @RequestMapping(value = "templates", method = RequestMethod.POST)

@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.customermanagement.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.effectivetrainings.billy.customermanagement.config.MessagingConstants;
 import de.effectivetrainings.billy.customermanagement.events.CustomerCreatedEvent;
 import de.effectivetrainings.billy.customermanagement.mapping.CustomerApiToDomainMapper;
@@ -8,13 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.messaging.handler.annotation.Payload;
 
 /**
  *
  */
 @Slf4j
-public class CustomerCommandHandler {
+public class CustomerCommandHandler extends JSONCommandHandler<Customer> {
 
 
     private CustomerApiToDomainMapper apiToDomainMapper = new CustomerApiToDomainMapper();
@@ -23,16 +23,18 @@ public class CustomerCommandHandler {
 
     private String eventExchange;
 
-    public CustomerCommandHandler(String eventExchange, AmqpTemplate amqpTemplate) {
+    public CustomerCommandHandler(String eventExchange, AmqpTemplate amqpTemplate, ObjectMapper objectMapper) {
+        super(Customer.class, objectMapper);
         this.amqpTemplate = amqpTemplate;
         this.eventExchange = eventExchange;
     }
 
     @RabbitListener(queues = MessagingConstants.CUSTOMER_INTERNAL_QUEUE)
-    public void handleMessage(Message message, @Payload Customer customer) {
-        log.info("Received Message {}", customer);
+    public void handleMessage(Message message) {
+        log.info("Received Message {}", message);
 
-        amqpTemplate.convertAndSend(eventExchange, null, new CustomerCreatedEvent(apiToDomainMapper.toDomain(customer)));
+        //TODO events - handle checks if persistence is allowed.
+        amqpTemplate.convertAndSend(eventExchange, null, new CustomerCreatedEvent(apiToDomainMapper.toDomain(getPayload(message.getBody()))));
 
     }
 }

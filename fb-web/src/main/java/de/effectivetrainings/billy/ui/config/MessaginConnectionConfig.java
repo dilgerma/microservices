@@ -27,9 +27,9 @@ public class MessaginConnectionConfig {
 
     @Bean(name = "messagingTemplate")
     @MessagingTemplate
-    public AmqpTemplate template(ConnectionFactory connectionFactory, @DefaultMessageConverterQualifier MessageConverter messageConverter) {
+    public AmqpTemplate template(ConnectionFactory connectionFactory) {
         RabbitTemplate amqpTemplate = new RabbitTemplate(connectionFactory);
-        amqpTemplate.setMessageConverter(messageConverter);
+        amqpTemplate.setMessageConverter(jsonMessageConverter());
         return amqpTemplate;
     }
 

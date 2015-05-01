@@ -1,10 +1,11 @@
 package de.effectivetrainings.eventstore.events;
 
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  *
@@ -12,32 +13,36 @@ import java.util.Date;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
-public class MongoEventAdapter<T> implements Event {
-
-    @Id
-    private String id;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class MongoEventAdapter implements Event {
 
     @NonNull
-    private String aggregateName;
+    private Event event;
 
-    @NonNull
-    private String aggregateId;
-
-    @NonNull
-    private T payload;
-
-    @CreatedDate
-    private Date eventDate;
-
-    public MongoEventAdapter(Event<T> other) {
-        this.aggregateName = other.getAggregateName();
-        this.aggregateId = other.getAggregateId();
-        this.payload = other.getPayload();
+    public MongoEventAdapter(Event event) {
+        this.event = event;
     }
 
+    @JsonIgnore
     @Override
+    public String getAggregateId() {
+        return event.getAggregateId();
+    }
+
+    @JsonIgnore
+    @Override
+    public String getAggregateName() {
+        return event.getAggregateName();
+    }
+
+    @JsonIgnore
+    @Override
+    public Object getPayload() {
+        return event.getPayload();
+    }
+
     public boolean isValid() {
-        return id == null;
+        return event.isValid();
     }
 
 }

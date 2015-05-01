@@ -67,14 +67,10 @@ public class RoutingConfig {
         return BindingBuilder.bind(fbCustomerDeadLetterQueue()).to(customerDeadLetterExchange());
     }
 
-    /**
-     */
-
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory, @DefaultMessageConverterQualifier MessageConverter messageConverter) {
         SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory = new SimpleRabbitListenerContainerFactory();
         simpleRabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-        simpleRabbitListenerContainerFactory.setMessageConverter(messageConverter);
         simpleRabbitListenerContainerFactory.setDefaultRequeueRejected(false);
         //give handlers 3 attempts
         simpleRabbitListenerContainerFactory.setAdviceChain(RetryInterceptorBuilder.stateless()

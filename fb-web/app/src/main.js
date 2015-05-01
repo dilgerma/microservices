@@ -29,7 +29,26 @@ angular.module('app', [
 ]).controller('MainController', ['$scope', function ($scope) {
     $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}, {display: 'formulare', href: 'formulare'}]
 }]);
-},{"./customers/customers":3,"./expenses/expenses":5,"./invoices/invoices":7,"./templates/templates":9,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],2:[function(require,module,exports){
+},{"./customers/customers":4,"./expenses/expenses":6,"./invoices/invoices":8,"./templates/templates":10,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],2:[function(require,module,exports){
+module.exports = function(customerId, customerNumber, organization, firstName, lastName) {
+    this.customerId = customerId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.customerNumber = customerNumber;
+    this.organization = organization;
+
+    this.toJSON = function() {
+        return  {
+            'FIRST_NAME' : this.firstName,
+            'LAST_NAME' : this.lastName,
+            'CUSTOMER_ID' : this.customerId,
+            'CUSTOMER_NUMBER' : this.customerNumber,
+            'ORGANIZATION' : this.organization
+        };
+    }
+
+};
+},{}],3:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
@@ -37,14 +56,19 @@ module.exports = ['$http',function($http) {
   return {
       loadCustomers : function() {
          return $http.get('/customers');
+      },
+
+      storeCustomer : function(customer) {
+          return $http.post('/customer', customer);
       }
 
   };
 }];
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
+var Customer = require('./Customer');
 
 // home module
 angular.module('customers', ['ui.router']).config(['$stateProvider', function($stateProvider) {
@@ -58,6 +82,10 @@ angular.module('customers', ['ui.router']).config(['$stateProvider', function($s
     '$scope',
     'customerService',
     function($scope, customerService) {
+
+        $scope.customer = new Customer();
+        $scope.customer.firstName = "hans";
+
         /* initialize */
         $scope.load = function() {
             customerService.loadCustomers().success(function(data) {
@@ -66,10 +94,14 @@ angular.module('customers', ['ui.router']).config(['$stateProvider', function($s
                 $scope.response = response;
             });
         };
+
+        $scope.store = function() {
+            customerService.storeCustomer()
+        }
     }
 ]).factory('customerService', require('./CustomerService'));
 
-},{"./CustomerService":2,"angular":"angular","angular-ui-router":"angular-ui-router"}],4:[function(require,module,exports){
+},{"./Customer":2,"./CustomerService":3,"angular":"angular","angular-ui-router":"angular-ui-router"}],5:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
@@ -81,7 +113,7 @@ module.exports = ['$http',function($http) {
 
   };
 }];
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -109,7 +141,7 @@ angular.module('expenses', ['ui.router']).config(['$stateProvider', function($st
     }
 ]).factory('expenseService', require('./ExpenseService'));
 
-},{"./ExpenseService":4,"angular":"angular","angular-ui-router":"angular-ui-router"}],6:[function(require,module,exports){
+},{"./ExpenseService":5,"angular":"angular","angular-ui-router":"angular-ui-router"}],7:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
@@ -121,7 +153,7 @@ module.exports = ['$http',function($http) {
 
   };
 }];
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -149,7 +181,7 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
     }
 ]).factory('invoiceService', require('./InvoiceService'));
 
-},{"./InvoiceService":6,"angular":"angular","angular-ui-router":"angular-ui-router"}],8:[function(require,module,exports){
+},{"./InvoiceService":7,"angular":"angular","angular-ui-router":"angular-ui-router"}],9:[function(require,module,exports){
 /*wichtig,
  gegen minificatino hier array zurückliefern!
  */
@@ -191,7 +223,7 @@ module.exports = ['$upload', '$q', '$http', function ($upload, $q, $http) {
     };
 
 }];
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -226,7 +258,7 @@ angular.module('templates', ['ui.router', 'angularFileUpload']).config(['$stateP
     }
 ]).factory('templateService', require('./TemplateService'));
 
-},{"./TemplateService":8,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
+},{"./TemplateService":9,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
 /**
  * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org

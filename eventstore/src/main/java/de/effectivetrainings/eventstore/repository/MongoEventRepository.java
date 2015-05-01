@@ -1,8 +1,7 @@
 package de.effectivetrainings.eventstore.repository;
 
-import de.effectivetrainings.eventstore.events.Event;
 import de.effectivetrainings.eventstore.EventCannotBeAppliedException;
-import de.effectivetrainings.eventstore.events.MongoEventAdapter;
+import de.effectivetrainings.eventstore.events.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -32,7 +31,7 @@ public class MongoEventRepository implements EventRepository {
     public void append(Event event) {
         if(event.isValid()) {
             String collectionName = event.getAggregateName();
-            mongoTemplate.save(new MongoEventAdapter<>(event), collectionName);
+            mongoTemplate.save(event, collectionName);
         } else {
             log.error("cannot append event {}", event);
             throw new EventCannotBeAppliedException("Event already persisted : " + event);

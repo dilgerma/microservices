@@ -28,4 +28,5 @@ public class EventConfig {
     public EventPersistenceHandler persistenceHandler(EventStore eventStore) {
         return new EventPersistenceHandler(eventStore);
     }
+
 }

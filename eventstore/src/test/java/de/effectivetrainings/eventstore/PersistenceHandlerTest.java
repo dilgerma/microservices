@@ -35,7 +35,7 @@ public class PersistenceHandlerTest {
 
     @Test
     public void publishEvent() throws Exception{
-        MongoEventAdapter event = new MongoEventAdapter(new TestEvent(UUID.randomUUID().toString()));
+        MongoEventAdapter event = new MongoEventAdapter(new TestEvent(UUID.randomUUID().toString(),"payload","id"));
         amqpTemplate.convertAndSend("eventStore.inbound.events", "", event);
     }
 

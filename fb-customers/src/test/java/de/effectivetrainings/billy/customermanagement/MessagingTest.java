@@ -41,11 +41,6 @@ public class MessagingTest {
         final Customer message = new Customer();
         message.setCustomerNumber("4711");
         amqpTemplate.convertAndSend("exchange.handler.customer", "customer.commands", message);
-
-        while(true) {
-            Thread.currentThread().sleep(2000);
-        }
-
     }
 
 }

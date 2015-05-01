@@ -1,22 +1,30 @@
 package de.effectivetrainings.billy.customermanagement.repository.domain;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  *
  */
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class Customer {
 
     public static final String AGGREGATE_NAME = "customer.customers";
 
-    @NonNull
+    //TODO events - implement mongo sequence
+
     private String customerId;
-    @NonNull
     private String customerNumber;
-    @NonNull
     private String organization;
+
+    public Customer(String customerId, String customerNumber, String organization) {
+        this.customerId = customerId;
+        this.customerNumber = customerNumber;
+        this.organization = organization;
+    }
+
+
 }

@@ -1,11 +1,13 @@
 package de.effectivetrainings.billy.customermanagement;
 
+import de.effectivetrainings.billy.customermanagement.config.MetricsConfig;
+import de.effectivetrainings.billy.customermanagement.config.RestConfig;
+import de.effectivetrainings.billy.customermanagement.config.ServiceConfig;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
-import de.effectivetrainings.billy.customermanagement.config.MetricsConfig;
-import de.effectivetrainings.billy.customermanagement.config.RestConfig;
 import de.effectivetrainings.support.rest.EnableRestSupport;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -25,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 @EnableWebMvc
 @EnableEurekaClient
 @EnableRestSupport
-@Import({RestConfig.class, MetricsConfig.class})
+@EnableRabbit
+@Import({RestConfig.class, MetricsConfig.class, ServiceConfig.class})
 public class Application {
 
     public static void main(String[] args) {

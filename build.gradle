@@ -56,14 +56,6 @@ subprojects {
     };
 
     apply plugin: "de.gesellix.docker"
-    apply plugin: 'idea'
-    //because of https://youtrack.jetbrains.com/issue/IDEA-120939
-    //and because of https://youtrack.jetbrains.com/issue/IDEA-91952#comment=27-769929
-    idea {
-        module {
-            inheritOutputDirs = true
-        }
-    }
 
     task buildImage(type: DockerBuildTask) {
         imageName = "dilgerm/" + project.name

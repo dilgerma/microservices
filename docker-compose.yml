@@ -72,6 +72,11 @@ customers:
    - eurekaserver
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
+#eventstore:
+#   build: eventstore
+#   links:
+#   - eurekaserver
+#   - rabbitmq
 templates:
    build: fb-template
    expose:
@@ -155,10 +160,18 @@ mongo:
   - /data/db
   expose:
   - "27017"
+  ports:
+  - "27017:27017"
 mongographite:
   build: mongo-graphite
   links:
   - graphite
   - mongo
   volumes_from: ['lsf']
+rabbitmq:
+  hostname: rabbitmq
+  image: rabbitmq:3.5.1-management
+  ports:
+  - "5672:5672"
+  - "15672:15672"
 

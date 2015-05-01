@@ -28,16 +28,15 @@
 
 package de.effectivetrainings.billy.fastbill.rest;
 
+import de.effectivetrainings.billy.fastbill.*;
 import de.effectivetrainings.billy.fastbill.domain.Customer;
 import de.effectivetrainings.billy.fastbill.domain.Customers;
 import de.effectivetrainings.billy.fastbill.domain.Filter;
-import de.effectivetrainings.billy.fastbill.FastbillRepository;
-import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
-import de.effectivetrainings.billy.fastbill.RetrieveServiceType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -64,6 +63,12 @@ public class CustomerResource extends BaseResource {
         FastbillRequestParameter parameter = new FastbillRequestParameter(RetrieveServiceType.CUSTOMER, -1, Filter.NONE);
         List<Customer> expenses = fastbillRepository.request(parameter).getResponse().getCustomers();
         return new Customers(expenses);
+    }
+
+    @RequestMapping(value = "/customer", method = RequestMethod.POST)
+    public void save(Customer customer) {
+        FastbillPayloadRequestParameter request = new FastbillPayloadRequestParameter(ModifyServiceType.CUSTOMER_CREATE, customer);
+        fastbillRepository.request(request);
     }
 
 }

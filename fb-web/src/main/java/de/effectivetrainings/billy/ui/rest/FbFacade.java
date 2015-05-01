@@ -29,12 +29,13 @@
 package de.effectivetrainings.billy.ui.rest;
 
 
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import de.effectivetrainings.billy.ui.config.ServicesConfig;
 import de.effectivetrainings.billy.ui.domain.*;
+import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -62,20 +63,22 @@ public class FbFacade {
 
     private ServicesConfig servicesConfig;
 
+    private AmqpTemplate amqpTemplate;
+
     //TODO retrieve customer id - currently just here statically defined.
     private static final String customerId = "default";
 
     @Autowired
-    public FbFacade(ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
+    public FbFacade(AmqpTemplate amqpTemplate, ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
         this.servicesConfig = servicesConfig;
         this.restTemplate = restTemplate;
+        this.amqpTemplate = amqpTemplate;
     }
 
     @RequestMapping(value = "invoices")
     public Invoices invoices() {
         log.info("Requesting all valid invoices");
         return request(servicesConfig.getInvoiceBackendUri(), Invoices.class);
-
     }
 
     @RequestMapping(value = "expenses")
@@ -88,6 +91,11 @@ public class FbFacade {
     public Customers customers() {
         log.info("Requesting all customers");
         return request(servicesConfig.getCustomersBackendURI(), Customers.class);
+    }
+
+    @RequestMapping(value = "customer", method = RequestMethod.POST)
+    public void storeCustomer(@RequestBody Customer customer) {
+        amqpTemplate.convertAndSend("exchange.handler.customer",null, customer);
     }
 
     @RequestMapping(value = "templates", method = RequestMethod.POST)

@@ -26,7 +26,7 @@
  */
 
 
-package de.effectivetrainings.billy.customermanagement.domain;
+package de.effectivetrainings.billy.customermanagement.rest.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,5 +52,6 @@ public class Customer {
 
     @JsonProperty(value = "ORGANIZATION")
     private String organization;
+
 
 }

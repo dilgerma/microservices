@@ -11,7 +11,6 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
@@ -41,6 +40,7 @@ dependencies {
     compile ('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile('org.springframework.boot:spring-boot-starter-amqp')
 
     compile('com.codahale.metrics:metrics-graphite:3.0.1')
 

@@ -7,6 +7,7 @@ import de.effectivetrainings.support.rest.correlation.CorrelationIdInterceptor;
 import de.effectivetrainings.support.rest.nag.SlowDownRestInterceptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

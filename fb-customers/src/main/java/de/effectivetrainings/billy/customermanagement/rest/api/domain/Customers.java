@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.customermanagement.domain;
+package de.effectivetrainings.billy.customermanagement.rest.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

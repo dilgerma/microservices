@@ -15,7 +15,6 @@ plugins {
 def projectName = "fb-web"
 
 apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.grunt'
 //apply plugin: 'war'
@@ -46,6 +45,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile ('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-amqp')
+
 
     compile("net.logstash.logback:logstash-logback-encoder:4.1")
 

@@ -29,7 +29,7 @@
 package de.effectivetrainings.billy.customermanagement.rest;
 
 
-import de.effectivetrainings.billy.customermanagement.domain.Customers;
+import de.effectivetrainings.billy.customermanagement.rest.api.domain.Customers;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

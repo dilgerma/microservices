@@ -1,10 +1,10 @@
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
-module.exports = ['$http',function($http) {
+module.exports = ['$http','SERVER',function($http, server) {
   return {
       loadInvoices : function() {
-         return $http.get('/invoices');
+         return $http.get(server.toURI()  + '/invoices');
       }
 
   };

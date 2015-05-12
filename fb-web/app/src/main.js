@@ -1,4 +1,102 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+angular.module('genTemplateCache', []).run(['$templateCache', function($templateCache) {
+  'use strict';
+
+  $templateCache.put('/customers/customers.tpl.html',
+    "<div class=\"container\" ui-view>\n" +
+    "    <a id=\"customers.load\" href=\"#\" ng-click=\"load()\">Load Customers</a>\n" +
+    "    <pre>\n" +
+    "    {{customers | json}}\n" +
+    "    </pre>\n" +
+    "\n" +
+    "    <div id=\"customer.result\">\n" +
+    "        {{response | json}}\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div>\n" +
+    "        <div>\n" +
+    "            <label for=\"customer.firstName\">Vorname</label>\n" +
+    "            <input ng-model=\"customer.firstName\" type=\"text\" id=\"customer.firstName\">\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <label for=\"customer.lastName\">Nachname</label>\n" +
+    "            <input ng-model=\"customer.lastName\" type=\"text\" id=\"customer.lastName\">\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <label for=\"customer.organization\">Firma</label>\n" +
+    "            <input ng-model=\"customer.organization\" type=\"text\" id=\"customer.organization\">\n" +
+    "        </div>\n" +
+    "        <div>\n" +
+    "            <label for=\"customer.customerNumber\">Kundennummer</label>\n" +
+    "            <input ng-model=\"customer.customerNumber\" type=\"text\" id=\"customer.customerNumber\">\n" +
+    "        </div>\n" +
+    "        <button type=\"submit\" ng-click=\"store()\">Kunde speichern</button>\n" +
+    "    </div>\n" +
+    "    <pre>\n" +
+    "        {{customer | json}}\n" +
+    "    </pre>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/expenses/expenses.tpl.html',
+    "<div class=\"container\" ui-view>\n" +
+    "    <a id=\"expenses.load\" href=\"#\" ng-click=\"load()\">Load Expenses</a>\n" +
+    "    <pre>\n" +
+    "    {{expenses | json}}\n" +
+    "    </pre>\n" +
+    "\n" +
+    "    <div id=\"expenses.result\">\n" +
+    "        {{response | json}}\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/invoices/directive/invoiceFilter.html',
+    "<div>\n" +
+    "    directive works\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('/invoices/invoices.tpl.html',
+    "<div class=\"container\" ui-view>\n" +
+    "    <a id=\"invoices.load\" href=\"#\" ng-click=\"load()\">Rechnungen laden</a>\n" +
+    "\n" +
+    "    <div data-invoice-filter>hallo welt</div>\n" +
+    "    <div class=\"row\" ng-repeat=\"invoice in invoices\">\n" +
+    "        <div class=\"col-md-2\">{{invoice.invoiceNumber}}-number</div>\n" +
+    "        <div class=\"col-md-4\">{{invoice.organization}}</div>\n" +
+    "        <div class=\"col-md-2\">{{invoice.date}}</div>\n" +
+    "        <div class=\"col-md-2\">{{invoice.amount.total | currency}}</div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/templates/templates.tpl.html',
+    "<div class=\"container\" ui-view>\n" +
+    "    Templates:\n" +
+    "    <div><input required type=\"text\" ng-model=\"templateName\">\n" +
+    "        <button id=\"templates.put\" class=\"button\" ng-file-select ng-file-change=\"upload($files, templateName)\" ng-multiple=\"false\">Template Datei</button>\n" +
+    "    </div>\n" +
+    "    Template: {{templateName}}\n" +
+    "\n" +
+    "    <div>\n" +
+    "        Templates\n" +
+    "        <div ng-repeat=\"template in templates\">\n" +
+    "            Template-File: {{template.name}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>"
+  );
+
+}]);
+
+},{}],2:[function(require,module,exports){
 'use strict';
 //require jQuery
 var $ = require('jquery');
@@ -14,6 +112,7 @@ require('angular-ui-router');
 
 //load src module
 //require home module
+require('./angular-template-cache');
 require('./invoices/invoices');
 require('./expenses/expenses');
 require('./customers/customers');
@@ -22,14 +121,22 @@ require('./templates/templates');
 angular.module('app', [
     'ui.router',
     'ngResource',
+    'genTemplateCache',
     'invoices',
     'expenses',
     'customers',
-    'templates',
+    'templates'
 ]).controller('MainController', ['$scope', function ($scope) {
     $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}, {display: 'formulare', href: 'formulare'}]
-}]);
-},{"./customers/customers":4,"./expenses/expenses":6,"./invoices/invoices":8,"./templates/templates":10,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],2:[function(require,module,exports){
+}])
+    .constant('SERVER', {
+        url : 'http://localhost',
+        port : 8080,
+        toURI : function() {
+            return this.url + ":" + this.port;
+        }
+    });
+},{"./angular-template-cache":1,"./customers/customers":5,"./expenses/expenses":7,"./invoices/invoices":10,"./templates/templates":12,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],3:[function(require,module,exports){
 module.exports = function(customerId, customerNumber, organization, firstName, lastName) {
     this.customerId = customerId;
     this.firstName = firstName;
@@ -48,7 +155,7 @@ module.exports = function(customerId, customerNumber, organization, firstName, l
     }
 
 };
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
@@ -59,12 +166,12 @@ module.exports = ['$http',function($http) {
       },
 
       storeCustomer : function(customer) {
-          return $http.post('/customer', customer);
+          return $http.post('/customer', customer.toJSON());
       }
 
   };
 }];
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -96,12 +203,12 @@ angular.module('customers', ['ui.router']).config(['$stateProvider', function($s
         };
 
         $scope.store = function() {
-            customerService.storeCustomer()
+            customerService.storeCustomer($scope.customer)
         }
     }
 ]).factory('customerService', require('./CustomerService'));
 
-},{"./Customer":2,"./CustomerService":3,"angular":"angular","angular-ui-router":"angular-ui-router"}],5:[function(require,module,exports){
+},{"./Customer":3,"./CustomerService":4,"angular":"angular","angular-ui-router":"angular-ui-router"}],6:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
@@ -113,7 +220,7 @@ module.exports = ['$http',function($http) {
 
   };
 }];
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -141,22 +248,30 @@ angular.module('expenses', ['ui.router']).config(['$stateProvider', function($st
     }
 ]).factory('expenseService', require('./ExpenseService'));
 
-},{"./ExpenseService":5,"angular":"angular","angular-ui-router":"angular-ui-router"}],7:[function(require,module,exports){
+},{"./ExpenseService":6,"angular":"angular","angular-ui-router":"angular-ui-router"}],8:[function(require,module,exports){
 /*wichtig,
 gegen minificatino hier array zurückliefern!
 */
-module.exports = ['$http',function($http) {
+module.exports = ['$http','SERVER',function($http, server) {
   return {
       loadInvoices : function() {
-         return $http.get('/invoices');
+         return $http.get(server.toURI()  + '/invoices');
       }
 
   };
 }];
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+module.exports = [function() {
+   return {
+       restricts: 'a',
+       templateUrl: '/invoices/directive/invoiceFilter.html'
+   }
+}];
+},{}],10:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
+require('./directive/invoiceFilter');
 
 // home module
 angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
@@ -179,9 +294,10 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
             });
         };
     }
-]).factory('invoiceService', require('./InvoiceService'));
+]).factory('invoiceService', require('./InvoiceService'))
+    .directive('invoiceFilter',  require('./directive/invoiceFilter'));
 
-},{"./InvoiceService":7,"angular":"angular","angular-ui-router":"angular-ui-router"}],9:[function(require,module,exports){
+},{"./InvoiceService":8,"./directive/invoiceFilter":9,"angular":"angular","angular-ui-router":"angular-ui-router"}],11:[function(require,module,exports){
 /*wichtig,
  gegen minificatino hier array zurückliefern!
  */
@@ -223,7 +339,7 @@ module.exports = ['$upload', '$q', '$http', function ($upload, $q, $http) {
     };
 
 }];
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -258,7 +374,7 @@ angular.module('templates', ['ui.router', 'angularFileUpload']).config(['$stateP
     }
 ]).factory('templateService', require('./TemplateService'));
 
-},{"./TemplateService":9,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
+},{"./TemplateService":11,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
 /**
  * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -45532,4 +45648,4 @@ for (key in angularFileUpload) {
 
 })();
 
-},{}]},{},[1]);
+},{}]},{},[2]);

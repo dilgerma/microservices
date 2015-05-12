@@ -1,6 +1,7 @@
 'use strict';
 require('angular');
 require('angular-ui-router');
+require('./directive/invoiceFilter');
 
 // home module
 angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
@@ -23,4 +24,5 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
             });
         };
     }
-]).factory('invoiceService', require('./InvoiceService'));
+]).factory('invoiceService', require('./InvoiceService'))
+    .directive('invoiceFilter',  require('./directive/invoiceFilter'));

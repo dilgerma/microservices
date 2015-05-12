@@ -2,3 +2,4 @@ src/main/resources/static
 _SpecRunner*
 app/components
 .grunt*
+app/src/angular-template-cache.js

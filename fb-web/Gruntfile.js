@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
@@ -62,9 +62,9 @@ module.exports = function(grunt) {
         // Watches files for changes and runs tasks based on the changed files
         watch: {
             //js: {
-                //files: ['<%= yeoman.app %>/src/{,*/}*.js'],
-                //tasks: ['jshint'],
-                //options: { livereload: true }
+            //files: ['<%= yeoman.app %>/src/{,*/}*.js'],
+            //tasks: ['jshint'],
+            //options: { livereload: true }
             //},
             jstest: {
                 files: ['test/spec/{,*/}*.js'],
@@ -72,8 +72,8 @@ module.exports = function(grunt) {
             },
             //uncomment this if you want to run testing everytime your scripts changing
             //karma: {
-                //files: ['app/src/**/*.js', 'test/**/*.js'],
-                //tasks: ['karma:unit'] //NOTE the :run flag
+            //files: ['app/src/**/*.js', 'test/**/*.js'],
+            //tasks: ['karma:unit'] //NOTE the :run flag
             //},
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
                     '!<%= yeoman.app %>/src/spec.js'
                 ],
                 tasks: ['browserify:app'],
-                options: { livereload: true }
+                options: {livereload: true}
             },
             styles: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
@@ -195,27 +195,27 @@ module.exports = function(grunt) {
 
         //browserify task
         browserify: {
-          app: {
-            files: { '<%= yeoman.app %>/src/main.js': ['<%= yeoman.app %>/src/app.js'] },
-            options: { alias: browserifyAliasConfig, debug: true }
-          },
-          dist: {
-            files: { '<%= yeoman.dist %>/src/main.js': ['<%= yeoman.app %>/src/app.js'] },
-            options: { alias: browserifyAliasConfig }
-          }
+            app: {
+                files: {'<%= yeoman.app %>/src/main.js': ['<%= yeoman.app %>/src/app.js']},
+                options: {alias: browserifyAliasConfig, debug: true}
+            },
+            dist: {
+                files: {'<%= yeoman.dist %>/src/main.js': ['<%= yeoman.app %>/src/app.js']},
+                options: {alias: browserifyAliasConfig}
+            }
         },
 
         // Reads HTML for usemin blocks to enable smart builds that automatically
         // concat, minify and revision files. Creates configurations in memory so
         // additional tasks can operate on them
         useminPrepare: {
-            options: { dest: '<%= yeoman.dist %>' },
+            options: {dest: '<%= yeoman.dist %>'},
             html: '<%= yeoman.app %>/index.html'
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
-            options: { assetsDirs: ['<%= yeoman.dist %>'] },
+            options: {assetsDirs: ['<%= yeoman.dist %>']},
             html: ['<%= yeoman.dist %>/{,*/}*.html'],
             css: ['<%= yeoman.dist %>/styles/{,*/}*.css']
         },
@@ -283,10 +283,26 @@ module.exports = function(grunt) {
                 'compass',
                 'copy:styles',
             ]
+        },
+
+        ngtemplates: {
+            templateCache: {
+                src: 'app/src/**/**.html',
+                dest: '<%= yeoman.app %>/src/angular-template-cache.js',
+                options: {
+                    //strip prefix
+                    url: function (url) {
+                        return url.replace('app/src', '');
+                    },
+                    standalone: true,
+                    module: 'genTemplateCache'
+                }
+
+            }
         }
     });
 
-    grunt.registerTask('serve', function(target) {
+    grunt.registerTask('serve', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -302,12 +318,12 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('server', function() {
+    grunt.registerTask('server', function () {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve']);
     });
 
-    grunt.registerTask('test', function(target) {
+    grunt.registerTask('test', function (target) {
         if (target !== 'watch') {
             grunt.task.run([
                 'clean:server',
@@ -327,6 +343,7 @@ module.exports = function(grunt) {
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
+        'ngtemplates',
         'browserify:dist',
         'clean:afterBuild',
         'copy:dist',
@@ -337,18 +354,19 @@ module.exports = function(grunt) {
 
     grunt.registerTask('watchme', [
         'clean:dist',
-               'concurrent:dist',
-               'autoprefixer',
-               'browserify:dist',
-               'clean:afterBuild',
-               'copy:dist',
-               'copy:html',
-               'watch'
+        'concurrent:dist',
+        'autoprefixer',
+        'browserify:dist',
+        'clean:afterBuild',
+        'copy:dist',
+        'copy:html',
+        'watch'
     ]);
 
     grunt.registerTask('default', [
-        'newer:jshint',
         'test',
         'build'
     ]);
+
+
 };

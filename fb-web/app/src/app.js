@@ -13,6 +13,7 @@ require('angular-ui-router');
 
 //load src module
 //require home module
+require('./angular-template-cache');
 require('./invoices/invoices');
 require('./expenses/expenses');
 require('./customers/customers');
@@ -21,10 +22,18 @@ require('./templates/templates');
 angular.module('app', [
     'ui.router',
     'ngResource',
+    'genTemplateCache',
     'invoices',
     'expenses',
     'customers',
-    'templates',
+    'templates'
 ]).controller('MainController', ['$scope', function ($scope) {
     $scope.navElements = [{display: 'rechnung', href: 'rechnung'}, {display: 'ausgaben', href: 'ausgaben'},{display: 'kunden', href: 'kunden'}, {display: 'formulare', href: 'formulare'}]
-}]);
+}])
+    .constant('SERVER', {
+        url : 'http://localhost',
+        port : 8080,
+        toURI : function() {
+            return this.url + ":" + this.port;
+        }
+    });

@@ -41,7 +41,8 @@
     "load-grunt-tasks": "*",
     "time-grunt": "*",
     "jshint-stylish": "*",
-    "modernizr": "~3.0.0-pre"
+    "modernizr": "~3.0.0-pre",
+    "grunt-angular-templates": "~0.5.7"
   },
   "engines": {
     "node": ">=0.8.0"

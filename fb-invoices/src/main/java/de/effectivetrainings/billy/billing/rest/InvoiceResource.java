@@ -30,6 +30,8 @@ package de.effectivetrainings.billy.billing.rest;
 
 
 import de.effectivetrainings.billy.billing.domain.Invoices;
+import de.effectivetrainings.billy.billing.rest.inbound.FbInboundModelMapper;
+import de.effectivetrainings.billy.billing.rest.inbound.model.FbInvoices;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,18 +59,21 @@ public class InvoiceResource {
 
     private String invoiceUri;
 
+    private FbInboundModelMapper inboundModelMapper;
+
     @Autowired
-    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @UserRestTemplate RestTemplate restTemplate) {
+    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @UserRestTemplate RestTemplate restTemplate, FbInboundModelMapper inboundModelMapper) {
         this.restTemplate = restTemplate;
         this.invoiceUri = invoiceUri;
+        this.inboundModelMapper = inboundModelMapper;
     }
 
     @RequestMapping
     public Invoices invoices() {
         log.info("Requesting all invoices");
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<Invoices> invoice = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, Invoices.class);
-        return invoice.getBody();
+        ResponseEntity<FbInvoices> invoices = restTemplate.exchange(invoiceUri, HttpMethod.GET, requestEntity, FbInvoices.class);
+        return inboundModelMapper.toInvoices(invoices.getBody());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

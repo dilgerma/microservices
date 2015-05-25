@@ -35,7 +35,8 @@ module.exports = function (grunt) {
                     open: true,
                     base: [
                         '.tmp',
-                        '<%= yeoman.app %>'
+                        '<%= yeoman.app %>/src',
+                        '<%= yeoman.app %>',
                     ]
                 }
             },
@@ -46,6 +47,7 @@ module.exports = function (grunt) {
                     base: [
                         '.tmp',
                         'test',
+                        '<%= yeoman.app %>/src',
                         '<%= yeoman.app %>'
                     ]
                 }
@@ -287,7 +289,7 @@ module.exports = function (grunt) {
 
         ngtemplates: {
             templateCache: {
-                src: 'app/src/**/**.html',
+                src: '<%= yeoman.app %>/src/**/**.html',
                 dest: '<%= yeoman.app %>/src/angular-template-cache.js',
                 options: {
                     //strip prefix
@@ -310,8 +312,11 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'concurrent:server',
+            'useminPrepare',
+            'ngtemplates',
             'browserify:app',
-            'concat',
+            'copy:dist',
+            'copy:html',
             'autoprefixer',
             'connect:livereload',
             'watch'
@@ -350,17 +355,6 @@ module.exports = function (grunt) {
         'copy:html',
         //'uglify',
         'usemin'
-    ]);
-
-    grunt.registerTask('watchme', [
-        'clean:dist',
-        'concurrent:dist',
-        'autoprefixer',
-        'browserify:dist',
-        'clean:afterBuild',
-        'copy:dist',
-        'copy:html',
-        'watch'
     ]);
 
     grunt.registerTask('default', [

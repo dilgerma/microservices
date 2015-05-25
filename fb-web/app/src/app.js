@@ -32,7 +32,7 @@ angular.module('app', [
 }])
     .constant('SERVER', {
         url : 'http://localhost',
-        port : 8080,
+        port : 8090,
         toURI : function() {
             return this.url + ":" + this.port;
         }

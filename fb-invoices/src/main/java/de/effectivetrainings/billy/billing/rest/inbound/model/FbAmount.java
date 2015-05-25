@@ -26,7 +26,7 @@
  */
 
 
-package de.effectivetrainings.billy.billing.domain;
+package de.effectivetrainings.billy.billing.rest.inbound.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,29 +44,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Amount {
+public class FbAmount {
 
-    @JsonProperty(value = "vat", required = true)
+    @JsonProperty(value = "VAT_TOTAL", required = true)
     private Double vatTotal = 0d;
 
-    @JsonProperty(value = "net", required = true)
+    @JsonProperty(value = "SUB_TOTAL", required = true)
     private Double subTotal = 0d;
 
-    @JsonProperty(value = "total", required = true)
+    @JsonProperty(value = "TOTAL", required = true)
     private Double total = 0d;
-
-    public Amount add(Amount amountValue) {
-        total += amountValue.getTotal();
-        vatTotal += amountValue.getVatTotal();
-        subTotal += amountValue.getSubTotal();
-        return this;
-    }
-
-    public Amount minus(Amount amountValue) {
-        total -= amountValue.getTotal();
-        vatTotal -= amountValue.getVatTotal();
-        subTotal -= amountValue.getSubTotal();
-        return this;
-    }
-
 }

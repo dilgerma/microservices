@@ -26,47 +26,54 @@
  */
 
 
-package de.effectivetrainings.billy.billing.domain;
+package de.effectivetrainings.billy.billing.rest.inbound.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 01.04.14
+ * @since: 28.03.14
  */
-@Getter
-@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Amount {
+@Getter
+@Setter
+public class FbInvoice {
 
-    @JsonProperty(value = "vat", required = true)
-    private Double vatTotal = 0d;
+    @JsonProperty(value = "INVOICE_ID")
+    private Long invoiceId;
 
-    @JsonProperty(value = "net", required = true)
-    private Double subTotal = 0d;
+    @JsonProperty(value = "INVOICE_NUMBER")
+    private Long invoiceNumber;
 
-    @JsonProperty(value = "total", required = true)
-    private Double total = 0d;
+    @JsonUnwrapped
+    private FbAmount amountValue;
 
-    public Amount add(Amount amountValue) {
-        total += amountValue.getTotal();
-        vatTotal += amountValue.getVatTotal();
-        subTotal += amountValue.getSubTotal();
-        return this;
-    }
+    @JsonProperty(value = "ORGANIZATION")
+    private String organization;
 
-    public Amount minus(Amount amountValue) {
-        total -= amountValue.getTotal();
-        vatTotal -= amountValue.getVatTotal();
-        subTotal -= amountValue.getSubTotal();
-        return this;
-    }
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty(value = "INVOICE_DATE")
+    private Date invoiceDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty(value = "PAID_DATE")
+    private Date paidDate;
+
+    @JsonProperty(value = "PAYMENT_INFO")
+    private String paymentInfo;
+
+    @JsonProperty(value = "IS_CANCELED")
+    private int cancelled;
 
 }

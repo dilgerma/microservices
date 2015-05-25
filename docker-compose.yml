@@ -5,28 +5,6 @@ eurekaserver:
    - "8761:8761"
    expose:
    - "8761"
-#dockerui:
-#  image: dockerui/dockerui
-#  privileged: true
-#  ports:
-#  - "9000:9000"
-#  volumes:
-#  - /var/run/docker.sock:/var/run/docker.sock
-#  mem_limit: 56m
-#icinga:
-#   build: icinga
-#   hostname: icinga-host
-#   ports:
-#   - "8092:80"
-#   links:
-#   - ui:invoices-ui
-#   - invoices:fb-invoices-service
-#   - repository:fb-backend
-#   - expenses:fb-expenses-service
-#   - customers:fb-customer-service
-#   - templates:fb-templates-service
-#   volumes_from: ['repository', 'ui','invoices', 'expenses', 'customers', 'templates']
-#   mem_limit: 1g
 ui:
    build: fb-web
    ports:

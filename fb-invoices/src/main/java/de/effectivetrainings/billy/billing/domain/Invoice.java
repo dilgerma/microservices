@@ -29,10 +29,8 @@
 package de.effectivetrainings.billy.billing.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,33 +53,27 @@ import java.util.Optional;
 @Setter
 public class Invoice implements Amountable {
 
-    @JsonProperty(value = "INVOICE_ID")
-    private Long invoiceId;
-
-    @JsonProperty(value = "INVOICE_NUMBER")
+    @JsonProperty(value = "invoiceNumber")
     private Long invoiceNumber;
 
-    @JsonUnwrapped
+    @JsonProperty(value = "amount")
     private Amount amountValue;
 
-    @JsonProperty(value = "ORGANIZATION")
+    @JsonProperty(value = "organization")
     private String organization;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "INVOICE_DATE")
+    @JsonProperty(value = "date")
     private Date invoiceDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "PAID_DATE")
+    @JsonProperty(value = "paidDate")
     private Date paidDate;
 
-    @JsonProperty(value = "PAYMENT_INFO")
-    private String paymentInfo;
+    @JsonProperty(value = "cancelled")
+    private boolean cancelled;
 
-    @JsonProperty(value = "IS_CANCELED")
-    private int cancelled;
-
-    @JsonIgnore
+    @JsonProperty(value = "paid")
     public boolean isPaid() {
         return paidDate != null;
     }

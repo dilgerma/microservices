@@ -49,6 +49,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -69,7 +70,6 @@ import static org.junit.Assert.*;
 @ComponentScan(basePackages = "de.effectivetrainings.domain.fastbill")
 @TestPropertySource({"classpath:application.properties"})
 @WebAppConfiguration
-@Ignore
 public class FastbillRepositoryTest {
 
     @Autowired
@@ -223,4 +223,13 @@ public class FastbillRepositoryTest {
         assertTrue(customers.isEmpty());
     }
 
+    @Test
+    public void testFindPaidInvoicesInYear() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        FastbillResponse response = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, -1, new Filter(Filter.YEAR, "2014")));
+        assertEquals(28, response.getResponse().getInvoices().stream().filter(invoice -> invoice.getCancelled() != 1).count());
+        double income = response.getResponse().getInvoices().stream().filter(invoice -> sdf.format(invoice.getPaidDate()).equals("2014")).filter(invoice -> invoice.getCancelled() !=1).map(invoice->invoice.getAmountValue().getSubTotal()).reduce(new Double(0), (a, b)-> a+b);
+        System.out.println(income /140*100);
+
+    }
 }

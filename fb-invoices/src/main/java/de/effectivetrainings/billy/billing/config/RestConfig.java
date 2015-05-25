@@ -1,6 +1,7 @@
 package de.effectivetrainings.billy.billing.config;
 
 import com.codahale.metrics.MetricRegistry;
+import de.effectivetrainings.billy.billing.rest.inbound.FbInboundModelMapper;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import de.effectivetrainings.support.rest.UserRestTemplate;
@@ -65,4 +66,9 @@ public class RestConfig {
            simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
            return simpleClientHttpRequestFactory;
        }
+
+    @Bean
+    public FbInboundModelMapper inboundModelMapper() {
+        return new FbInboundModelMapper();
+    }
 }

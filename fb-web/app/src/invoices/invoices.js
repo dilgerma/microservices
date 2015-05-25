@@ -1,10 +1,9 @@
 'use strict';
 require('angular');
 require('angular-ui-router');
-require('./directive/invoiceFilter');
 
 // home module
-angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+angular.module('invoices', ['ui.router']).config(['$stateProvider', function ($stateProvider) {
     /*config path for home page*/
     $stateProvider.state('rechnung', {
         url: '/',
@@ -13,16 +12,26 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
     });
 }]).controller('InvoiceController', [
     '$scope',
+    '$log',
     'invoiceService',
-    function($scope, invoiceService) {
+    function ($scope, $log, invoiceService) {
+
+        $scope.filter = {
+        };
+
+        $scope.$watch('filter', function (filter) {
+            $log.debug("Received new Filter", filter);
+        }, true);
+
         /* initialize */
-        $scope.load = function() {
-            invoiceService.loadInvoices().success(function(data) {
-                $scope.invoices = data.invoices;
-            }).error(function(response) {
+        $scope.load = function () {
+            invoiceService.loadInvoices($scope.filter).then(function (invoices) {
+                $scope.invoices = invoices;
+            }, function (response) {
                 $scope.response = response;
             });
         };
+
     }
 ]).factory('invoiceService', require('./InvoiceService'))
-    .directive('invoiceFilter',  require('./directive/invoiceFilter'));
+    .directive('invoiceFilter', require('./directive/ListFilter'));

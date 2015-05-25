@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.billing.domain;
+package de.effectivetrainings.billy.billing.rest.inbound.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,18 +7,14 @@ import lombok.Getter;
 
 import java.util.List;
 
-/**
- *
- */
-@Getter
-public class Invoices {
+public class FbInvoices {
 
+    @Getter
     @JsonUnwrapped
-    private List<Invoice> invoices;
+    private List<FbInvoice> invoices;
 
     @JsonCreator
-    public Invoices(@JsonProperty("invoices") List<Invoice> invoices) {
+    public FbInvoices(@JsonProperty(value = "invoices") List<FbInvoice> invoices) {
         this.invoices = invoices;
     }
-
 }

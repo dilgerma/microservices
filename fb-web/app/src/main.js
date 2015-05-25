@@ -53,9 +53,31 @@ angular.module('genTemplateCache', []).run(['$templateCache', function($template
   );
 
 
-  $templateCache.put('/invoices/directive/invoiceFilter.html',
+  $templateCache.put('/invoices/directive/listFilter.html',
     "<div>\n" +
-    "    directive works\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-md-1\" ng-repeat=\"month in [1,2,3,4,5,6,7,8,10,11,12]\">\n" +
+    "            <a href=\"javascript:void(0)\" class=\"\" ng-click=\"filterCtrl.selectMonth(month - 1)\">{{month}}</a>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-md-4\">\n" +
+    "            <label for=\"year\">Jahr</label>\n" +
+    "            <input type=\"number\" placeholder=\"year\" id=\"year\" ng-model=\"filterCtrl.filter.year\">\n" +
+    "        </div>\n" +
+    "        <div class=\"col-md-2\" ng-click=\"filterCtrl.togglePaid()\">\n" +
+    "            Bezahlt\n" +
+    "        </div>\n" +
+    "        <div class=\"col-md-2\" ng-click=\"filterCtrl.selectCurrentMonth()\">\n" +
+    "            Aktueller Monat\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <pre>\n" +
+    "        Y: {{filterCtrl.filter.year}}\n" +
+    "        month: {{filterCtrl.filter.month}}\n" +
+    "        paid : {{filterCtrl.filter.paid}}\n" +
+    "    </pre>\n" +
     "</div>"
   );
 
@@ -64,11 +86,11 @@ angular.module('genTemplateCache', []).run(['$templateCache', function($template
     "<div class=\"container\" ui-view>\n" +
     "    <a id=\"invoices.load\" href=\"#\" ng-click=\"load()\">Rechnungen laden</a>\n" +
     "\n" +
-    "    <div data-invoice-filter>hallo welt</div>\n" +
+    "    <div data-invoice-filter=\"filter\"></div>\n" +
     "    <div class=\"row\" ng-repeat=\"invoice in invoices\">\n" +
     "        <div class=\"col-md-2\">{{invoice.invoiceNumber}}-number</div>\n" +
     "        <div class=\"col-md-4\">{{invoice.organization}}</div>\n" +
-    "        <div class=\"col-md-2\">{{invoice.date}}</div>\n" +
+    "        <div class=\"col-md-2\">{{invoice.date | date:'dd.MM.yyyy'}}</div>\n" +
     "        <div class=\"col-md-2\">{{invoice.amount.total | currency}}</div>\n" +
     "    </div>\n" +
     "\n" +
@@ -121,7 +143,7 @@ require('./templates/templates');
 angular.module('app', [
     'ui.router',
     'ngResource',
-    'genTemplateCache',
+    //'genTemplateCache',
     'invoices',
     'expenses',
     'customers',
@@ -136,7 +158,7 @@ angular.module('app', [
             return this.url + ":" + this.port;
         }
     });
-},{"./angular-template-cache":1,"./customers/customers":5,"./expenses/expenses":7,"./invoices/invoices":10,"./templates/templates":12,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],3:[function(require,module,exports){
+},{"./angular-template-cache":1,"./customers/customers":5,"./expenses/expenses":7,"./invoices/invoices":11,"./templates/templates":13,"angular":"angular","angular-resource":"angular-resource","angular-ui-router":"angular-ui-router","bootstrap":"bootstrap","jquery":"jquery"}],3:[function(require,module,exports){
 module.exports = function(customerId, customerNumber, organization, firstName, lastName) {
     this.customerId = customerId;
     this.firstName = firstName;
@@ -250,31 +272,86 @@ angular.module('expenses', ['ui.router']).config(['$stateProvider', function($st
 
 },{"./ExpenseService":6,"angular":"angular","angular-ui-router":"angular-ui-router"}],8:[function(require,module,exports){
 /*wichtig,
-gegen minificatino hier array zurückliefern!
-*/
-module.exports = ['$http','SERVER',function($http, server) {
-  return {
-      loadInvoices : function() {
-         return $http.get(server.toURI()  + '/invoices');
-      }
+ gegen minificatino hier array zurückliefern!
+ */
+module.exports = ['$http', 'SERVER', '$q', function ($http, SERVER, $q) {
 
-  };
+    var that = this;
+    this._filter = function (filter, invoices) {
+        return invoices.filter(function (invoice) {
+            return (!filter.year || filter.year == new Date(invoice.date).getFullYear())
+            && (filter.paid == null || filter.paid == invoice.paid)
+            && (filter.month == null || filter.month == new Date(invoice.date).getMonth() )
+
+        });
+        /**
+         * && (filter.month == undefined || filter.month == invoice.month) && filter.paid === invoice.paid
+         */
+    };
+
+    return {
+        loadInvoices: function (filter) {
+            var deferred = $q.defer();
+
+            $http.get(SERVER.toURI() + '/invoices').success(function (result) {
+                var filteredInvoices = that._filter(filter, result.invoices);
+                deferred.resolve(filteredInvoices);
+            }).error(function (response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        }
+    };
 }];
 },{}],9:[function(require,module,exports){
+/**
+ * Expects to receive a filter object with these properties that
+ * could even be prefilled.
+ *
+ *    this.filter = {
+ *        year: new Date().getYear(),
+ *        paid: false,
+ *        //defaults to none
+ *        selectedMonth: null
+ *    };
+ */
 module.exports = [function() {
    return {
        restricts: 'a',
-       templateUrl: '/invoices/directive/invoiceFilter.html'
+       scope: {
+           filter : '=invoiceFilter'
+       },
+       templateUrl: '/invoices/directive/listFilter.html',
+       controller: require("./ListFilterCtrl"),
+       controllerAs: 'filterCtrl'
    }
 }];
-},{}],10:[function(require,module,exports){
+},{"./ListFilterCtrl":10}],10:[function(require,module,exports){
+module.exports = ['$scope', '$log', function ($scope, $log) {
+
+    this.filter = $scope.filter;
+
+    this.selectCurrentMonth = function () {
+        this.selectMonth(new Date().getMonth());
+    };
+
+    this.selectMonth = function (month) {
+        $log.debug("selecting current month");
+        this.filter.month = month;
+    };
+
+    this.togglePaid = function () {
+        this.filter.paid = !this.filter.paid;
+    }
+
+}];
+},{}],11:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
-require('./directive/invoiceFilter');
 
 // home module
-angular.module('invoices', ['ui.router']).config(['$stateProvider', function($stateProvider) {
+angular.module('invoices', ['ui.router']).config(['$stateProvider', function ($stateProvider) {
     /*config path for home page*/
     $stateProvider.state('rechnung', {
         url: '/',
@@ -283,21 +360,31 @@ angular.module('invoices', ['ui.router']).config(['$stateProvider', function($st
     });
 }]).controller('InvoiceController', [
     '$scope',
+    '$log',
     'invoiceService',
-    function($scope, invoiceService) {
+    function ($scope, $log, invoiceService) {
+
+        $scope.filter = {
+        };
+
+        $scope.$watch('filter', function (filter) {
+            $log.debug("Received new Filter", filter);
+        }, true);
+
         /* initialize */
-        $scope.load = function() {
-            invoiceService.loadInvoices().success(function(data) {
-                $scope.invoices = data.invoices;
-            }).error(function(response) {
+        $scope.load = function () {
+            invoiceService.loadInvoices($scope.filter).then(function (invoices) {
+                $scope.invoices = invoices;
+            }, function (response) {
                 $scope.response = response;
             });
         };
+
     }
 ]).factory('invoiceService', require('./InvoiceService'))
-    .directive('invoiceFilter',  require('./directive/invoiceFilter'));
+    .directive('invoiceFilter', require('./directive/ListFilter'));
 
-},{"./InvoiceService":8,"./directive/invoiceFilter":9,"angular":"angular","angular-ui-router":"angular-ui-router"}],11:[function(require,module,exports){
+},{"./InvoiceService":8,"./directive/ListFilter":9,"angular":"angular","angular-ui-router":"angular-ui-router"}],12:[function(require,module,exports){
 /*wichtig,
  gegen minificatino hier array zurückliefern!
  */
@@ -339,7 +426,7 @@ module.exports = ['$upload', '$q', '$http', function ($upload, $q, $http) {
     };
 
 }];
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 require('angular');
 require('angular-ui-router');
@@ -374,7 +461,7 @@ angular.module('templates', ['ui.router', 'angularFileUpload']).config(['$stateP
     }
 ]).factory('templateService', require('./TemplateService'));
 
-},{"./TemplateService":11,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
+},{"./TemplateService":12,"angular":"angular","angular-ui-router":"angular-ui-router","ng-file-upload":"ng-file-upload"}],"angular-mocks":[function(require,module,exports){
 /**
  * @license AngularJS v1.3.14
  * (c) 2010-2014 Google, Inc. http://angularjs.org

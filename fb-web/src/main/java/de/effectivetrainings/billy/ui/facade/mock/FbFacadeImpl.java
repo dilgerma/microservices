@@ -2,8 +2,10 @@ package de.effectivetrainings.billy.ui.facade.mock;
 
 import de.effectivetrainings.billy.ui.config.MessagingTemplate;
 import de.effectivetrainings.billy.ui.config.ServicesConfig;
-import de.effectivetrainings.billy.ui.domain.*;
+import de.effectivetrainings.billy.ui.rest.inbound.*;
+import de.effectivetrainings.billy.ui.rest.inbound.expense.Expenses;
 import de.effectivetrainings.billy.ui.rest.FbFacade;
+import de.effectivetrainings.billy.ui.rest.inbound.invoice.Invoices;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

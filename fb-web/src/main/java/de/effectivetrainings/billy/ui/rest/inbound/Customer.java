@@ -26,45 +26,31 @@
  */
 
 
-package de.effectivetrainings.billy.expenses.domain;
+package de.effectivetrainings.billy.ui.rest.inbound;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.Setter;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 01.04.14
+ * @since: 24.04.14
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Expense  {
+public class Customer {
 
-    @JsonProperty(value = "organization")
+    @JsonProperty(value = "CUSTOMER_ID")
+    private String customerId;
+
+    @JsonProperty(value = "CUSTOMER_NUMBER")
+    private String customerNumber;
+
+    @JsonProperty(value = "ORGANIZATION")
     private String organization;
 
-    @JsonProperty(value = "expense_number")
-    private String invoiceNumber;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "expense_date")
-    private Date expenseDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "paid_date")
-    private Date paidDate;
-
-    @JsonUnwrapped
-    private Amount amountValue;
-
-    @JsonProperty(value = "comment")
-    private String comment;
 }

@@ -26,7 +26,7 @@
  */
 
 
-package de.effectivetrainings.billy.expenses.domain;
+package de.effectivetrainings.billy.reporting.rest.inbound.expense;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,7 +46,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Expense  {
+public class Expense {
 
     @JsonProperty(value = "organization")
     private String organization;
@@ -63,7 +63,7 @@ public class Expense  {
     private Date paidDate;
 
     @JsonUnwrapped
-    private Amount amountValue;
+    private ExpenseAmount amountValue;
 
     @JsonProperty(value = "comment")
     private String comment;

@@ -26,31 +26,47 @@
  */
 
 
-package de.effectivetrainings.billy.ui.domain;
+package de.effectivetrainings.billy.expenses.rest.inbound;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 24.04.14
+ * @since: 01.04.14
  */
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Customer {
+public class FbExpenseAmount {
 
-    @JsonProperty(value = "CUSTOMER_ID")
-    private String customerId;
+    @JsonProperty(value = "VAT_TOTAL", required = true)
+    private Double vatTotal = 0d;
 
-    @JsonProperty(value = "CUSTOMER_NUMBER")
-    private String customerNumber;
+    @JsonProperty(value = "SUB_TOTAL", required = true)
+    private Double subTotal = 0d;
 
-    @JsonProperty(value = "ORGANIZATION")
-    private String organization;
+    @JsonProperty(value = "TOTAL", required = true)
+    private Double total = 0d;
+
+    public FbExpenseAmount add(FbExpenseAmount amountValue) {
+        total += amountValue.getTotal();
+        vatTotal += amountValue.getVatTotal();
+        subTotal += amountValue.getSubTotal();
+        return this;
+    }
+
+    public FbExpenseAmount minus(FbExpenseAmount amountValue) {
+        total -= amountValue.getTotal();
+        vatTotal -= amountValue.getVatTotal();
+        subTotal -= amountValue.getSubTotal();
+        return this;
+    }
 
 }

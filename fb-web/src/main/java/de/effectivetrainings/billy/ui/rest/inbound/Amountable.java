@@ -1,4 +1,6 @@
-package de.effectivetrainings.billy.expenses.domain;
+package de.effectivetrainings.billy.ui.rest.inbound;
+
+import de.effectivetrainings.billy.ui.rest.inbound.invoice.Amount;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>

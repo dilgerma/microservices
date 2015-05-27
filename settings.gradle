@@ -17,5 +17,5 @@ include 'services:webservice'
 */
 
 rootProject.name = 'fb-micro-services'
-include 'fb-repository', 'fb-invoices', 'fb-web', 'fb-expenses', 'correlation-id', 'spring-metrics', 'fb-customers', 'fb-template', 'fb-eureka-server','rest-support', 'eventstore'
+include 'fb-repository', 'fb-invoices', 'fb-web', 'fb-expenses', 'correlation-id', 'spring-metrics', 'fb-customers', 'fb-template', 'fb-eureka-server','rest-support', 'eventstore', 'fb-reporting'
 

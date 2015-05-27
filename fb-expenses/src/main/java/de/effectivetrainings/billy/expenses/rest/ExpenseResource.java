@@ -29,8 +29,10 @@
 package de.effectivetrainings.billy.expenses.rest;
 
 
+import de.effectivetrainings.billy.expenses.domain.Expense;
+import de.effectivetrainings.billy.expenses.rest.inbound.FbExpenseInboundModelMapper;
+import de.effectivetrainings.billy.expenses.rest.inbound.FbExpenses;
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.billy.expenses.domain.Expenses;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
@@ -60,19 +64,22 @@ public class ExpenseResource {
 
     private CorrelationId correlationId;
 
+    private FbExpenseInboundModelMapper fbExpenseInboundModelMapper;
+
     @Autowired
-    public ExpenseResource(@Value("${fb.repository.expenses}") String expenseUri, @UserRestTemplate RestTemplate restTemplate, CorrelationId correlationId) {
+    public ExpenseResource(@Value("${fb.repository.expenses}") String expenseUri, @UserRestTemplate RestTemplate restTemplate, CorrelationId correlationId, FbExpenseInboundModelMapper fbExpenseInboundModelMapper) {
         this.restTemplate = restTemplate;
         this.expenseUri = expenseUri;
         this.correlationId = correlationId;
+        this.fbExpenseInboundModelMapper = fbExpenseInboundModelMapper;
     }
 
     @RequestMapping
-    public Expenses expenses() {
+    public List<Expense> expenses() {
         log.info("Requesting all expenses for correlation id : {}", correlationId.getCorrelationId());
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<Expenses> expenses = restTemplate.exchange(expenseUri, HttpMethod.GET, requestEntity, Expenses.class);
-        return expenses.getBody();
+        ResponseEntity<FbExpenses> expenses = restTemplate.exchange(expenseUri, HttpMethod.GET, requestEntity, FbExpenses.class);
+        return fbExpenseInboundModelMapper.toExpense(expenses.getBody().getExpenses());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

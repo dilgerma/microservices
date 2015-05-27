@@ -52,11 +52,24 @@ customers:
    - rabbitmq:messaging
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-eventstore:
-   build: eventstore
+reporting:
+   build: fb-reporting
+   expose:
+   - "8081"
+   ports:
+   - "9999:8081"
    links:
+   - invoices
+   - logstash
+   - graphite
    - eurekaserver
-   - rabbitmq:messaging
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   volumes_from: ['lsf']
+#eventstore:
+#   build: eventstore
+#   links:
+#   - eurekaserver
+#   - rabbitmq:messaging
 templates:
    build: fb-template
    expose:

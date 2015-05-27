@@ -46,13 +46,13 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Amount {
 
-    @JsonProperty(value = "VAT_TOTAL", required = true)
+    @JsonProperty(value = "vat", required = true)
     private Double vatTotal = 0d;
 
-    @JsonProperty(value = "SUB_TOTAL", required = true)
+    @JsonProperty(value = "net", required = true)
     private Double subTotal = 0d;
 
-    @JsonProperty(value = "TOTAL", required = true)
+    @JsonProperty(value = "total", required = true)
     private Double total = 0d;
 
     public Amount add(Amount amountValue) {

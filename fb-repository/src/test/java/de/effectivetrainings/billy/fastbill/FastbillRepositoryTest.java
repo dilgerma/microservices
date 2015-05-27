@@ -70,6 +70,7 @@ import static org.junit.Assert.*;
 @ComponentScan(basePackages = "de.effectivetrainings.domain.fastbill")
 @TestPropertySource({"classpath:application.properties"})
 @WebAppConfiguration
+@Ignore
 public class FastbillRepositoryTest {
 
     @Autowired

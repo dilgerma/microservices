@@ -1,17 +1,14 @@
-package de.effectivetrainings.billy.ui.domain;
+package de.effectivetrainings.billy.reporting.rest.inbound.invoice;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.Getter;
 
 import java.util.List;
 
-/**
- *
- */
+@Getter
 public class Invoices {
 
-    @JsonUnwrapped
     private List<Invoice> invoices;
 
     @JsonCreator
@@ -19,7 +16,4 @@ public class Invoices {
         this.invoices = invoices;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
 }

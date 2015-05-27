@@ -26,45 +26,89 @@
  */
 
 
-package de.effectivetrainings.billy.expenses.domain;
+package de.effectivetrainings.billy.ui.rest.inbound.invoice;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import de.effectivetrainings.billy.ui.rest.inbound.Amountable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
- * @since: 01.04.14
+ * @since: 28.03.14
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Expense  {
+@Setter
+public class Invoice implements Amountable {
+
+    @JsonProperty(value = "invoiceNumber")
+    private Long invoiceNumber;
+
+    @JsonProperty(value = "amount")
+    private Amount amountValue;
 
     @JsonProperty(value = "organization")
     private String organization;
 
-    @JsonProperty(value = "expense_number")
-    private String invoiceNumber;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty(value = "date")
+    private Date invoiceDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "expense_date")
-    private Date expenseDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "paid_date")
+    @JsonProperty(value = "paidDate")
     private Date paidDate;
 
-    @JsonUnwrapped
-    private Amount amountValue;
+    @JsonProperty(value = "cancelled")
+    private boolean cancelled;
 
-    @JsonProperty(value = "comment")
-    private String comment;
+    @JsonProperty(value = "paid")
+    public boolean isPaid() {
+        return paidDate != null;
+    }
+
+
+    public Optional<LocalDateTime> getPaidMonth() {
+        Date paidDate = getPaidDate();
+        if(paidDate == null) {
+            return null;
+        }
+
+        LocalDateTime localDate = toLocalDateTime(paidDate);
+        return Optional.of(localDate);
+    }
+
+    public boolean paidIn(Integer month, Integer year) {
+        if(month == null && year == null) {
+            //no filter supplied
+            return true;
+        }
+        if(!isPaid()) {
+            return false;
+        }
+
+        LocalDateTime paidDate = toLocalDateTime(getPaidDate());
+        int paidMonth = paidDate.getMonthValue();
+        int paidYear = paidDate.getYear();
+        return (month != null ? paidMonth == month : true) &&
+            (year != null ? paidYear == year : true);
+    }
+
+    private LocalDateTime toLocalDateTime(Date date) {
+        if(date == null)
+            return null;
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+    }
 }

@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.ui.domain;
+package de.effectivetrainings.billy.ui.rest.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

@@ -1,7 +1,7 @@
-package de.effectivetrainings.billy.expenses.config;
+package de.effectivetrainings.billy.reporting.config;
 
 import com.codahale.metrics.MetricRegistry;
-import de.effectivetrainings.billy.expenses.rest.inbound.FbExpenseInboundModelMapper;
+import de.effectivetrainings.billy.reporting.rest.inbound.ReportingInboundModelMapper;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import de.effectivetrainings.support.rest.UserRestTemplate;
@@ -27,23 +27,23 @@ import java.util.Arrays;
 @Slf4j
 public class RestConfig {
 
-    @Bean
-          @UserRestTemplate
-          public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
-              final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-              restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
-              return restTemplate;
-          }
 
+    @Bean
+              @UserRestTemplate
+              public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
+                  final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+                  restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
+                  return restTemplate;
+              }
 
     /**
      * system request template - no interceptors that rely on an active request initiated by a customer
      */
     @Bean
     @SystemRequestTemplate
-    public RestTemplate systemRestTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
+    public RestTemplate systemRestTemplate(LoadBalancerInterceptor loadBalancerInterceptor) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(loadBalancerInterceptor, restRequestTimerInterceptor));
+        restTemplate.setInterceptors(Arrays.asList(loadBalancerInterceptor));
         return restTemplate;
     }
 
@@ -68,7 +68,7 @@ public class RestConfig {
        }
 
     @Bean
-    public FbExpenseInboundModelMapper inboundModelMapper() {
-        return new FbExpenseInboundModelMapper();
+    public ReportingInboundModelMapper inboundModelMapper() {
+        return new ReportingInboundModelMapper();
     }
 }

@@ -26,45 +26,47 @@
  */
 
 
-package de.effectivetrainings.billy.ui.domain;
+package de.effectivetrainings.billy.ui.rest.inbound.expense;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import lombok.Setter;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
  * @since: 01.04.14
  */
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Expense implements Amountable {
+public class ExpenseAmount {
 
-    @JsonProperty(value = "ORGANIZATION")
-    private String organization;
+    @JsonProperty(value = "vat", required = true)
+    private Double vatTotal = 0d;
 
-    @JsonProperty(value = "INVOICE_NUMBER")
-    private String invoiceNumber;
+    @JsonProperty(value = "net", required = true)
+    private Double subTotal = 0d;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "INVOICE_DATE")
-    private Date invoiceDate;
+    @JsonProperty(value = "total", required = true)
+    private Double total = 0d;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty(value = "PAID_DATE")
-    private Date paidDate;
+    public ExpenseAmount add(ExpenseAmount amountValue) {
+        total += amountValue.getTotal();
+        vatTotal += amountValue.getVatTotal();
+        subTotal += amountValue.getSubTotal();
+        return this;
+    }
 
-    @JsonUnwrapped
-    private Amount amountValue;
+    public ExpenseAmount minus(ExpenseAmount amountValue) {
+        total -= amountValue.getTotal();
+        vatTotal -= amountValue.getVatTotal();
+        subTotal -= amountValue.getSubTotal();
+        return this;
+    }
 
-    @JsonProperty(value = "COMMENT")
-    private String comment;
 }

@@ -35,7 +35,7 @@ dependencies {
     compile project(":rest-support")
     compile project(":spring-metrics")
 
-    compile "org.projectlombok:lombok:1.14.8"
+    compile "org.projectlombok:lombok:1.16.4"
     compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
     compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
     compile "com.google.guava:guava:17.0"

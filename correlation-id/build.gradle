@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
 
-    compile "org.projectlombok:lombok:1.14.8"
+    compile "org.projectlombok:lombok:1.16.4"
     compile "com.google.guava:guava:17.0"
     compile("net.logstash.logback:logstash-logback-encoder:4.1")
     compile("javax.servlet:javax.servlet-api:3.1.0")

@@ -6,5 +6,5 @@ package de.effectivetrainings.billy.billing.domain;
  */
 public interface Amountable {
 
-   public Amount getAmountValue();
+   Amount getAmountValue();
 }

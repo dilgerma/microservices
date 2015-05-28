@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
 
-    compile "org.projectlombok:lombok:1.14.8"
+    compile "org.projectlombok:lombok:1.16.4"
     compile "com.google.guava:guava:17.0"
     compile("io.dropwizard.metrics:metrics-core:3.1.0")
     compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")

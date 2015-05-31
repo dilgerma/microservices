@@ -87,8 +87,8 @@ public class BaseTest {
 
         Date paidDate = new Date();
 
-        Invoice invoice = new Invoice(1L, 123L, new Amount(1D, 1D, 1D), "Orga1", paidDate, paidDate, "", 1);
-        Invoice invoice2 = new Invoice(2L, 124L, new Amount(2D, 2D, 1D),"Orga2", paidDate, paidDate, "", 1);
+        Invoice invoice = new Invoice(1L, "123", new Amount(1D, 1D, 1D), "Orga1", paidDate, paidDate, "", 1);
+        Invoice invoice2 = new Invoice(2L, "124", new Amount(2D, 2D, 1D),"Orga2", paidDate, paidDate, "", 1);
 
         Expense expense = new Expense("Amazon", "INV-01", paidDate, paidDate, new Amount(1D, 1D, 2D), "");
         Expense expense2 = new Expense("CortalConsors", "INV-02", paidDate, paidDate, new Amount(1D, 1D, 2D), "");

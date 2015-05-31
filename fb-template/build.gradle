@@ -1,5 +1,7 @@
 
+
 def projectName = "fb-template"
+
 
 buildscript {
     repositories {

@@ -67,7 +67,8 @@ public class FastbillMockRepository implements FastbillRepository {
 
         List<Invoice> invoiceList = new ArrayList<>();
 
-        Invoice invoice = new Invoice(4711L, 4811L, new Amount(200d, 2000d, 2200d), "Heureka Cloud Apps", new Date(), new Date(), "paid cheque", -1);
+        Invoice invoice = new Invoice(4711L, "4811", new Amount(200d, 2000d, 2200d), "" +
+                "Heureka Cloud Apps", new Date(), new Date(), "paid cheque", -1);
         invoiceList.add(invoice);
 
         fastbillResponse.getResponse().setInvoices(invoiceList);

@@ -28,11 +28,7 @@
 
 package de.effectivetrainings.billy.fastbill.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +55,7 @@ public class Invoice implements Amountable {
     private Long invoiceId;
 
     @JsonProperty(value = "INVOICE_NUMBER")
-    private Long invoiceNumber;
+    private String invoiceNumber;
 
     @JsonUnwrapped
     private Amount amountValue;
@@ -80,6 +76,11 @@ public class Invoice implements Amountable {
 
     @JsonProperty(value = "IS_CANCELED")
     private int cancelled;
+
+
+
+
+
 
     @JsonIgnore
     public boolean isPaid() {

@@ -30,9 +30,7 @@ package de.effectivetrainings.billy.fastbill;
 
 
 import de.effectivetrainings.billy.fastbill.config.Profiles;
-import de.effectivetrainings.billy.fastbill.domain.Customer;
-import de.effectivetrainings.billy.fastbill.domain.FastbillResponse;
-import de.effectivetrainings.billy.fastbill.domain.Filter;
+import de.effectivetrainings.billy.fastbill.domain.*;
 import de.effectivetrainings.billy.fastbill.domain.customer.Address;
 import de.effectivetrainings.billy.fastbill.domain.customer.CustomerType;
 import de.effectivetrainings.billy.fastbill.domain.customer.DeleteCustomer;
@@ -49,12 +47,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -70,7 +68,7 @@ import static org.junit.Assert.*;
 @ComponentScan(basePackages = "de.effectivetrainings.domain.fastbill")
 @TestPropertySource({"classpath:application.properties"})
 @WebAppConfiguration
-@Ignore
+//@Ignore
 public class FastbillRepositoryTest {
 
     @Autowired
@@ -225,12 +223,14 @@ public class FastbillRepositoryTest {
     }
 
     @Test
-    public void testFindPaidInvoicesInYear() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-        FastbillResponse response = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, -1, new Filter(Filter.YEAR, "2014")));
-        assertEquals(28, response.getResponse().getInvoices().stream().filter(invoice -> invoice.getCancelled() != 1).count());
-        double income = response.getResponse().getInvoices().stream().filter(invoice -> sdf.format(invoice.getPaidDate()).equals("2014")).filter(invoice -> invoice.getCancelled() !=1).map(invoice->invoice.getAmountValue().getSubTotal()).reduce(new Double(0), (a, b)-> a+b);
-        System.out.println(income /140*100);
+    public void testFindPaidInvoicesInYear1() throws Exception {
+        FastbillResponse response = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, -1, new Filter(Filter.YEAR, "2015")));
+        List<Invoice> invoices = response.getResponse().getInvoices().stream().filter(invoice -> invoice.getPaidDate() != null && invoice.getPaidMonth().isPresent() && invoice.getPaidMonth().get().getMonth().equals(Month.MAY)).collect(Collectors.toList());
+
+        FastbillResponse expenses = repository.request(new FastbillRequestParameter(RetrieveServiceType.EXPENSES, -1, new Filter(Filter.YEAR, "2015")));
+                List<Expense> expenseList = response.getResponse().getExpenses().stream().filter(expense -> expense.getPaidDate() != null && expense.getPaidMonth().isPresent() && expense.getPaidMonth().get().getMonth().equals(Month.MAY)).collect(Collectors.toList());
+
+        System.out.println("finish");
 
     }
 }

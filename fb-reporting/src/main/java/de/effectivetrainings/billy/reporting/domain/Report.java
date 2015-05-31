@@ -1,20 +1,14 @@
 package de.effectivetrainings.billy.reporting.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-
 import java.util.Collections;
 import java.util.List;
 
 /**
  *
  */
-@Getter
 public class Report {
 
-    @JsonProperty("reportInvoices")
     private final List<ReportInvoice> reportInvoices;
-    @JsonProperty("reportExpenses")
     private List<ReportExpense> reportExpenses;
 
     public Report(List<ReportInvoice> reportInvoices, List<ReportExpense> reportExpenses) {
@@ -22,4 +16,9 @@ public class Report {
         this.reportInvoices = Collections.unmodifiableList(reportInvoices);
     }
 
+    public Amount getTotal() {
+        Amount invoiceAmount  =  reportInvoices.stream().map(ReportInvoice::getAmountValue).reduce(new Amount(0d, 0d, 0d), (result, next) -> result.add(next));
+        Amount expenseAmount = reportExpenses.stream().map(ReportExpense::getAmountValue).reduce(new Amount(0d,0d,0d), (result, next)-> result.add(next));
+        return invoiceAmount.minus(expenseAmount);
+    }
 }

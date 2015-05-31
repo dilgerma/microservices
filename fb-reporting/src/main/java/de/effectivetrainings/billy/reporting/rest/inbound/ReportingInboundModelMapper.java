@@ -35,11 +35,11 @@ public class ReportingInboundModelMapper {
     }
 
     private Amount toAmount(InvoiceAmount amountValue) {
-        return new Amount(amountValue.getVatTotal(), amountValue.getSubTotal(), amountValue.getTotal());
+        return new Amount(amountValue.getSubTotal(), amountValue.getVatTotal(), amountValue.getTotal());
     }
 
     private Amount toAmount(ExpenseAmount expenseAmount) {
-        return new Amount(expenseAmount.getVatTotal(), expenseAmount.getSubTotal(), expenseAmount.getTotal());
+        return new Amount(expenseAmount.getSubTotal(), expenseAmount.getVatTotal(), expenseAmount.getTotal());
     }
 
 

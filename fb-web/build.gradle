@@ -1,11 +1,10 @@
-
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-          classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
-      }
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
+    }
 }
 
 plugins {
@@ -27,6 +26,14 @@ repositories {
     mavenCentral()
 }
 
+node {
+    // Version of node to use.
+    version = '0.10.22'
+
+    // Enabled the automatic download. False is the default (for now).
+    download = true
+}
+
 dependencies {
 
     /**
@@ -44,7 +51,7 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile ('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
+    compile('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-amqp')
 
 
@@ -58,4 +65,6 @@ dependencies {
 }
 
 //build config
+grunt_build.dependsOn 'installGrunt'
+grunt_build.dependsOn 'npmInstall'
 build.dependsOn grunt_build

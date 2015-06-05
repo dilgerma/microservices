@@ -2,6 +2,7 @@ package de.effectivetrainings.billy.reporting;
 
 import de.effectivetrainings.billy.billing.config.MetricsConfig;
 import de.effectivetrainings.billy.reporting.config.RestConfig;
+import de.effectivetrainings.billy.reporting.config.ServiceConfig;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan(basePackages = "de.effectivetrainings.billy.reporting.rest")
 @EnableEurekaClient
 @EnableRestSupport
-@Import({RestConfig.class, MetricsConfig.class})
+@Import({RestConfig.class, MetricsConfig.class, ServiceConfig.class})
 public class Application {
 
     public static void main(String[] args) {

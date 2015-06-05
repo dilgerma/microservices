@@ -2,7 +2,6 @@ package de.effectivetrainings.billy.customermanagement;
 
 import de.effectivetrainings.billy.customermanagement.config.MetricsConfig;
 import de.effectivetrainings.billy.customermanagement.config.RestConfig;
-import de.effectivetrainings.billy.customermanagement.config.ServiceConfig;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
@@ -28,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableEurekaClient
 @EnableRestSupport
 @EnableRabbit
-@Import({RestConfig.class, MetricsConfig.class, ServiceConfig.class})
+@Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 
     public static void main(String[] args) {

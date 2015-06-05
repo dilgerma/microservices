@@ -24,7 +24,7 @@ public class ServiceConfig {
 
     @Bean
     @ExpenseDataSourceQualifier
-    public RestDataSource<Expenses> expenses(@Value("${fb.expense.uri}") URI expenseUri,@UserRestTemplate RestTemplate restTemplate) {
+    public RestDataSource<Expenses> expenses(@Value("${fb.expenses.uri}") URI expenseUri,@UserRestTemplate RestTemplate restTemplate) {
         return new RestDataSource<>(expenseUri, restTemplate, Expenses.class);
     }
 

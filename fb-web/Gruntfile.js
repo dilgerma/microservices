@@ -320,7 +320,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'useminPrepare',
         'concurrent:dist',
-        'autoprefixer',
+        //'autoprefixer',
         'ngtemplates',
         'browserify:dist',
         'clean:afterBuild',

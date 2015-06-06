@@ -23,4 +23,4 @@ angular.module('expenses', ['ui.router']).config(['$stateProvider', function($st
             });
         };
     }
-]).factory('expenseService', require('./ExpenseService'));
+]).factory('expenseService', require('./expenseService'));

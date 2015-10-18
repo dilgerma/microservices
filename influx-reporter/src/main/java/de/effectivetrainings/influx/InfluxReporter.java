@@ -8,7 +8,9 @@ import org.influxdb.dto.Point;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +20,8 @@ public class InfluxReporter extends ScheduledReporter {
 
     private InfluxDB influxDB;
     private String database;
+
+    private Map<String, String> cached = new ConcurrentHashMap<>();
 
     public InfluxReporter(MetricRegistry registry,
                           String name,
@@ -32,7 +36,7 @@ public class InfluxReporter extends ScheduledReporter {
     }
 
     public InfluxReporter(MetricRegistry registry, String name, InfluxDB influxDB, String database) {
-        this(registry, name, MetricFilter.ALL, TimeUnit.SECONDS, TimeUnit.SECONDS, influxDB, database);
+        this(registry, name, MetricFilter.ALL, TimeUnit.SECONDS, TimeUnit.MILLISECONDS, influxDB, database);
     }
 
     @Override
@@ -41,7 +45,8 @@ public class InfluxReporter extends ScheduledReporter {
                        SortedMap<String, Histogram> histograms,
                        SortedMap<String, Meter> meters,
                        SortedMap<String, Timer> timers) {
-        log.info("reporting to influx");
+        log.info("reporting to influx with InfluxDB : {}", influxDB);
+        influxDB.createDatabase(database);
         List<Point> counterPoints = reportCounters(counters);
         List<Point> gaugePoints = reportGauges(gauges);
         List<Point> meterPoints = reportMeters(meters);
@@ -50,10 +55,12 @@ public class InfluxReporter extends ScheduledReporter {
         List<Point> points = Stream.of(counterPoints, gaugePoints, meterPoints, timerPoints, histogramPoints).flatMap
                 (List::stream)
                 .collect(Collectors.toList());
+
         final BatchPoints batchPoints = BatchPoints.database(database)
                 .points(points.toArray(new Point[0]))
                 .consistency(InfluxDB.ConsistencyLevel
                         .ALL)
+                .time(System.currentTimeMillis(), TimeUnit.SECONDS)
                 .build();
         log.info("sending {} points", points.size());
         influxDB.write(batchPoints);
@@ -162,7 +169,7 @@ public class InfluxReporter extends ScheduledReporter {
     private Point point(String name, String fieldName, Object value) {
         return Point.
                 measurement(name)
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS).
+                .time(System.currentTimeMillis(), TimeUnit.SECONDS).
                         field(fieldName, value).build();
     }
 }

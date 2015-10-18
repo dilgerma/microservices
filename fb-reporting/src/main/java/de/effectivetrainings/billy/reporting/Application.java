@@ -1,6 +1,6 @@
 package de.effectivetrainings.billy.reporting;
 
-import de.effectivetrainings.billy.billing.config.MetricsConfig;
+import de.effectivetrainings.billy.reporting.config.MetricsConfig;
 import de.effectivetrainings.billy.reporting.config.RestConfig;
 import de.effectivetrainings.billy.reporting.config.ServiceConfig;
 import de.effectivetrainings.correlation.CorrelationId;

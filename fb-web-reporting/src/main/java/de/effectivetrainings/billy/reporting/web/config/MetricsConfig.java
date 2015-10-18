@@ -34,19 +34,6 @@ public class MetricsConfig {
     private MetricRegistry metricRegistry;
 
     @Bean
-    public GraphiteReporter reporter(MetricRegistry registry) {
-        final Graphite graphite = new FailsafeGraphite(new InetSocketAddress("graphite", 2003));
-        final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                .prefixedWith("ui")
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .filter(MetricFilter.ALL)
-                .build(graphite);
-        reporter.start(1l, TimeUnit.MINUTES);
-        return reporter;
-    }
-
-    @Bean
     public HealthCheckRegistry healthChecks(@SystemRequestTemplate RestTemplate restTemplate, @Value("${fb.reporting.uri}") URI reportingURI) {
 
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();

@@ -42,8 +42,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.boot:spring-boot-starter-amqp')
 
-    compile('io.dropwizard.metrics:metrics-graphite:3.1.0')
-
     compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")

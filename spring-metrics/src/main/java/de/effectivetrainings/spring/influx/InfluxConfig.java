@@ -34,7 +34,6 @@ public class InfluxConfig {
     public InfluxDB influxDB() {
         try {
             InfluxDB influxDB = InfluxDBFactory.connect(influxURI, influxUser, influxPassword);
-            influxDB.createDatabase(influxDb);
             return influxDB;
         } catch (Exception e) {
             //dont fail for influx errors

@@ -28,6 +28,8 @@ invoices:
    expose:
    - "8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   links:
+   - influxdb
 expenses:
    build: fb-expenses
    expose:

@@ -16,13 +16,13 @@ ui:
    ports:
    - "8080:8080"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
-reportingui:
-  build: fb-web-reporting
-  expose:
-  - "8081"
-  ports:
-  - "8081:8081"
-  command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+#reportingui:
+#  build: fb-web-reporting
+#  expose:
+#  - "8081"
+#  ports:
+#  - "8081:8081"
+#  command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 invoices:
    build: fb-invoices
    expose:
@@ -81,22 +81,20 @@ kibana:
   - "80"
   ports:
   - "8090:80"
-graphite:
-  image: hopsoft/graphite-statsd
+influxdb:
+  image: tutum/influxdb
+  hostname: influxdb
   ports:
-  #keep this port exposed so that grafana can access it from the browser
-  - "9090:80"
-  #keep this port exposed so that systems with static configuration can access it
-  - "2003:2003"
-  - "2004:2004"
-  expose:
-  - "2003"
-  - "2004"
-  - "9090"
+  - "8083:8083"
+  - "8086:8086"
+  environment:
+  - ADMIN_USER="root"
 grafana:
-  build: grafana
+  image: grafana/grafana
   ports:
-  - "8091:80"
+  - "3000:3000"
+  environment:
+  - "GF_SECURITY_ADMIN_PASSWORD=secret"
 mongo:
   hostname: mongo
   image: mongo
@@ -106,11 +104,11 @@ mongo:
   - "27017"
   ports:
   - "27017:27017"
-mongographite:
-  build: mongo-graphite
-  links:
-  - graphite
-  - mongo
+#mongographite:
+#  build: mongo-graphite
+#  links:
+#  - graphite
+#  - mongo
 rabbitmq:
   hostname: rabbitmq
   image: rabbitmq:3.5.1-management

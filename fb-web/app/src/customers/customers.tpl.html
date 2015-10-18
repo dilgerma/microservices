@@ -1,0 +1,33 @@
+<div class="container" ui-view>
+    <a id="customers.load" href="#" ng-click="load()">Load Customers</a>
+    <pre>
+    {{customers | json}}
+    </pre>
+
+    <div id="customer.result">
+        {{response | json}}
+    </div>
+
+    <div>
+        <div>
+            <label for="customer.firstName">Vorname</label>
+            <input ng-model="customer.firstName" type="text" id="customer.firstName">
+        </div>
+        <div>
+            <label for="customer.lastName">Nachname</label>
+            <input ng-model="customer.lastName" type="text" id="customer.lastName">
+        </div>
+        <div>
+            <label for="customer.organization">Firma</label>
+            <input ng-model="customer.organization" type="text" id="customer.organization">
+        </div>
+        <div>
+            <label for="customer.customerNumber">Kundennummer</label>
+            <input ng-model="customer.customerNumber" type="text" id="customer.customerNumber">
+        </div>
+        <button type="submit" ng-click="store()">Kunde speichern</button>
+    </div>
+    <pre>
+        {{customer | json}}
+    </pre>
+</div>

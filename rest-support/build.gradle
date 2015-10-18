@@ -1,0 +1,29 @@
+apply plugin: 'java'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile project(":correlation-id")
+
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.google.guava:guava:17.0"
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
+
+    //we do register some eureka components
+    compile('org.springframework.cloud:spring-cloud-starter-eureka:1.0.3.RELEASE')
+
+    compile("org.springframework:spring-web:${springVersion}")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+

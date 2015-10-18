@@ -1,0 +1,5 @@
+FROM dilgerm/rpi-app-base
+#assume building in a context
+ADD /lib/ /sources/lib
+ADD / /sources/
+CMD java -cp /sources org.springframework.boot.loader.JarLauncher

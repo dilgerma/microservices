@@ -1,0 +1,7 @@
+FROM dilgerm/rpi-app-base
+MAINTAINER martin@effectivetrainings.de
+
+apt-get update
+apt-get install net-tools
+apt-get install -y curl
+apt-get install -y inetutils-ping

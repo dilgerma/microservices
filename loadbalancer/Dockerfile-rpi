@@ -1,0 +1,2 @@
+FROM akkerman/rpi-nginx
+ADD nginx.conf /etc/nginx/nginx.conf:ro

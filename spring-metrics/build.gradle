@@ -1,0 +1,27 @@
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+    compile project(":influx-reporter")
+
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.google.guava:guava:17.0"
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
+    compile('io.dropwizard.metrics:metrics-graphite:3.1.0')
+
+    compile("org.springframework:spring-web:${springVersion}")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+

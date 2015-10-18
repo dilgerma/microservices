@@ -1,0 +1,25 @@
+input {
+  gelf {
+      host => "0.0.0.0"
+      port => 12201
+  }
+}
+
+filter {
+
+  multiline {
+    pattern => "^[\[~]"
+    negate => true
+    what => "previous"
+  }
+}
+
+output {
+  elasticsearch {
+    host => "elasticsearch"
+    protocol => "http"
+  }
+  stdout {
+    codec => rubydebug
+  }
+}

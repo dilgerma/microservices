@@ -1,0 +1,120 @@
+dockerui:
+  image: dockerui/dockerui
+  privileged: true
+  ports:
+  - "9000:9000"
+  mem_limit: 56m
+icinga:
+   image: dilgerm/icinga2
+   ports:
+   - "8092:80"
+   links:
+   - ui:invoices-ui
+   - invoices:fb-invoices-service
+   - repository:fb-backend
+   - expenses:fb-expenses-service
+   - customers:fb-customer-service
+   volumes_from: ['repository', 'ui','invoices', 'expenses', 'customers']
+   mem_limit: 1g
+ui:
+   image: dilgerm/fbweb
+   ports:
+   - "80:8080"
+   links:
+   - invoices
+   - expenses
+   - customers
+   - graphite
+   volumes_from: ['lsf']
+   mem_limit: 324m
+invoices:
+   image: dilgerm/fbinvoices
+   expose:
+   - "8081"
+   links:
+   - repository:repository
+   - graphite
+   volumes_from: ['lsf']
+   mem_limit: 324m
+expenses:
+   image: dilgerm/fbexpenses
+   expose:
+   - "8081"
+   links:
+   - repository:repository
+   - logstash
+   - graphite
+   volumes_from: ['lsf']
+   mem_limit: 324m
+customers:
+   image: dilgerm/fbcustomers
+   expose:
+   - "8081"
+   links:
+   - repository:repository
+   - logstash
+   - graphite
+   volumes_from: ['lsf']
+   mem_limit: 324m
+repository:
+   image: dilgerm/fbrepository
+   expose:
+   - "8080"
+   volumes_from: ['lsf']
+   environment:
+   - user_email
+   - user_apiKey
+   links:
+   - graphite
+   mem_limit: 324m
+lsf:
+   image: dilgerm/logstashforwarder
+   links:
+   - logstash
+   volumes:
+   - /var/log/app
+elasticvolume:
+   image: dilgerm/elasticsearchvolume
+   mem_limit: 4m
+elasticsearch:
+  user: root
+  image: dilgerm/elasticsearch
+  expose:
+  - "9200"
+  - "9300"
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+  volumes_from: ['elasticvolume']
+  mem_limit: 1g
+logstash:
+  image: dilgerm/logstash
+  expose:
+  - "5000"
+  links:
+   - elasticsearch:es
+  mem_limit: 1g
+kibana:
+  image: dilgerm/kibana
+  expose:
+  - "80"
+  ports:
+  - "8090:80"
+  mem_limit: 128m
+graphite:
+  image: hopsoft/graphite-statsd
+  ports:
+  #graphite itself
+  - "8080:80"
+  expose:
+  #carbon port
+  - "2003"
+  mem_limit: 1g
+grafana:
+  image: dilgerm/grafana
+  ports:
+  - "8091:80"
+  links:
+  - elasticsearch
+  - graphite
+  mem_limit: 56m

@@ -1,0 +1,23 @@
+machine:
+    node:
+        version: 0.12.0
+    services:
+    - docker
+    java:
+      version: oraclejdk8
+
+dependencies:
+    override:
+        - sudo pip install -U docker-compose
+        - sudo pip install shipwright
+    pre:
+        - npm install -g bower
+test:
+    override:
+        - ./gradlew clean build
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - shipwright push

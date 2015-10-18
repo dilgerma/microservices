@@ -1,0 +1,120 @@
+loadbalancer:
+   build: loadbalancer
+   ports:
+   - "80:80"
+eurekaserver:
+   build: fb-eureka-server
+   hostname: eurekaserver
+   ports:
+   - "8761:8761"
+   expose:
+   - "8761"
+ui:
+   build: fb-web
+   expose:
+   - "8080"
+   ports:
+   - "8080:8080"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+reportingui:
+  build: fb-web-reporting
+  expose:
+  - "8081"
+  ports:
+  - "8081:8081"
+  command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+invoices:
+   build: fb-invoices
+   expose:
+   - "8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+expenses:
+   build: fb-expenses
+   expose:
+   - "8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+customers:
+   build: fb-customers
+   expose:
+   - "8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+reporting:
+   build: fb-reporting
+   expose:
+   - "8081"
+   ports:
+   - "9999:8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+templates:
+   build: fb-template
+   expose:
+   - "8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+repository:
+   build: fb-repository
+   expose:
+   - "8080"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   environment:
+   - user_email
+   - user_apiKey
+elasticvolume:
+   build: elasticsearch-volume
+   mem_limit: 4m
+elasticsearch:
+  user: root
+  build: elasticsearch
+  expose:
+  - "9200"
+  - "9300"
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+  volumes_from: ['elasticvolume']
+logstash:
+  build: logstash
+  expose:
+  - "5000"
+kibana:
+  build: kibana
+  expose:
+  - "80"
+  ports:
+  - "8090:80"
+graphite:
+  image: hopsoft/graphite-statsd
+  ports:
+  #keep this port exposed so that grafana can access it from the browser
+  - "9090:80"
+  #keep this port exposed so that systems with static configuration can access it
+  - "2003:2003"
+  - "2004:2004"
+  expose:
+  - "2003"
+  - "2004"
+  - "9090"
+grafana:
+  build: grafana
+  ports:
+  - "8091:80"
+mongo:
+  hostname: mongo
+  image: mongo
+  volumes:
+  - /data/db
+  expose:
+  - "27017"
+  ports:
+  - "27017:27017"
+mongographite:
+  build: mongo-graphite
+  links:
+  - graphite
+  - mongo
+rabbitmq:
+  hostname: rabbitmq
+  image: rabbitmq:3.5.1-management
+  ports:
+  - "5672:5672"
+  #user guest / guest
+  - "15672:15672"

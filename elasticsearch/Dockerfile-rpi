@@ -1,0 +1,4 @@
+FROM itwars/rpi-elasticsearch
+WORKDIR /elasticsearch
+USER root
+RUN bin/plugin -i elasticsearch/marvel/latest

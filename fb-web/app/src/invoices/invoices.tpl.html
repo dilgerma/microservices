@@ -1,0 +1,12 @@
+<div class="container" ui-view>
+    <a id="invoices.load" href="#" ng-click="load()">Rechnungen laden</a>
+
+    <div data-invoice-filter="filter"></div>
+    <div class="row" ng-repeat="invoice in invoices">
+        <div class="col-md-2">{{invoice.invoiceNumber}}-number</div>
+        <div class="col-md-4">{{invoice.organization}}</div>
+        <div class="col-md-2">{{invoice.date | date:'dd.MM.yyyy'}}</div>
+        <div class="col-md-2">{{invoice.amount.total | currency}}</div>
+    </div>
+
+</div>

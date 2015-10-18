@@ -1,0 +1,2 @@
+FROM dilgerm/rpi-app-base
+VOLUME /var/lib/elasticsearch

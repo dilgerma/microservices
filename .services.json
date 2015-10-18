@@ -1,0 +1,69 @@
+{
+  "dockerfile": "Dockerfile-rpi",
+  "services": [
+    {
+      "name": "invoices",
+      "dir": "fb-invoices",
+      "tag": "dilgerm/rpi-billy-invoices",
+      "group": "app"
+    },
+    {
+      "name": "expenses",
+      "dir": "fb-expenses",
+      "tag": "dilgerm/rpi-billy-expenses",
+      "group": "app"
+    },
+    {
+      "name": "repository",
+      "dir": "fb-repository",
+      "tag": "dilgerm/rpi-billy-repository",
+      "group": "app"
+    },
+    {
+      "name": "customers",
+      "dir": "fb-customers",
+      "tag": "dilgerm/rpi-billy-customers",
+      "group": "app"
+    },
+    {
+      "name": "template",
+      "dir": "fb-template",
+      "tag": "dilgerm/rpi-billy-templates",
+      "group": "app"
+    },
+    {
+      "name": "ui",
+      "dir": "fb-web",
+      "tag": "dilgerm/rpi-billy-ui",
+      "group": "app"
+    },
+    {
+      "name": "reporting",
+      "dir": "fb-reporting",
+      "tag": "dilgerm/rpi-billy-reporting",
+      "group": "app"
+    },
+    {
+      "name": "eurekaserver",
+      "dir": "fb-eureka-server",
+      "tag": "dilgerm/rpi-eurekaserver",
+      "group": "app"
+    },
+    {
+      "name": "bootadmin",
+      "dir": "fb-boot-admin-server",
+      "tag": "dilgerm/rpi-bootadmin",
+      "group": "app"
+    },
+    {
+      "name": "logstash",
+      "dir": "logstash",
+      "tag": "dilgerm/rpi-logstash"
+    },
+    {
+      "name": "kibana",
+      "dir": "kibana",
+      "tag": "dilgerm/rpi-billy-kibana"
+    }
+  ]
+}

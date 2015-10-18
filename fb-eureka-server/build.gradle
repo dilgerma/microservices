@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = "fb-eureka-server"
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude group: 'javax.servlet', module: 'servlet-api'
+    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+springBoot {
+    requiresUnpack = ['com.netflix.eureka:eureka-core', 'com.netflix.eureka:eureka-client']
+}
+
+dependencies {
+
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.3.RELEASE') {
+        exclude module: 'javax.servlet:servlet-api'
+    }
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+}
+
+

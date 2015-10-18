@@ -1,0 +1,27 @@
+FROM dilgerm/rpi-app-base
+
+RUN wget https://download.elastic.co/logstash/logstash/packages/debian/logstash_1.5.4-1_all.deb
+RUN apt-get -f -y install logrotate git-core
+RUN dpkg -i logstash_1.5.4-1_all.deb
+
+
+#raspberry pi workaround
+RUN apt-get -f -y install git-core
+
+RUN wget http://mirror.synyx.de/apache//ant/binaries/apache-ant-1.9.6-bin.tar.gz
+RUN tar -xf apache-ant-1.9.6-bin.tar.gz
+RUN chmod +x apache-ant-1.9.6/bin/ant
+RUN ln -s $(pwd)/apache-ant-1.9.6/bin/ant /usr/local/bin/ant
+
+WORKDIR /data
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y zip make texinfo build-essential && \
+    git clone https://github.com/jnr/jffi.git && \
+    cd jffi && \
+    ant jar && \
+    cp /data/jffi/build/jni/libjffi-1.2.so /opt/logstash/vendor/jruby/lib/jni/arm-Linux/libjffi-1.2.so && \
+    cd /opt/logstash/vendor/jruby/lib && \
+    zip -g jruby-complete-1.7.11.jar jni/arm-Linux/libjffi-1.2.so
+
+COPY logstash.conf.json /etc/logstash/logstash.conf
+VOLUME /etc/logstash
+CMD /opt/logstash/bin/logstash agent -f /etc/logstash/logstash.conf

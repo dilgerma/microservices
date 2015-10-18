@@ -1,0 +1,135 @@
+#loadbalancer:
+#   build: loadbalancer
+#   dockerfile: Dockerfile-rpi
+#   ports:
+#   - "80:80"
+#   links:
+#   - ui
+#   - reportingui
+eurekaserver:
+   build: fb-eureka-server
+   dockerfile: Dockerfile-rpi
+   ports:
+   - "8761:8761"
+   hostname: "eurekaserver"
+   container_name: "eurekaserver"
+#   environment:
+#   - "constraint:node==pi41"
+ui:
+   build: fb-web
+   dockerfile: Dockerfile-rpi
+   container_name: "ui"
+   ports:
+   - "8080:8080"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+reportingui:
+  build: fb-web-reporting
+  dockerfile: Dockerfile-rpi
+  container_name: "reporting-ui"
+  ports:
+  - "8999:8081"
+#  links:
+#  - eurekaserver
+  command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+invoices:
+   build: fb-invoices
+   dockerfile: Dockerfile-rpi
+   container_name: "invoices"
+   expose:
+   - "8081"
+#   links:
+#   - eurekaserver
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+expenses:
+   build: fb-expenses
+   dockerfile: Dockerfile-rpi
+   container_name: "expenses"
+   expose:
+   - "8081"
+#   links:
+#   - eurekaserver
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+customers:
+   build: fb-customers
+   dockerfile: Dockerfile-rpi
+   container_name : "customers"
+   expose:
+   - "8081"
+#   links:
+#   - eurekaserver
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+reporting:
+   build: fb-reporting
+   dockerfile: Dockerfile-rpi
+   container_name : "reporting"
+   expose:
+   - "8081"
+   ports:
+   - "8081"
+#   links:
+#   - eurekaserver
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+#templates:
+#   build: fb-template
+#   dockerfile: Dockerfile-rpi
+#   expose:
+#   - "8081"
+#   links:
+#   - eurekaserver
+#   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+repository:
+   build: fb-repository
+   dockerfile: Dockerfile-rpi
+   container_name : "repoository"
+   expose:
+   - "8080"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   # volumes_from: ['lsf']
+   environment:
+   - user_email
+   - user_apiKey
+   - spring.profiles.active=mock
+#   links:
+#   - eurekaserver
+lsf:
+   build: logstash-forwarder
+   dockerfile: Dockerfile-rpi
+   links:
+   - logstash
+   volumes:
+   - /var/log/
+#elasticvolume:
+#   dockerfile: Dockerfile-rpi
+#   build: elasticsearch-volume
+elasticsearch:
+  user: root
+  build: elasticsearch
+  dockerfile: Dockerfile-rpi
+  container_name : "elasticsearch"
+  expose:
+  - "9200"
+  - "9300"
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+#  volumes_from: ['elasticvolume']
+logstash:
+  build: logstash
+  dockerfile: Dockerfile-rpi
+  expose:
+  - "5000"
+  links:
+   - elasticsearch:es
+influxdb:
+  image: sbiermann/rpi-influxdb
+  hostname: "influxdb"
+  ports:
+  #keep this port exposed so that grafana can access it from the browser
+  - "8086"
+  - "8083"
+grafana:
+  build: grafana
+  dockerfile: Dockerfile-rpi
+  ports:
+  - "8091:80"
+

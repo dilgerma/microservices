@@ -1,0 +1,26 @@
+
+eurekaserver:
+   build: fb-eureka-server
+   name: eurekaserver
+   dockerfile: Dockerfile-rpi
+   ports:
+   - "8761:8761"
+   environment:
+   - constraint:node==pi46
+ui:
+   build: fb-web
+   dockerfile: Dockerfile-rpi
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   ports:
+   - "8080:8080"
+   extra_hosts:
+    eurekaserver: 192.168.178.46
+invoices:
+   build: fb-invoices
+   dockerfile: Dockerfile-rpi
+   ports:
+   - "8081:8081"
+   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
+   extra_hosts:
+   - "eurekaserver:192.168.178.46"
+

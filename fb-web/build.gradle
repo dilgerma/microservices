@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+plugins {
+    id "com.moowork.grunt" version "0.11"
+}
+
+def projectName = "fb-web"
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'com.moowork.grunt'
+//apply plugin: 'war'
+
+jar {
+    baseName = projectName
+}
+
+repositories {
+    mavenCentral()
+}
+
+node {
+    // Version of node to use.
+    version = '0.12.0'
+
+    // Enabled the automatic download. False is the default (for now).
+    download = false
+}
+
+dependencies {
+
+    /**
+     * libs
+     */
+    compile project(":rest-support")
+    compile project(":spring-metrics")
+
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
+    compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
+    compile "com.google.guava:guava:17.0"
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.boot:spring-boot-starter-amqp')
+
+
+    compile("net.logstash.logback:logstash-logback-encoder:4.1")
+
+    compile('io.dropwizard.metrics:metrics-graphite:3.1.0')
+
+    compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+//build config
+grunt_build.dependsOn 'npmInstall'
+build.dependsOn grunt_build

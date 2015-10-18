@@ -1,0 +1,39 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = "fb-admin-server"
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude group: 'javax.servlet', module: 'servlet-api'
+    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+
+dependencies {
+
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    compile("de.codecentric:spring-boot-admin-server:1.2.3")
+    compile("de.codecentric:spring-boot-admin-server-ui:1.2.3")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+}
+
+

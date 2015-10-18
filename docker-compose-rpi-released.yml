@@ -1,0 +1,123 @@
+#loadbalancer:
+#   build: loadbalancer
+#   dockerfile: Dockerfile-rpi
+#   ports:
+#   - "80:80"
+#   links:
+#   - ui
+#   - reportingui
+eurekaserver:
+   image: dilgerm/rpi-eurekaserver:41
+   ports:
+   - "8761:8761"
+   container_name: "eurekaserver"
+   log_driver: "gelf"
+   log_opt:
+     gelf-address: udp://pi31:12201
+bootadmin:
+   image: dilgerm/rpi-bootadmin:41
+   ports:
+   - "9800:8080"
+   container_name: "bootadmin"
+   log_driver: "gelf"
+   log_opt:
+     gelf-address: udp://pi31:12201
+ui:
+   image: dilgerm/rpi-billy-ui:41
+   container_name: "ui"
+   ports:
+   - "8080:8080"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+#reportingui:
+#  image: dilgerm/rpi-billy-reporting-ui:41
+#  ports:
+#  - "8999:8081"
+#  log_driver: "gelf"
+#  log_opt:
+#    gelf-address: udp://pi31:12201
+invoices:
+   image: dilgerm/rpi-billy-invoices:46
+   expose:
+   - "8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+expenses:
+   image: dilgerm/rpi-billy-expenses:46
+   expose:
+   - "8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+customers:
+   image: dilgerm/rpi-billy-customers:41
+   expose:
+   - "8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+reporting:
+   image: dilgerm/rpi-billy-reporting:41
+   expose:
+   - "8081"
+   ports:
+   - "8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+templates:
+   image: dilgerm/rpi-billy-templates:41
+   expose:
+   - "8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+repository:
+   image: dilgerm/rpi-billy-repository:45
+   expose:
+   - "8080"
+   environment:
+   - user_email=martin@effectivetrainings.de
+   - user_apiKey=b7cd951bc464a9ab45640730001d64edBRI3mrXeTVGh2dT43ff6Z4FCXSBDSnMk
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi31:12201
+elasticsearch:
+  image: itwars/rpi-elasticsearch
+  container_name: elasticsearch
+  environment:
+  - constraint:node==pi24
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+logstash:
+  image: dilgerm/rpi-logstash:41
+  container_name: logstash
+  expose:
+  - "5000"
+  ports:
+  - "12201:12201/udp"
+#needs to run on pi31 to be able to use gelf-logging
+  environment:
+  - constraint:node==pi31
+kibana:
+  image: dilgerm/rpi-billy-kibana:41
+  ports:
+  - "9681:80"
+influxdb:
+  image: sbiermann/rpi-influxdb
+  container_name: "influxdb"
+  ports:
+  - "8086"
+  - "8083"
+  log_driver: "gelf"
+  log_opt:
+   gelf-address: udp://pi31:12201
+#grafana:
+#  build: grafana
+#  dockerfile: Dockerfile-rpi
+#  ports:
+#  - "8091:80"
+

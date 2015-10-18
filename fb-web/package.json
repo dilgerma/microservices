@@ -1,0 +1,43 @@
+  {
+  "name": "webapp",
+  "version": "0.0.1",
+  "dependencies": {
+    "async": "^1.4.2",
+    "bower": "^1.4.1",
+    "grunt-cli": "~0.1.13",
+    "handlebars": "^3.0.3",
+    "underscore": "^1.8.3",
+    "envify": "*",
+    "grunt": "*",
+    "grunt-angular-templates": "~0.5.7",
+    "grunt-autoprefixer": "*",
+    "grunt-browserify": "4.0.*",
+    "grunt-concurrent": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-compass": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-htmlmin": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-modernizr": "1.0.0",
+    "grunt-rev": "*",
+    "grunt-shell": "*",
+    "grunt-svgmin": "*",
+    "grunt-usemin": "*",
+    "jshint-stylish": "*",
+    "load-grunt-tasks": "*",
+    "modernizr": "~v3.0.*",
+    "time-grunt": "*",
+    "source-map": "*"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "postinstall" : "node_modules/.bin/bower --allow-root --config.interactive=false install"
+  }
+}

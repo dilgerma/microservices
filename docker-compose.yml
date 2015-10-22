@@ -4,11 +4,16 @@ loadbalancer:
    - "80:80"
 eurekaserver:
    build: fb-eureka-server
-   hostname: eurekaserver
+   container_name: eurekaserver
    ports:
    - "8761:8761"
    expose:
    - "8761"
+bootadmin:
+   build: fb-boot-admin-server
+   container_name: bootadmin
+   ports:
+   - "9800:8080"
 ui:
    build: fb-web
    expose:
@@ -60,6 +65,7 @@ repository:
    environment:
    - user_email
    - user_apiKey
+   - spring.profiles.active=mock
 elasticvolume:
    build: elasticsearch-volume
    mem_limit: 4m
@@ -85,7 +91,7 @@ kibana:
   - "8090:80"
 influxdb:
   image: tutum/influxdb
-  hostname: influxdb
+  container_name: influxdb
   ports:
   - "8083:8083"
   - "8086:8086"

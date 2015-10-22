@@ -63,26 +63,26 @@ public class InfluxReporter extends ScheduledReporter {
     private List<Point> reportHistograms(SortedMap<String, Histogram> histograms) {
         List<Point> histogramMetrics = new ArrayList<>();
         histograms.entrySet().stream().forEach(histogram -> {
-            Set<Field> fields = new HashSet<>();
-            fields.add(field("histogram.count",
+            Set<InfluxField> fields = new HashSet<>();
+            fields.add(field("count",
                     histogram.getValue().getCount()));
-            fields.add(field("histogram.percentile.75",
+            fields.add(field("p75",
                     histogram.getValue().getSnapshot().get75thPercentile()));
-            fields.add(field("histogram.percentile.95",
+            fields.add(field("p95",
                     histogram.getValue().getSnapshot().get95thPercentile()));
-            fields.add(field("histogram.percentile.98",
+            fields.add(field("p98",
                     histogram.getValue().getSnapshot().get98thPercentile()));
-            fields.add(field("histogram.percentile.999",
+            fields.add(field("p999",
                     histogram.getValue().getSnapshot().get999thPercentile()));
-            fields.add(field("histogram.percentile.99",
+            fields.add(field("p99",
                     histogram.getValue().getSnapshot().get99thPercentile()));
-            fields.add(field("histogram.max",
+            fields.add(field("max",
                     histogram.getValue().getSnapshot().getMax()));
-            fields.add(field("histogram.min",
+            fields.add(field("min",
                     histogram.getValue().getSnapshot().getMin()));
-            fields.add(field("histogram.mean",
+            fields.add(field("mean",
                     histogram.getValue().getSnapshot().getMean()));
-            fields.add(field("histogram.median",
+            fields.add(field("median",
                     histogram.getValue().getSnapshot().getMedian()));
             histogramMetrics.add(point(histogram.getKey(), fields));
         });
@@ -93,35 +93,35 @@ public class InfluxReporter extends ScheduledReporter {
     private List<Point> reportTimers(SortedMap<String, Timer> timers) {
         List<Point> timerMetrics = new ArrayList<>();
         timers.entrySet().stream().forEach(timer -> {
-            Set<Field> fields = new HashSet<>();
-            fields.add(field("timer.count",
+            Set<InfluxField> fields = new HashSet<>();
+            fields.add(field("count",
                     timer.getValue().getCount()));
-            fields.add(field("timer.15min.rate",
+            fields.add(field("m15_rate",
                     timer.getValue().getFifteenMinuteRate()));
-            fields.add(field("timer.5min.rate",
+            fields.add(field("m5_rate",
                     timer.getValue().getFiveMinuteRate()));
-            fields.add(field("timer.mean.rate",
+            fields.add(field("mean_rate",
                     timer.getValue().getMeanRate()));
-            fields.add(field("timer.1min.rate",
+            fields.add(field("m1_rate",
                     timer.getValue().getOneMinuteRate()));
-            fields.add(field("timer.percentile.75",
-                    timer.getValue().getSnapshot().get75thPercentile()));
-            fields.add(field("timer.percentile.95",
+            fields.add(field("p75",
+                    convertDuration(timer.getValue().getSnapshot().get75thPercentile())));
+            fields.add(field("p95",
                     timer.getValue().getSnapshot().get95thPercentile()));
-            fields.add(field("timer.percentile.98",
+            fields.add(field("p98",
                     timer.getValue().getSnapshot().get98thPercentile()));
-            fields.add(field("timer.percentile.999",
+            fields.add(field("p999",
                     timer.getValue().getSnapshot().get999thPercentile()));
-            fields.add(field("timer.percentile.99",
+            fields.add(field("p99",
                     timer.getValue().getSnapshot().get99thPercentile()));
-            fields.add(field("timer.max",
+            fields.add(field("max",
                     timer.getValue().getSnapshot().getMax()));
-            fields.add(field("timer.min",
+            fields.add(field("min",
                     timer.getValue().getSnapshot().getMin()));
             fields.add(field(
-                    "timer.mean",
+                    "mean",
                     timer.getValue().getSnapshot().getMean()));
-            fields.add(field("timer.median",
+            fields.add(field("median",
                     timer.getValue().getSnapshot().getMedian()));
             timerMetrics.add(point(timer.getKey(), fields));
         });
@@ -149,27 +149,27 @@ public class InfluxReporter extends ScheduledReporter {
     private List<Point> reportMeters(SortedMap<String, Meter> meters) {
         List<Point> meterMetrics = new ArrayList<>();
         meters.entrySet().stream().forEach(meter -> {
-            Set<Field> fields = new HashSet<>();
-            fields.add(field("meter.count",
+            Set<InfluxField> fields = new HashSet<>();
+            fields.add(field("count",
                     meter.getValue().getCount()));
-            fields.add(field("meter.15min.rate",
+            fields.add(field("m15",
                     meter.getValue().getFifteenMinuteRate()));
-            fields.add(field("meter.5min.rate",
+            fields.add(field("m5",
                     meter.getValue().getFiveMinuteRate()));
-            fields.add(field("meter.mean.rate",
+            fields.add(field("mean",
                     meter.getValue().getMeanRate()));
-            fields.add(field("meter.1min.rate",
+            fields.add(field("m1",
                     meter.getValue().getOneMinuteRate()));
             meterMetrics.add(point(meter.getKey(), fields));
         });
         return meterMetrics;
     }
 
-    private Field field(String key, Object value) {
-        return new Field(key, value);
+    private InfluxField field(String key, Object value) {
+        return new InfluxField(key, value);
     }
 
-    private Point point(String name, Set<Field> fields) {
+    private Point point(String name, Set<InfluxField> fields) {
         final Point.Builder pointBuilder = Point.
                 measurement(name)
                 .time(System.currentTimeMillis(), TimeUnit.SECONDS);

@@ -1,5 +1,3 @@
 FROM dilgerm/app-base
-#assumes the jar file was unpacked to /build/unpacked
-ADD /build/unpacked/lib/ /sources/lib
-ADD /build/unpacked/ /sources
-CMD java -cp /sources org.springframework.boot.loader.JarLauncher
+COPY /build/libs/fb-admin-server-0.1.0.jar /sources/app.jar
+CMD java -jar /sources/app.jar

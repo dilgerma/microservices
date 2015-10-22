@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Field {
+public class InfluxField {
 
     private String name;
     private Object value;

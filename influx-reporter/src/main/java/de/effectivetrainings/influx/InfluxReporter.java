@@ -52,8 +52,7 @@ public class InfluxReporter extends ScheduledReporter {
                 .collect(Collectors.toList());
         final BatchPoints batchPoints = BatchPoints.database(database)
                 .points(points.toArray(new Point[0]))
-                .consistency(InfluxDB.ConsistencyLevel
-                        .ALL)
+                .retentionPolicy("30d")
                 .time(System.currentTimeMillis(), TimeUnit.SECONDS)
                 .build();
         log.info("sending {} points", points.size());
@@ -95,34 +94,34 @@ public class InfluxReporter extends ScheduledReporter {
         timers.entrySet().stream().forEach(timer -> {
             Set<InfluxField> fields = new HashSet<>();
             fields.add(field("count",
-                    timer.getValue().getCount()));
+                    convertDuration(timer.getValue().getCount())));
             fields.add(field("m15_rate",
-                    timer.getValue().getFifteenMinuteRate()));
+                    convertDuration(timer.getValue().getFifteenMinuteRate())));
             fields.add(field("m5_rate",
-                    timer.getValue().getFiveMinuteRate()));
+                    convertDuration(timer.getValue().getFiveMinuteRate())));
             fields.add(field("mean_rate",
-                    timer.getValue().getMeanRate()));
+                    convertDuration(timer.getValue().getMeanRate())));
             fields.add(field("m1_rate",
-                    timer.getValue().getOneMinuteRate()));
+                    convertDuration(timer.getValue().getOneMinuteRate())));
             fields.add(field("p75",
                     convertDuration(timer.getValue().getSnapshot().get75thPercentile())));
             fields.add(field("p95",
-                    timer.getValue().getSnapshot().get95thPercentile()));
+                    convertDuration(timer.getValue().getSnapshot().get95thPercentile())));
             fields.add(field("p98",
-                    timer.getValue().getSnapshot().get98thPercentile()));
+                    convertDuration(timer.getValue().getSnapshot().get98thPercentile())));
             fields.add(field("p999",
-                    timer.getValue().getSnapshot().get999thPercentile()));
+                    convertDuration(timer.getValue().getSnapshot().get999thPercentile())));
             fields.add(field("p99",
-                    timer.getValue().getSnapshot().get99thPercentile()));
+                    convertDuration(timer.getValue().getSnapshot().get99thPercentile())));
             fields.add(field("max",
-                    timer.getValue().getSnapshot().getMax()));
+                    convertDuration(timer.getValue().getSnapshot().getMax())));
             fields.add(field("min",
-                    timer.getValue().getSnapshot().getMin()));
+                    convertDuration(timer.getValue().getSnapshot().getMin())));
             fields.add(field(
                     "mean",
-                    timer.getValue().getSnapshot().getMean()));
+                    convertDuration(timer.getValue().getSnapshot().getMean())));
             fields.add(field("median",
-                    timer.getValue().getSnapshot().getMedian()));
+                    convertDuration(timer.getValue().getSnapshot().getMedian())));
             timerMetrics.add(point(timer.getKey(), fields));
         });
         return timerMetrics;

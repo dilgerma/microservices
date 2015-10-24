@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class NoOpInflux implements InfluxDB{
+public class NoOpInflux implements InfluxDB {
     @Override
     public InfluxDB setLogLevel(LogLevel logLevel) {
         log.debug("reporting against NoOpInflux");
@@ -19,24 +19,25 @@ public class NoOpInflux implements InfluxDB{
     @Override
     public InfluxDB enableBatch(int i, int i1, TimeUnit timeUnit) {
         log.debug("reporting against NoOpInflux");
-                return this;
+        return this;
     }
 
     @Override
-    public void disableBatch() {
+    public InfluxDB disableBatch() {
         log.debug("reporting against NoOpInflux");
+        return this;
     }
 
     @Override
     public Pong ping() {
         log.debug("reporting against NoOpInflux");
-                return new Pong();
+        return new Pong();
     }
 
     @Override
     public String version() {
         log.debug("reporting against NoOpInflux");
-                return "0.0";
+        return "0.0";
     }
 
     @Override
@@ -52,7 +53,12 @@ public class NoOpInflux implements InfluxDB{
     @Override
     public QueryResult query(Query query) {
         log.debug("reporting against NoOpInflux");
-                return null;
+        return new QueryResult();
+    }
+
+    @Override
+    public QueryResult query(Query query, TimeUnit timeUnit) {
+        return new QueryResult();
     }
 
     @Override
@@ -69,5 +75,10 @@ public class NoOpInflux implements InfluxDB{
     public List<String> describeDatabases() {
         log.debug("reporting against NoOpInflux");
         return Collections.emptyList();
+    }
+
+    @Override
+    public InfluxDB withDefaultRetentionPolicy(String s) {
+        return this;
     }
 }

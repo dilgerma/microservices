@@ -17,6 +17,7 @@ public class InfluxReporter extends ScheduledReporter {
 
     private InfluxDB influxDB;
     private String database;
+    private boolean initialized;
 
     public InfluxReporter(MetricRegistry registry,
                           String name,
@@ -31,7 +32,7 @@ public class InfluxReporter extends ScheduledReporter {
     }
 
     public InfluxReporter(MetricRegistry registry, String name, InfluxDB influxDB, String database) {
-        this(registry, name, MetricFilter.ALL, TimeUnit.SECONDS, TimeUnit.MILLISECONDS, influxDB, database);
+        this(registry, name, MetricFilter.ALL, TimeUnit.MILLISECONDS, TimeUnit.MILLISECONDS, influxDB, database);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class InfluxReporter extends ScheduledReporter {
                        SortedMap<String, Meter> meters,
                        SortedMap<String, Timer> timers) {
         log.info("reporting to influx with InfluxDB : {}", influxDB);
-        influxDB.createDatabase(database);
+        initializeDatabase();
         List<Point> counterPoints = reportCounters(counters);
         List<Point> gaugePoints = reportGauges(gauges);
         List<Point> meterPoints = reportMeters(meters);
@@ -52,11 +53,17 @@ public class InfluxReporter extends ScheduledReporter {
                 .collect(Collectors.toList());
         final BatchPoints batchPoints = BatchPoints.database(database)
                 .points(points.toArray(new Point[0]))
-                .retentionPolicy("30d")
-                .time(System.currentTimeMillis(), TimeUnit.SECONDS)
+                .consistency(InfluxDB.ConsistencyLevel.ALL)
                 .build();
         log.info("sending {} points", points.size());
         influxDB.write(batchPoints);
+    }
+
+    private void initializeDatabase() {
+        if (!initialized && !influxDB.describeDatabases().contains(database)) {
+            influxDB.createDatabase(database);
+            initialized = true;
+        }
     }
 
     private List<Point> reportHistograms(SortedMap<String, Histogram> histograms) {
@@ -130,9 +137,27 @@ public class InfluxReporter extends ScheduledReporter {
     private List<Point> reportGauges(SortedMap<String, Gauge> gauges) {
         return gauges.entrySet().stream().map(entry -> point(entry.getKey(),
                 Collections.singleton(field("gauge",
-                        entry.getValue().getValue())))).collect(
+                        sanitizeGauge(entry.getValue().getValue()))))).collect(
                 Collectors
                         .toList());
+    }
+
+    /**
+     * InfluxDB does not like "NaN" for number fields, use null instead
+     *
+     * @param value the value to sanitize
+     * @return value, or null if value is a number and is finite
+     */
+    private Object sanitizeGauge(Object value) {
+        final Object finalValue;
+        if (value instanceof Double && (Double.isInfinite((Double) value) || Double.isNaN((Double) value))) {
+            finalValue = null;
+        } else if (value instanceof Float && (Float.isInfinite((Float) value) || Float.isNaN((Float) value))) {
+            finalValue = null;
+        } else {
+            finalValue = value;
+        }
+        return finalValue;
     }
 
     private List<Point> reportCounters(SortedMap<String, Counter> counters) {
@@ -168,10 +193,13 @@ public class InfluxReporter extends ScheduledReporter {
         return new InfluxField(key, value);
     }
 
+    protected String sanitizeName(String name) {
+        return name.replace(".", "_");
+    }
+
     private Point point(String name, Set<InfluxField> fields) {
         final Point.Builder pointBuilder = Point.
-                measurement(name)
-                .time(System.currentTimeMillis(), TimeUnit.SECONDS);
+                measurement(sanitizeName(name));
         fields.stream().forEach(field -> pointBuilder.field(field.getName(), field.getValue()));
         return pointBuilder.build();
     }

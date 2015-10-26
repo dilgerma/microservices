@@ -1,5 +1,6 @@
 package de.effectivetrainings.eventstore;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = Application.class)
 @WebAppConfiguration
 @TestPropertySource("classpath:application.properties")
+@Ignore
 public class StartupTest {
 
     @Autowired

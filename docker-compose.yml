@@ -72,6 +72,7 @@ elasticvolume:
 elasticsearch:
   user: root
   build: elasticsearch
+  container_name: elasticsearch
   expose:
   - "9200"
   - "9300"

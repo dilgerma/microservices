@@ -194,7 +194,7 @@ public class InfluxReporter extends ScheduledReporter {
     }
 
     protected String sanitizeName(String name) {
-        return name.replace(".", "_");
+        return name;
     }
 
     private Point point(String name, Set<InfluxField> fields) {

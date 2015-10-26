@@ -46,10 +46,11 @@ public class BaseResource {
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    protected void handle(HttpServletRequest servletRequest, Exception e) {
+    protected GenericError handle(HttpServletRequest servletRequest, Exception e) {
         LOG.warn("Resource Exception", e);
         LOG.info("Error Requesting Resource - Path: {}, Query: {}",
                 servletRequest.getServletPath(),
                 servletRequest.getQueryString());
+        return new GenericError(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }

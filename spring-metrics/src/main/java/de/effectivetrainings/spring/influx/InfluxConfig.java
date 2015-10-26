@@ -45,7 +45,7 @@ public class InfluxConfig {
     @Bean
     public InfluxReporter influxdbReporter() {
         final InfluxReporter metrics = new InfluxReporter(metricRegistry, "metrics", influxDB(), influxDb);
-        metrics.start(10, TimeUnit.SECONDS);
+        metrics.start(1, TimeUnit.MINUTES);
         return metrics;
     }
 

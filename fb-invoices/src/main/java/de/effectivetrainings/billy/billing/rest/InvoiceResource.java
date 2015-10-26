@@ -89,7 +89,8 @@ public class InvoiceResource {
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    protected void handle(Exception e) {
+    protected GenericError handle(Exception e) {
         log.error("Invoice Resource ERROR", e);
+        return new GenericError(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }

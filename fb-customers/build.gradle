@@ -1,20 +1,25 @@
-
-def projectName = "fb-customers"
-
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+        classpath "io.spring.gradle:dependency-management-plugin:0.4.0.RELEASE"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'spring-boot'
+apply plugin: "io.spring.dependency-management"
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3'
+    }
+}
 jar {
-    baseName = projectName
+    baseName = "fb-customers"
 }
 
 repositories {
@@ -31,16 +36,16 @@ dependencies {
     compile project(":spring-metrics")
 
     compile "org.projectlombok:lombok:1.16.4"
-//    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
-//    compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
     compile "com.google.guava:guava:17.0"
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile ('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.cloud:spring-cloud-starter-eureka')
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.boot:spring-boot-starter-amqp')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
 
     compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")
 

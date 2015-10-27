@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.fastbill.repository;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequest;
 import de.effectivetrainings.billy.fastbill.FastbillRequestParameter;
@@ -19,6 +20,8 @@ import java.util.List;
 @Slf4j
 @Profile(Profiles.MOCK)
 public class FastbillMockRepository implements FastbillRepository {
+
+    @HystrixCommand(commandKey = "fb.mockrepository")
     @Override
     public FastbillResponse request(FastbillRequest parameter) {
 

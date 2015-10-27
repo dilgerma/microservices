@@ -1,0 +1,5 @@
+FROM dilgerm/rpi-app-base
+#assumes the jar file was unpacked to /build/unpacked
+ADD /lib/ /sources/lib
+ADD / /sources/
+CMD java -cp /sources org.springframework.boot.loader.JarLauncher

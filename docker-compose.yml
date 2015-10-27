@@ -14,6 +14,11 @@ bootadmin:
    container_name: bootadmin
    ports:
    - "9800:8080"
+metricsserver:
+   build: fb-metrics-server
+   container_name: metricsserver
+   ports:
+   - "9810:8080"
 ui:
    build: fb-web
    expose:

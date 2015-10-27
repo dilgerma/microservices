@@ -28,6 +28,7 @@
 
 package de.effectivetrainings.billy.fastbill.repository;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import de.effectivetrainings.billy.fastbill.FastbillRepository;
 import de.effectivetrainings.billy.fastbill.FastbillRequest;
 import de.effectivetrainings.billy.fastbill.FastbillUserData;
@@ -80,6 +81,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
 
     }
 
+    @HystrixCommand(commandKey = "fb.repository")
     @Override
     public FastbillResponse request(FastbillRequest parameter){
 

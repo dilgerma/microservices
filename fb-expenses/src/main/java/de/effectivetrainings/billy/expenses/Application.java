@@ -9,7 +9,9 @@ import de.effectivetrainings.spring.influx.EnableInflux;
 import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -27,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 @EnableEurekaClient
 @EnableRestSupport
 @EnableInflux
+@EnableCircuitBreaker
+@EnableHystrixDashboard
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 

@@ -16,8 +16,8 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'auth-server'
-    version = '0.0.1-SNAPSHOT'
+    baseName = 'fb-auth-server'
+    version = '0.1.0'
 }
 
 sourceCompatibility = 1.8

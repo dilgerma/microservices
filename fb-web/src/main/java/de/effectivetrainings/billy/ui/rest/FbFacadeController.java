@@ -29,7 +29,9 @@
 package de.effectivetrainings.billy.ui.rest;
 
 
-import de.effectivetrainings.billy.ui.rest.inbound.*;
+import de.effectivetrainings.billy.ui.rest.inbound.Customer;
+import de.effectivetrainings.billy.ui.rest.inbound.Customers;
+import de.effectivetrainings.billy.ui.rest.inbound.TemplateDocument;
 import de.effectivetrainings.billy.ui.rest.inbound.expense.Expenses;
 import de.effectivetrainings.billy.ui.rest.inbound.invoice.Invoices;
 import lombok.AccessLevel;

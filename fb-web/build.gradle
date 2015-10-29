@@ -39,9 +39,9 @@ node {
 
 
 dependencyManagement {
-  imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3'
-  }
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3'
+    }
 }
 
 dependencies {
@@ -66,6 +66,9 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
 
+    compile("org.springframework.cloud:spring-cloud-starter-security:1.0.0.RELEASE")
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
+    compile("org.springframework.cloud:spring-cloud-security:1.0.2.RELEASE")
 
     compile("net.logstash.logback:logstash-logback-encoder:4.1")
 

@@ -19,6 +19,11 @@ metricsserver:
    container_name: metricsserver
    ports:
    - "9810:8080"
+authserver:
+   build: fb-auth-server
+   container_name: authserver
+   ports:
+   - "9999:8080"
 ui:
    build: fb-web
    expose:

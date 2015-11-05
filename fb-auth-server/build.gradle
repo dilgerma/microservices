@@ -1,36 +1,40 @@
 buildscript {
-    ext {
-        springBootVersion = '1.2.2.RELEASE'
-    }
     repositories {
         mavenCentral()
-        jcenter()
+        maven {
+            url = 'http://repo.spring.io/milestone'
+        }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'spring-boot'
+apply plugin: "io.spring.dependency-management"
+
 
 jar {
     baseName = 'fb-auth-server'
     version = '0.1.0'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-group = 'callista'
-mainClassName = 'demo.AuthserverApplication'
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3'
+    }
+}
 
 repositories {
     mavenCentral()
+    maven {
+        url = 'http://repo.spring.io/milestone'
+    }
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
 

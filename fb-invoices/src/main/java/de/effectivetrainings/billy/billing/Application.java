@@ -1,10 +1,10 @@
 package de.effectivetrainings.billy.billing;
 
+import de.effectivetrainings.billy.billing.config.MetricsConfig;
 import de.effectivetrainings.billy.billing.config.RestConfig;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
-import de.effectivetrainings.billy.billing.config.MetricsConfig;
 import de.effectivetrainings.spring.influx.EnableInflux;
 import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +13,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.*;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
+@EnableResourceServer
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 

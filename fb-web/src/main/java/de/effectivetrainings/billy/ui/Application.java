@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Import;
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-//@EnableOAuth2Resource
 @EnableOAuth2Sso
 @Import({ApplicationConfig.class, MetricsConfig.class, MessaginConnectionConfig.class})
 public class Application

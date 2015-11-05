@@ -9,7 +9,14 @@
 
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
+        maven {
+            url = 'http://repo.spring.io/milestone'
+        }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.4.0.RELEASE"
     }
 }
 
@@ -27,9 +34,7 @@ allprojects {
 
 subprojects {
 
-    ext {
-        springVersion = '4.2.0.RELEASE'
-    };
+
 
     group = "de.effectivetrainings"
     version = "0.1.0"
@@ -37,17 +42,6 @@ subprojects {
     targetCompatibility = 1.8
     compileJava.options.verbose = true
 
-//    task prepareDocker(type: Copy) {
-//
-//        println("${project} ${jar.archivePath}")
-//        ext.zipFile = file("${jar.archivePath}");
-//        ext.outputDir = file("${project.buildDir}/unpacked")
-//
-//            from zipTree(zipFile)
-//            into outputDir
-//    }
-
-//    prepareDocker.dependsOn build
 
 }
 

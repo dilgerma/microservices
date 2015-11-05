@@ -85,8 +85,8 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 			clients.inMemory()
 					.withClient("acme")
 					.secret("acmesecret")
-					.authorizedGrantTypes("authorization_code", "refresh_token",
-							"password").scopes("openid");
+					.redirectUris("http://localhost:8082")
+					.authorizedGrantTypes("authorization_code", "refresh_token").scopes("openid");
 		}
 
 		@Override

@@ -1,9 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url = 'http://repo.spring.io/milestone'
+        }
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
         classpath "com.moowork.gradle:gradle-gulp-plugin:0.10"
     }
 }
@@ -16,7 +19,16 @@ def projectName = "fb-web-reporting"
 
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.gulp'
+apply plugin: "io.spring.dependency-management"
+
 //apply plugin: 'war'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3'
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+    }
+}
 
 jar {
     baseName = projectName
@@ -24,6 +36,9 @@ jar {
 
 repositories {
     mavenCentral()
+    maven {
+        url = 'http://repo.spring.io/milestone'
+    }
 }
 
 node {

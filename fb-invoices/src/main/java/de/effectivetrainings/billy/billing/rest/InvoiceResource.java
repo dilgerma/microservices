@@ -42,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
+import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -85,6 +86,10 @@ public class InvoiceResource {
         return new InvoicePaidDateFilter(from, to).apply(invoices);
     }
 
+    @ExceptionHandler
+    public void handle(UserRedirectRequiredException userRedirectException) {
+        throw userRedirectException;
+    }
 
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

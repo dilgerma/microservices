@@ -7,6 +7,7 @@ import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import de.effectivetrainings.support.rest.UserRestTemplate;
 import de.effectivetrainings.support.rest.resilience.RetryableRibbonLoadBalancerClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -27,13 +30,16 @@ import java.util.Arrays;
 @Slf4j
 public class RestConfig {
 
+    @Autowired
+    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
 
     @Bean
     @UserRestTemplate
     public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory,
                                      RestRequestTimerInterceptor restRequestTimerInterceptor,
                                      LoadBalancerInterceptor loadBalancerInterceptor) {
-        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+        final RestTemplate restTemplate = new OAuth2RestTemplate(oAuth2ProtectedResourceDetails);
+        restTemplate.setRequestFactory(clientHttpRequestFactory);
         restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
         return restTemplate;
     }

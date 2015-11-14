@@ -29,12 +29,14 @@ public class RestConfig {
 
 
     @Bean
-              @UserRestTemplate
-              public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor, LoadBalancerInterceptor loadBalancerInterceptor) {
-                  final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-                  restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
-                  return restTemplate;
-              }
+    @UserRestTemplate
+    public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory,
+                                     RestRequestTimerInterceptor restRequestTimerInterceptor,
+                                     LoadBalancerInterceptor loadBalancerInterceptor) {
+        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
+        return restTemplate;
+    }
 
     /**
      * system request template - no interceptors that rely on an active request initiated by a customer
@@ -54,18 +56,21 @@ public class RestConfig {
 
     @Bean
     @ConditionalOnProperty(value = "rest.client.retries", matchIfMissing = false)
-    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries, SpringClientFactory springClientFactory, MetricRegistry metricRegistry) {
+    public RetryableRibbonLoadBalancerClient loadBalancerClient(@Value("${rest.client.retries}") int maxRetries,
+                                                                SpringClientFactory springClientFactory,
+                                                                MetricRegistry metricRegistry) {
         log.info("Building Retryable Ribbon Loadbalancer. {} Retries configured", maxRetries);
         return new RetryableRibbonLoadBalancerClient(maxRetries, springClientFactory, metricRegistry);
     }
 
     @Bean(name = "restClientHttpFactory")
-       public ClientHttpRequestFactory clientHttpRequestFactory(@Value("${rest.client.connectionTimeout:-1}") Integer connectionTimeout, @Value("${rest.client.readTimeout:-1}") Integer readTimeout) {
-           final SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
-           simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
-           simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
-           return simpleClientHttpRequestFactory;
-       }
+    public ClientHttpRequestFactory clientHttpRequestFactory(@Value("${rest.client.connectionTimeout:-1}") Integer connectionTimeout,
+                                                             @Value("${rest.client.readTimeout:-1}") Integer readTimeout) {
+        final SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+        simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
+        simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
+        return simpleClientHttpRequestFactory;
+    }
 
     @Bean
     public FbInboundModelMapper inboundModelMapper() {

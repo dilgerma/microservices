@@ -13,7 +13,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.*;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@EnableResourceServer
+@EnableOAuth2Client
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 

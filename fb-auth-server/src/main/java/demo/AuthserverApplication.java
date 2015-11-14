@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -65,6 +66,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 	@Configuration
 	@EnableAuthorizationServer
+//	@EnableResourceServer
 	protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
 		@Autowired
@@ -83,10 +85,11 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 			clients.inMemory()
-					.withClient("acme")
-					.secret("acmesecret")
-					.redirectUris("http://localhost:8082")
-					.authorizedGrantTypes("authorization_code", "refresh_token").scopes("openid");
+					.withClient("client")
+					.secret("secret")
+//					.redirectUris("http://localhost:8082")
+					.authorizedGrantTypes("authorization_code", "refresh_token")
+					.scopes("authorize");
 		}
 
 		@Override

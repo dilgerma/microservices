@@ -88,7 +88,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 					.withClient("client")
 					.secret("secret")
 //					.redirectUris("http://localhost:8082")
-					.authorizedGrantTypes("authorization_code", "refresh_token")
+					.authorizedGrantTypes("authorization_code", "refresh_token", "client_credentials")
 					.scopes("authorize");
 		}
 

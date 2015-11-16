@@ -7,10 +7,10 @@ import de.effectivetrainings.spring.influx.EnableInflux;
 import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
-import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,14 +19,13 @@ import org.springframework.context.annotation.Import;
  *
  */
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = TransactionAutoConfiguration.class)
 @ComponentScan("de.effectivetrainings.billy.ui.rest")
 @EnableEurekaClient
 @EnableRestSupport
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@EnableOAuth2Sso
 @Import({ApplicationConfig.class, MetricsConfig.class, MessaginConnectionConfig.class})
 public class Application
 {

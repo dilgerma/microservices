@@ -12,9 +12,11 @@ import de.effectivetrainings.billy.template.db.TemplateDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -25,11 +27,12 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = TransactionAutoConfiguration.class)
 @ComponentScan(basePackages = "de.effectivetrainings.billy.template.rest")
 @EnableWebMvc
 @EnableEurekaClient
 @EnableRestSupport
+@EnableMongoRepositories
 @EnableInflux
 @Import({RestConfig.class, MetricsConfig.class})
 public class Application extends AbstractMongoConfiguration {

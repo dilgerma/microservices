@@ -47,7 +47,7 @@ subprojects {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    testCompile "junit:junit:4.11"
+    testCompile "junit:junit:4.12"
 }
 
 

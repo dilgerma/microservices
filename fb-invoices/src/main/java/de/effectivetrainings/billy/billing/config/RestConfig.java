@@ -30,16 +30,12 @@ import java.util.Arrays;
 @Slf4j
 public class RestConfig {
 
-    @Autowired
-    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
-
     @Bean
     @UserRestTemplate
     public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory,
                                      RestRequestTimerInterceptor restRequestTimerInterceptor,
                                      LoadBalancerInterceptor loadBalancerInterceptor) {
-        final RestTemplate restTemplate = new OAuth2RestTemplate(oAuth2ProtectedResourceDetails);
-        restTemplate.setRequestFactory(clientHttpRequestFactory);
+        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
         restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor, loadBalancerInterceptor));
         return restTemplate;
     }

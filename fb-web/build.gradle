@@ -65,10 +65,8 @@ dependencies {
     compile project(":spring-metrics")
 
     compile "org.projectlombok:lombok:1.16.4"
-    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.4"
-    compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
     compile "com.google.guava:guava:17.0"
-    compile("org.springframework.boot:spring-boot-starter-web:") {
+    compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
     compile("org.springframework.boot:spring-boot-starter-jetty")
@@ -78,11 +76,9 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
 
-    compile("org.springframework.cloud:spring-cloud-starter-security:1.0.0.RELEASE")
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
-    compile("org.springframework.cloud:spring-cloud-security:1.0.2.RELEASE")
-
-    compile("net.logstash.logback:logstash-logback-encoder:4.1")
+//    compile("org.springframework.cloud:spring-cloud-starter-security:1.0.0.RELEASE")
+//    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
+//    compile("org.springframework.cloud:spring-cloud-security:1.0.2.RELEASE")
 
     compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")
 

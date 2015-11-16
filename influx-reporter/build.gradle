@@ -27,5 +27,5 @@ dependencies {
     compile "com.google.guava:guava:17.0"
     compile('io.dropwizard.metrics:metrics-core:3.1.0')
     compile('com.github.dilgerma:influxdb-java:2.0.1e')
-    testCompile('junit:junit:4.8.2')
+    testCompile('junit:junit:4.12')
 }

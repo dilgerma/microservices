@@ -52,7 +52,7 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
 
-    compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")
+//    compile("de.codecentric:spring-boot-admin-starter-client:$springBootAdminVersion")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

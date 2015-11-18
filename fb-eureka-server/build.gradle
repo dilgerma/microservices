@@ -45,7 +45,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.3.RELEASE') {
+    compile("org.springframework.cloud:spring-cloud-starter-eureka-server:$springCloudEurekaVersion") {
         exclude module: 'javax.servlet:servlet-api'
     }
     testCompile("org.springframework.boot:spring-boot-starter-test")

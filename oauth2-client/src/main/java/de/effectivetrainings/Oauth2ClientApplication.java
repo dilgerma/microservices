@@ -1,20 +1,15 @@
 package de.effectivetrainings;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
-@EnableOAuth2Sso
 @SpringBootApplication
+@EnableOAuth2Client
 public class Oauth2ClientApplication {
-
-    @Autowired
-    private OAuth2RestTemplate restTemplate;
-
 
     public static void main(String[] args) {
         SpringApplication.run(Oauth2ClientApplication.class, args);
     }
+
 }

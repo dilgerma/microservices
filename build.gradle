@@ -18,6 +18,7 @@ buildscript {
     dependencies {
         classpath "io.spring.gradle:dependency-management-plugin:0.4.0.RELEASE"
     }
+
 }
 
 allprojects {
@@ -42,7 +43,11 @@ subprojects {
     targetCompatibility = 1.8
     compileJava.options.verbose = true
 
+    task listAllDependencies(type: DependencyReportTask) {}
 
+}
+
+configurations {
 }
 
 // In this section you declare the dependencies for your production and test code

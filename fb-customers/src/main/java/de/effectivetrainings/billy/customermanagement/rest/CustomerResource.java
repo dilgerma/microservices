@@ -31,18 +31,15 @@ package de.effectivetrainings.billy.customermanagement.rest;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import de.effectivetrainings.billy.customermanagement.rest.api.domain.Customers;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 /**
  * @author <a href=mailto:martin@effectivetrainings.de">Martin Dilger</a>
@@ -54,14 +51,12 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class CustomerResource {
 
-    private RestTemplate restTemplate;
+    private RestOperations restOperations;
 
     private String invoiceUri;
 
-    @Autowired
-    public CustomerResource(@Value("${fb.repository.customer}") String customerUri,
-                            @UserRestTemplate RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public CustomerResource(String customerUri, RestOperations restOperations) {
+        this.restOperations = restOperations;
         this.invoiceUri = customerUri;
     }
 
@@ -70,7 +65,7 @@ public class CustomerResource {
     public Customers customers() {
         log.info("Requesting all customers");
         HttpEntity requestEntity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<Customers> invoice = restTemplate.exchange(invoiceUri,
+        ResponseEntity<Customers> invoice = restOperations.exchange(invoiceUri,
                 HttpMethod.GET,
                 requestEntity,
                 Customers.class);

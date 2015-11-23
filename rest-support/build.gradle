@@ -18,7 +18,7 @@ dependencies {
     compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
 
     //we do register some eureka components
-    compile("org.springframework.cloud:spring-cloud-starter-eureka:$springCloudVersion")
+//    compile("org.springframework.cloud:spring-cloud-starter-eureka:$springCloudVersion")
 
     compile("org.springframework:spring-web:${springVersion}")
 

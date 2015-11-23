@@ -45,7 +45,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 import java.util.Arrays;
 import java.util.Base64;
@@ -65,7 +65,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
     //TODO extract to external spring config, and check why it does not work with @Value
     private final CorrelationId correlationId;
 
-    private RestTemplate restTemplate;
+    private RestOperations restTemplate;
 
     private FastbillUserData userData;
 
@@ -73,7 +73,7 @@ public class FastbillRepositoryImpl implements FastbillRepository {
 
 
     @Autowired
-    public FastbillRepositoryImpl( @Value("${app.fastbill.uri}") String apiUri, RestTemplate restTemplate, FastbillUserData userData, CorrelationId correlationId) {
+    public FastbillRepositoryImpl(@Value("${app.fastbill.uri}") String apiUri, RestOperations restTemplate, FastbillUserData userData, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.userData = userData;
         this.correlationId = correlationId;

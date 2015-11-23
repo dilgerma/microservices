@@ -1,14 +1,13 @@
 package de.effectivetrainings.billy.template;
 
 import com.mongodb.MongoClient;
+import de.effectivetrainings.billy.template.config.MetricsConfig;
+import de.effectivetrainings.billy.template.config.RestConfig;
+import de.effectivetrainings.billy.template.db.TemplateDB;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.spring.influx.EnableInflux;
-import de.effectivetrainings.support.rest.EnableRestSupport;
-import de.effectivetrainings.billy.template.config.MetricsConfig;
-import de.effectivetrainings.billy.template.config.RestConfig;
-import de.effectivetrainings.billy.template.db.TemplateDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan(basePackages = "de.effectivetrainings.billy.template.rest")
 @EnableWebMvc
 @EnableEurekaClient
-@EnableRestSupport
 @EnableMongoRepositories
 @EnableInflux
 @Import({RestConfig.class, MetricsConfig.class})

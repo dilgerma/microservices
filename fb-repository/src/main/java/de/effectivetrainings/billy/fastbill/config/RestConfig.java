@@ -8,8 +8,8 @@ import de.effectivetrainings.billy.fastbill.repository.FastbillMockRepository;
 import de.effectivetrainings.billy.fastbill.repository.FastbillRepositoryImpl;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -33,23 +34,41 @@ import java.util.List;
 @Slf4j
 public class RestConfig {
 
+    @Value("${fastbill.api.uri}")
+    private URI fastbillApiUri;
+
+    @Autowired
+    private FastbillUserData fastbillUserData;
+
+    @Value("${rest.client.connectionTimeout:-1}")
+    private Integer connectionTimeout;
+
+    @Value("${rest.client.readTimeout:-1}")
+    private Integer readTimeout;
+
+    @Autowired
+    private MetricRegistry metricRegistry;
+
+    @Autowired
+    private CorrelationId correlationId;
+
     @Profile(Profiles.PROD)
     @Bean
-    public FastbillRepository fastbillRepository(@Value("${fastbill.api.uri}") URI fastbillApiUri, FastbillUserData fastbillUserData, CorrelationId correlationId, @UserRestTemplate RestTemplate restTemplate) {
-        return new FastbillRepositoryImpl(fastbillApiUri.toString(), restTemplate, fastbillUserData, correlationId);
+    public FastbillRepository fastbillRepository() {
+        return new FastbillRepositoryImpl(fastbillApiUri.toString(), restTemplate(), fastbillUserData, correlationId);
     }
 
     @Profile(Profiles.MOCK)
     @Bean
-    public FastbillRepository fastbillRepositoryMock(FastbillUserData fastbillUserData) {
+    public FastbillRepository fastbillRepositoryMock() {
         return new FastbillMockRepository();
     }
 
     @Bean
-    @UserRestTemplate
-    public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor) {
+    @Qualifier("userRestTemplate")
+    public RestOperations restTemplate() {
 
-        RestTemplate template = new RestTemplate(clientHttpRequestFactory);
+        RestTemplate template = new RestTemplate(clientHttpRequestFactory());
 
         List<HttpMessageConverter<?>> messageConverters = template.getMessageConverters();
             /*
@@ -63,18 +82,18 @@ public class RestConfig {
         jacksonConv.setSupportedMediaTypes(Lists.newArrayList(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN));
 
         template.setMessageConverters(Lists.newArrayList(messageConverters));
-        template.setInterceptors(Arrays.asList(restRequestTimerInterceptor));
+        template.setInterceptors(Arrays.asList(restTimer()));
 
         return template;
     }
 
     @Bean
-    public RestRequestTimerInterceptor registry(MetricRegistry registry) {
-        return new RestRequestTimerInterceptor(registry);
+    public RestRequestTimerInterceptor restTimer() {
+        return new RestRequestTimerInterceptor(metricRegistry);
     }
 
     @Bean(name = "restClientHttpFactory")
-       public ClientHttpRequestFactory clientHttpRequestFactory(@Value("${rest.client.connectionTimeout:-1}") Integer connectionTimeout, @Value("${rest.client.readTimeout:-1}") Integer readTimeout) {
+       public ClientHttpRequestFactory clientHttpRequestFactory() {
            final SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
            simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
            simpleClientHttpRequestFactory.setReadTimeout(readTimeout);

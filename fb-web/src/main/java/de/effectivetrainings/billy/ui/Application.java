@@ -2,9 +2,7 @@ package de.effectivetrainings.billy.ui;
 
 import de.effectivetrainings.billy.ui.config.ApplicationConfig;
 import de.effectivetrainings.billy.ui.config.MessaginConnectionConfig;
-import de.effectivetrainings.billy.ui.config.MetricsConfig;
 import de.effectivetrainings.spring.influx.EnableInflux;
-import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
@@ -22,11 +20,10 @@ import org.springframework.context.annotation.Import;
 @EnableAutoConfiguration(exclude = TransactionAutoConfiguration.class)
 @ComponentScan("de.effectivetrainings.billy.ui.rest")
 @EnableEurekaClient
-@EnableRestSupport
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@Import({ApplicationConfig.class, MetricsConfig.class, MessaginConnectionConfig.class})
+@Import({ApplicationConfig.class, MessaginConnectionConfig.class})
 public class Application
 {
 

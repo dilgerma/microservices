@@ -34,16 +34,14 @@ import de.effectivetrainings.billy.expenses.rest.filter.ExpensePaidDateFilter;
 import de.effectivetrainings.billy.expenses.rest.inbound.FbExpenseInboundModelMapper;
 import de.effectivetrainings.billy.expenses.rest.inbound.FbExpenses;
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -58,7 +56,7 @@ import java.util.List;
 @Slf4j
 public class ExpenseResource {
 
-    private RestTemplate restTemplate;
+    private RestOperations restTemplate;
 
     private String expenseUri;
 
@@ -67,7 +65,7 @@ public class ExpenseResource {
     private FbExpenseInboundModelMapper fbExpenseInboundModelMapper;
 
     @Autowired
-    public ExpenseResource(@Value("${fb.repository.expenses}") String expenseUri, @UserRestTemplate RestTemplate restTemplate, CorrelationId correlationId, FbExpenseInboundModelMapper fbExpenseInboundModelMapper) {
+    public ExpenseResource(String expenseUri, RestOperations restTemplate, CorrelationId correlationId, FbExpenseInboundModelMapper fbExpenseInboundModelMapper) {
         this.restTemplate = restTemplate;
         this.expenseUri = expenseUri;
         this.correlationId = correlationId;

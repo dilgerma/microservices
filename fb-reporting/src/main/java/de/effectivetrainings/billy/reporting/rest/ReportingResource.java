@@ -6,7 +6,6 @@ import de.effectivetrainings.billy.reporting.domain.repository.IncomeReportRepos
 import de.effectivetrainings.billy.reporting.rest.outbound.ReportValue;
 import de.effectivetrainings.billy.reporting.rest.outbound.ReportingOutboundModelMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,6 @@ public class ReportingResource {
 
     private ReportingOutboundModelMapper outboundModelMapper = new ReportingOutboundModelMapper();
 
-    @Autowired
     public ReportingResource(IncomeReportRepository incomeReportRepository) {
         this.incomeReportRepository = Preconditions.checkNotNull(incomeReportRepository);
     }

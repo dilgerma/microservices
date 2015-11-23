@@ -6,7 +6,6 @@ import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.billy.fastbill.config.MetricsConfig;
 import de.effectivetrainings.billy.fastbill.config.RestConfig;
 import de.effectivetrainings.spring.influx.EnableInflux;
-import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan(basePackages = "de.effectivetrainings.billy.fastbill.rest")
 @EnableWebMvc
 @EnableEurekaClient
-@EnableRestSupport
 @EnableInflux
 @EnableHystrix
 @Import({RestConfig.class, MetricsConfig.class})

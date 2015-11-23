@@ -26,7 +26,7 @@ public class MetricsConfig {
     private MetricRegistry metricRegistry;
 
     @Bean
-    public HealthCheckRegistry healthChecks(@Value("${fastbill.alive.check.uri}") URI fastbillApiUri, RestTemplate restTemplate) {
+    public HealthCheckRegistry healthChecks() {
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 //        final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(fastbillApiUri, restTemplate);
 //        healthCheckRegistry.register("repository/backend", connectionHealthCheck);

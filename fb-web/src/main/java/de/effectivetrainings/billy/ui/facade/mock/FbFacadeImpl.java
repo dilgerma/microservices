@@ -1,7 +1,6 @@
 package de.effectivetrainings.billy.ui.facade.mock;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import de.effectivetrainings.billy.ui.config.MessagingTemplate;
 import de.effectivetrainings.billy.ui.config.ServicesConfig;
 import de.effectivetrainings.billy.ui.rest.FbFacade;
 import de.effectivetrainings.billy.ui.rest.inbound.Customer;
@@ -10,7 +9,6 @@ import de.effectivetrainings.billy.ui.rest.inbound.TemplateDocument;
 import de.effectivetrainings.billy.ui.rest.inbound.TemplateDocuments;
 import de.effectivetrainings.billy.ui.rest.inbound.expense.Expenses;
 import de.effectivetrainings.billy.ui.rest.inbound.invoice.Invoices;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -40,7 +38,7 @@ import java.util.Map;
 @ConditionalOnBean(value = FbFacade.class)
 public class FbFacadeImpl implements FbFacade {
 
-    private RestTemplate restTemplate;
+    private RestOperations restTemplate;
 
     private ServicesConfig servicesConfig;
 
@@ -50,7 +48,9 @@ public class FbFacadeImpl implements FbFacade {
     private static final String customerId = "default";
 
     @Autowired
-    public FbFacadeImpl(@MessagingTemplate AmqpTemplate amqpTemplate, ServicesConfig servicesConfig, @UserRestTemplate RestTemplate restTemplate) {
+    public FbFacadeImpl(AmqpTemplate amqpTemplate, ServicesConfig servicesConfig,
+            RestOperations
+            restTemplate) {
         this.servicesConfig = servicesConfig;
         this.restTemplate = restTemplate;
         this.amqpTemplate = amqpTemplate;

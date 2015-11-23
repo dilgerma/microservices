@@ -6,7 +6,6 @@ import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.spring.influx.EnableInflux;
-import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan
 @EnableWebMvc
 @EnableEurekaClient
-@EnableRestSupport
 @EnableRabbit
 @EnableInflux
 @EnableCircuitBreaker

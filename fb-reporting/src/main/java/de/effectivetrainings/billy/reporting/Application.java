@@ -7,7 +7,6 @@ import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.spring.influx.EnableInflux;
-import de.effectivetrainings.support.rest.EnableRestSupport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -28,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 @EnableWebMvc
 @ComponentScan(basePackages = "de.effectivetrainings.billy.reporting.rest")
 @EnableEurekaClient
-@EnableRestSupport
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard

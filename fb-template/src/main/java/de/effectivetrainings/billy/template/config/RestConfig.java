@@ -2,15 +2,16 @@ package de.effectivetrainings.billy.template.config;
 
 import com.codahale.metrics.MetricRegistry;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
-import de.effectivetrainings.support.rest.SystemRequestTemplate;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -23,25 +24,27 @@ import java.util.Arrays;
 @Configuration
 @Slf4j
 public class RestConfig {
+    @Value("${rest.client.connectionTimeout:-1}")
+    private Integer connectionTimeout;
+    @Value("${rest.client.readTimeout:-1}")
+    private Integer readTimeout;
+
+    @Autowired
+    private MetricRegistry metricRegistry;
+
+    @Autowired
+    private LoadBalancerInterceptor loadBalancerInterceptor;
 
     @Bean
-    public RestRequestTimerInterceptor requestTimer(MetricRegistry registry) {
-        return new RestRequestTimerInterceptor(registry);
+    public RestRequestTimerInterceptor requestTimer() {
+        return new RestRequestTimerInterceptor(metricRegistry);
     }
 
     @Bean
-    @UserRestTemplate
-    public RestTemplate restTemplate(@Qualifier("restClientHttpFactory") ClientHttpRequestFactory clientHttpRequestFactory, RestRequestTimerInterceptor restRequestTimerInterceptor) {
-        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor));
-        return restTemplate;
-    }
-
-    @Bean
-    @SystemRequestTemplate
-    public RestTemplate systemRestTemplate(RestRequestTimerInterceptor restRequestTimerInterceptor) {
-        final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor));
+    @Qualifier("userRestTemplate")
+    public RestOperations restTemplate() {
+        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+        restTemplate.setInterceptors(Arrays.asList(requestTimer(), loadBalancerInterceptor));
         return restTemplate;
     }
 
@@ -52,10 +55,10 @@ public class RestConfig {
     }
 
     @Bean(name = "restClientHttpFactory")
-       public ClientHttpRequestFactory clientHttpRequestFactory(@Value("${rest.client.connectionTimeout:-1}") Integer connectionTimeout, @Value("${rest.client.readTimeout:-1}") Integer readTimeout) {
+       public ClientHttpRequestFactory clientHttpRequestFactory() {
            final SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
-           simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
-           simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
+//           simpleClientHttpRequestFactory.setConnectTimeout(connectionTimeout);
+//           simpleClientHttpRequestFactory.setReadTimeout(readTimeout);
            return simpleClientHttpRequestFactory;
        }
 }

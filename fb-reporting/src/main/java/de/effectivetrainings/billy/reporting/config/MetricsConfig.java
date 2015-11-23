@@ -4,7 +4,6 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import de.effectivetrainings.support.rest.SystemRequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,7 @@ public class MetricsConfig {
     private MetricRegistry metricRegistry;
 
     @Bean
-    public HealthCheckRegistry healthChecks(@SystemRequestTemplate RestTemplate restTemplate, @Value("${fb.invoices.uri}") URI invoiceURI) {
+    public HealthCheckRegistry healthChecks() {
 
         HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 //        final ConnectionHealthCheck connectionHealthCheck = new ConnectionHealthCheck(invoiceURI, restTemplate);

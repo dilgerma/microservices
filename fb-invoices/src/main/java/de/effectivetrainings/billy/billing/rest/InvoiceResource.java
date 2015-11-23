@@ -34,11 +34,10 @@ import de.effectivetrainings.billy.billing.rest.filter.InvoicePaidDateFilter;
 import de.effectivetrainings.billy.billing.rest.inbound.FbInboundModelMapper;
 import de.effectivetrainings.billy.billing.rest.inbound.model.FbInvoices;
 import de.effectivetrainings.correlation.CorrelationId;
-import de.effectivetrainings.support.rest.UserRestTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
@@ -66,8 +65,7 @@ public class InvoiceResource {
 
     private CorrelationId correlationId;
 
-    @Autowired
-    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @UserRestTemplate RestTemplate restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
+    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @Qualifier("user") RestTemplate restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.invoiceUri = invoiceUri;
         this.inboundModelMapper = inboundModelMapper;

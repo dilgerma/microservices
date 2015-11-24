@@ -1,7 +1,17 @@
-oauth2:
-        client:
-            clientId: bd1c0a783ccdd1c9b9e4
-            clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
-            accessTokenUri: https://github.com/login/oauth/access_token
-            userAuthorizationUri: https://github.com/login/oauth/authorize
-            clientAuthenticationScheme: form
+server:
+  port: 8090
+
+
+
+security:
+  basic:
+    enabled: false
+
+  oauth2:
+    client:
+            client-id: client
+            client-secret: secret
+            access-token-uri: http://authserver:8080/auth/oauth/token
+            user-authorization-uri: http://authserver:8080/auth/oauth/authorize
+            client-authentication-scheme: header
+            use-current-uri:  true

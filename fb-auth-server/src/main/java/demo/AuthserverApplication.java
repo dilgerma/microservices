@@ -54,6 +54,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
+			http.csrf().disable();
 			http.formLogin().loginPage("/login").permitAll().and().authorizeRequests()
 					.anyRequest().authenticated();
 		}
@@ -103,7 +104,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		public void configure(AuthorizationServerSecurityConfigurer oauthServer)
 				throws Exception {
 			oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess(
-					"isAuthenticated()");
+					"permitAll()");
 		}
 
 	}

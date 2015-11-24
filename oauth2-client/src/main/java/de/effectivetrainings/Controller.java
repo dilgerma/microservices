@@ -5,7 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
 
-    private OAuth2RestOperations restTemplate;
+    private OAuth2RestTemplate restTemplate;
 
     @Autowired
-    public Controller(OAuth2RestOperations restTemplate) {
+    public Controller(OAuth2RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

@@ -22,6 +22,7 @@ import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
@@ -48,7 +49,8 @@ public class ApplicationConfig {
     private MetricRegistry registry;
 
     @Autowired
-    private LoadBalancerInterceptor loadBalancerInterceptor;
+    @Qualifier(value = "oAuth2RestOperations")
+    private OAuth2RestOperations restTemplate;
 
     @Autowired
     @MessagingTemplate
@@ -57,7 +59,7 @@ public class ApplicationConfig {
     @Bean
     @Profile(value = {Profiles.MOCK, Profiles.PROD})
     public FbFacade fbFacade() {
-        return new FbFacadeImpl(amqpTemplate, servicesConfig(), restTemplate());
+        return new FbFacadeImpl(amqpTemplate, servicesConfig(), restTemplate);
     }
 
     @Bean
@@ -67,18 +69,8 @@ public class ApplicationConfig {
         return new FbMockFacade();
     }
 
-    @Bean
-    @Qualifier("userRestTemplate")
-    public RestOperations restTemplate() {
-        final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
-        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor(), loadBalancerInterceptor));
-        return restTemplate;
-    }
 
-    @Bean
-    public RestRequestTimerInterceptor restRequestTimerInterceptor() {
-        return new RestRequestTimerInterceptor(registry);
-    }
+
 
     @Bean
     public ServicesConfig servicesConfig() {

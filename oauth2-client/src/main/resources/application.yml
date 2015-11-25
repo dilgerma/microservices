@@ -15,3 +15,4 @@ security:
             user-authorization-uri: http://authserver:8080/auth/oauth/authorize
             client-authentication-scheme: header
             use-current-uri:  true
+            scope: services

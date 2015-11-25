@@ -23,7 +23,7 @@ authserver:
    build: fb-auth-server
    container_name: authserver
    ports:
-   - "9999:8080"
+   - "9820:8080"
 ui:
    build: fb-web
    expose:
@@ -133,3 +133,8 @@ rabbitmq:
   - "5672:5672"
   #user guest / guest
   - "15672:15672"
+redis:
+  container_name: redis
+  image: redis
+  ports:
+  - "6379"

@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.billing.config;
+package de.effectivetrainings.billy.fastbill.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

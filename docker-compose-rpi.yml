@@ -13,6 +13,11 @@ eurekaserver:
    - "8761"
    extra_hosts:
    - "eurekaserver:192.168.178.46"
+authserver:
+   build: fb-auth-server
+   container_name: authserver
+   ports:
+   - "9820:8080"
 ui:
    build: fb-web
    dockerfile: Dockerfile-rpi
@@ -198,3 +203,8 @@ rabbitmq:
   ports:
   - "5672:5672"
   - "15672:15672"
+redis:
+  container_name: redis
+  image: hypriot/rpi-redis
+  ports:
+  - "6379"

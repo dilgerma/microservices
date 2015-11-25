@@ -1,6 +1,5 @@
 package de.effectivetrainings.billy.ui.facade.mock;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import de.effectivetrainings.billy.ui.config.ServicesConfig;
 import de.effectivetrainings.billy.ui.rest.FbFacade;
 import de.effectivetrainings.billy.ui.rest.inbound.Customer;
@@ -56,21 +55,21 @@ public class FbFacadeImpl implements FbFacade {
         this.amqpTemplate = amqpTemplate;
     }
 
-    @HystrixCommand(commandKey = "web.invoices")
+//    @HystrixCommand(commandKey = "web.invoices")
     @Override
     public Invoices invoices() {
         log.info("Requesting all valid invoices");
         return request(servicesConfig.getInvoiceBackendUri(), Invoices.class);
     }
 
-    @HystrixCommand(commandKey = "web.expenses")
+//    @HystrixCommand(commandKey = "web.expenses")
     @Override
     public Expenses expenses() {
         log.info("Requesting all expenses");
         return request(servicesConfig.getExpenseBackendURI(), Expenses.class);
     }
 
-    @HystrixCommand(commandKey = "web.customers")
+//    @HystrixCommand(commandKey = "web.customers")
     @Override
     @RequestMapping(value = "customers")
     public Customers customers() {
@@ -78,13 +77,13 @@ public class FbFacadeImpl implements FbFacade {
         return request(servicesConfig.getCustomersBackendURI(), Customers.class);
     }
 
-    @HystrixCommand(commandKey = "web.storeCustomer")
+//    @HystrixCommand(commandKey = "web.storeCustomer")
     @Override
     public void storeCustomer(@RequestBody Customer customer) {
         amqpTemplate.convertAndSend("exchange.handler.customer", "queue.commands.customer", customer);
     }
 
-    @HystrixCommand(commandKey = "web.templateUpload")
+//    @HystrixCommand(commandKey = "web.templateUpload")
     @Override
     public void upload(MultipartFile upload, String templateName) throws Exception {
         log.info("Receiving template request : {}, size: {}", templateName, upload.getSize());
@@ -104,7 +103,7 @@ public class FbFacadeImpl implements FbFacade {
         restTemplate.postForLocation(servicesConfig.getTemplateServiceURI(), parts, uriVars);
     }
 
-    @HystrixCommand(commandKey = "web.documents")
+//    @HystrixCommand(commandKey = "web.documents")
     @Override
     public List<TemplateDocument> documents() {
         log.info("loading template-documents for {}", customerId);

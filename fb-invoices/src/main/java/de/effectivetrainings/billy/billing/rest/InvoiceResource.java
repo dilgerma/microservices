@@ -43,7 +43,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 import java.time.LocalDate;
 
@@ -57,7 +57,7 @@ import java.time.LocalDate;
 @Slf4j
 public class InvoiceResource {
 
-    private RestTemplate restTemplate;
+    private RestOperations restTemplate;
 
     private String invoiceUri;
 
@@ -65,7 +65,7 @@ public class InvoiceResource {
 
     private CorrelationId correlationId;
 
-    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @Qualifier("user") RestTemplate restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
+    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @Qualifier("user") RestOperations restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.invoiceUri = invoiceUri;
         this.inboundModelMapper = inboundModelMapper;

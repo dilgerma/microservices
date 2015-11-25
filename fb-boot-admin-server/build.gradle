@@ -42,8 +42,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
 
-    compile("de.codecentric:spring-boot-admin-server:1.2.3")
-    compile("de.codecentric:spring-boot-admin-server-ui:1.2.3")
+    compile("de.codecentric:spring-boot-admin-server:$springBootAdminVersion")
+    compile("de.codecentric:spring-boot-admin-server-ui:$springBootAdminVersion")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 

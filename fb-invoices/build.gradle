@@ -55,6 +55,7 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-hystrix")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix-dashboard")
 
+    compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.springframework.security.oauth:spring-security-oauth2")
     compile("org.springframework.cloud:spring-cloud-security")
 

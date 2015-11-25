@@ -38,9 +38,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
 
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.8.RELEASE")
     compile("org.springframework.security:spring-security-jwt")
     compile("org.springframework.boot:spring-boot-starter-freemarker")
+    compile("org.springframework.boot:spring-boot-starter-redis")
+
 
     testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude(module: 'commons-logging')

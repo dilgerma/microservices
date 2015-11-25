@@ -44,6 +44,12 @@
       "group": "app"
     },
     {
+      "name": "authserver",
+      "dir": "fb-auth-server",
+      "tag": "dilgerm/rpi-authserver",
+      "group": "app"
+    },
+    {
       "name": "eurekaserver",
       "dir": "fb-eureka-server",
       "tag": "dilgerm/rpi-eurekaserver",

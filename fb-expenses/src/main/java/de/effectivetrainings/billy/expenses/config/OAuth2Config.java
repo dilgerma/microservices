@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.billing.config;
+package de.effectivetrainings.billy.expenses.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class OAuth2Config extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         super.configure(resources);
-        resources.resourceId("invoices");
+        resources.resourceId("expenses");
         resources.tokenStore(new RedisTokenStore(redisConnectionFactory));
     }
 }

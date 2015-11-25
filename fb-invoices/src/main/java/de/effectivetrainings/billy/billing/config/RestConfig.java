@@ -21,6 +21,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class RestConfig {
     private LoadBalancerInterceptor loadBalancerInterceptor;
 
     @Bean(name = "user")
-    public RestTemplate restTemplate() {
+    public RestOperations restTemplate() {
         final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
         restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor(),
                 loadBalancerInterceptor));
@@ -82,6 +83,6 @@ public class RestConfig {
 
     @Bean
     public InvoiceResource invoiceResource() {
-        return new InvoiceResource("", new RestTemplate(), new FbInboundModelMapper(), new DefaultCorrelationId("1"));
+        return new InvoiceResource("", restTemplate(), new FbInboundModelMapper(), new DefaultCorrelationId("1"));
     }
 }

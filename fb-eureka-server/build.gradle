@@ -34,7 +34,7 @@ repositories {
 
 configurations {
     compile.exclude group: 'javax.servlet', module: 'servlet-api'
-    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+//    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 }
 
 springBoot {
@@ -42,7 +42,6 @@ springBoot {
 }
 
 dependencies {
-
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.cloud:spring-cloud-starter-eureka-server") {

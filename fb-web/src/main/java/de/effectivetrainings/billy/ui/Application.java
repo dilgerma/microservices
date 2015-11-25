@@ -2,6 +2,7 @@ package de.effectivetrainings.billy.ui;
 
 import de.effectivetrainings.billy.ui.config.ApplicationConfig;
 import de.effectivetrainings.billy.ui.config.MessaginConnectionConfig;
+import de.effectivetrainings.billy.ui.config.OAuth2Config;
 import de.effectivetrainings.spring.influx.EnableInflux;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -23,7 +24,7 @@ import org.springframework.context.annotation.Import;
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@Import({ApplicationConfig.class, MessaginConnectionConfig.class})
+@Import({ApplicationConfig.class, MessaginConnectionConfig.class, OAuth2Config.class})
 public class Application
 {
 

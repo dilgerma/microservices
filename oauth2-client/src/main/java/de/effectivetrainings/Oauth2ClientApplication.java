@@ -19,10 +19,6 @@ public class Oauth2ClientApplication {
     @Autowired
     private OAuth2ClientContext clientContext;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Oauth2ClientApplication.class, args);
-    }
-
     @Bean
     public OAuth2RestOperations oAuth2RestOperations() {
         return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails(), clientContext);
@@ -33,5 +29,10 @@ public class Oauth2ClientApplication {
     public OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails() {
         return new AuthorizationCodeResourceDetails();
     }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Oauth2ClientApplication.class, args);
+    }
+
 
 }

@@ -79,4 +79,4 @@ dependencies {
 
 //build config
 grunt_build.dependsOn 'npmInstall'
-build.dependsOn grunt_build
+processResources.dependsOn grunt_build

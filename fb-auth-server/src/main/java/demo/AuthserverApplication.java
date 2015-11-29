@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
@@ -97,7 +96,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 			clients.inMemory()
 					.withClient("client")
 					.secret("secret")
-					.authorizedGrantTypes("authorization_code", "refresh_token", "client_credentials")
+					.authorizedGrantTypes("authorization_code", "implicit", "refresh_token", "client_credentials")
 					.scopes("services");
 		}
 

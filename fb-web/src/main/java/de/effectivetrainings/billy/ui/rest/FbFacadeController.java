@@ -52,12 +52,9 @@ import java.util.List;
 @RequestMapping("/")
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Slf4j
-//TODO rename - prod facade is a pretty bad name
 public class FbFacadeController implements FbFacade {
 
     private FbFacade fbFacade;
-    //TODO retrieve customer id - currently just here statically defined.
-    private static final String customerId = "default";
 
     @Autowired
     public FbFacadeController(FbFacade fbFacade) {

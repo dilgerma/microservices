@@ -1,6 +1,5 @@
 package de.effectivetrainings.billy.ui;
 
-import de.effectivetrainings.billy.ui.rest.FbFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class StartupTest {
     @Autowired
     @Qualifier("oAuth2RestOperations")
     private RestOperations restTemplate;
-
-    @Autowired
-    private FbFacade fbFacade;
 
     @Test
     public void contextTest() {

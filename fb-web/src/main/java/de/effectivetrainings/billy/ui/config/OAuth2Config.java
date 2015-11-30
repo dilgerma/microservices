@@ -1,6 +1,7 @@
 package de.effectivetrainings.billy.ui.config;
 
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.collect.Lists;
 import de.effectivetrainings.spring.metrics.RestRequestTimerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,7 +47,7 @@ public class OAuth2Config {
     public OAuth2RestOperations oAuth2RestOperations() {
         final OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(oAuth2ProtectedResourceDetails,
                 clientContext);
-        oAuth2RestTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor(), loadBalancerInterceptor));
+        oAuth2RestTemplate.setInterceptors(Lists.newArrayList(restRequestTimerInterceptor(), loadBalancerInterceptor));
         return oAuth2RestTemplate;
     }
 
@@ -55,13 +56,6 @@ public class OAuth2Config {
         return new RestRequestTimerInterceptor(metricRegistry);
     }
 
-//    @Bean
-//    @Primary
-//    public static AuthorizationServerTokenServices authorizationServerTokenServices(RedisConnectionFactory redisConnectionFactory) {
-//        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-//        defaultTokenServices.setTokenStore(tokenStore(redisConnectionFactory));
-//        return defaultTokenServices;
-//    }
 
     @Bean
     public static TokenStore tokenStore(RedisConnectionFactory redisConnectionFactory) {

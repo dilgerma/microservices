@@ -52,6 +52,9 @@ public class RestConfig {
     @Value("${rest.client.readTimeout:-1}")
     private Integer readTimeout;
 
+    @Value("${fb.repository.invoices}")
+    private String repositoryInvoiceUri;
+
     @Autowired
     private LoadBalancerInterceptor loadBalancerInterceptor;
 
@@ -83,6 +86,6 @@ public class RestConfig {
 
     @Bean
     public InvoiceResource invoiceResource() {
-        return new InvoiceResource("", restTemplate(), new FbInboundModelMapper(), new DefaultCorrelationId("1"));
+        return new InvoiceResource(repositoryInvoiceUri, restTemplate(), new FbInboundModelMapper(), new DefaultCorrelationId("1"));
     }
 }

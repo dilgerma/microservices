@@ -20,7 +20,7 @@ module.exports = ['$http', 'SERVER', '$q', function ($http, SERVER, $q) {
         loadInvoices: function (filter) {
             var deferred = $q.defer();
 
-            $http.get('/invoices').success(function (result) {
+            $http.get('/api/invoice/invoices').success(function (result) {
                 var filteredInvoices = that._filter(filter, result.invoices);
                 deferred.resolve(filteredInvoices);
             }).error(function (response) {

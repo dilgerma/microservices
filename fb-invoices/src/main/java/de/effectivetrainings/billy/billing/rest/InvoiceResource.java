@@ -38,7 +38,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
@@ -65,7 +64,7 @@ public class InvoiceResource {
 
     private CorrelationId correlationId;
 
-    public InvoiceResource(@Value("${fb.repository.invoices}") String invoiceUri, @Qualifier("user") RestOperations restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
+    public InvoiceResource(String invoiceUri, @Qualifier("user") RestOperations restTemplate, FbInboundModelMapper inboundModelMapper, CorrelationId correlationId) {
         this.restTemplate = restTemplate;
         this.invoiceUri = invoiceUri;
         this.inboundModelMapper = inboundModelMapper;

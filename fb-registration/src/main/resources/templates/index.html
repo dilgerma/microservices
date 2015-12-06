@@ -5,6 +5,21 @@
 </head>
 <body>
 <h3 th:text="#{spring.messages.index.registration}"></h3>
-<p>Hello World!</p>
+<form method="post" th:object="${registration}" th:action="@{/register}">
+    <ul th:if="${#fields.hasErrors('*')}">
+      <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+    </ul>
+    <label>
+        E-Mail:
+        <input th:required="true" name="email" type="text" th:value="*{email}" th:errorclass="error"/>
+    </label>
+    <label>
+        Name:
+        <input th:required="true" name="name" type="text" th:value="*{name}" th:errorclass="error"/>
+    </label>
+    <label>
+        <input type="submit" value="Registrieren"/>
+    </label>
+</form>
 </body>
 </html>

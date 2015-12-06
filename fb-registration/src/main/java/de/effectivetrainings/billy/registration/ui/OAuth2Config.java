@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.registration;
+package de.effectivetrainings.billy.registration.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 
 @Configuration
 @EnableWebSecurity
-//@EnableOAuth2Sso
+@EnableOAuth2Sso
 public class OAuth2Config extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -22,7 +22,7 @@ public class OAuth2Config extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.requestMatchers().antMatchers("/*").and().authorizeRequests()
+        http.requestMatchers().antMatchers("/**").and().authorizeRequests()
                 .anyRequest().access("#oauth2.hasScope('services')");
     }
 

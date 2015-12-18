@@ -2,15 +2,14 @@ package de.effectivetrainings.billy.registration;
 
 import de.effectivetrainings.billy.registration.service.RegistrationService;
 import de.effectivetrainings.billy.registration.service.RegistrationServiceImpl;
-import de.effectivetrainings.billy.registration.ui.OAuth2Config;
 import de.effectivetrainings.billy.registration.ui.confirm.RegistrationConfirmController;
 import de.effectivetrainings.billy.registration.ui.password.PasswordConfirmationController;
 import de.effectivetrainings.billy.registration.ui.registration.RegistrationController;
+import de.effectivetrainings.billy.registration.ui.registration.RegistrationDetailsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -19,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableAutoConfiguration
 @Controller
 @PropertySource("messages.properties")
-@Import(OAuth2Config.class)
+//@Import(OAuth2Config.class)
 public class RegistrationApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {
@@ -46,6 +45,11 @@ public class RegistrationApplication extends WebMvcConfigurerAdapter {
 	@Bean
 	public RegistrationConfirmController registrationConfirmController() {
 		return new RegistrationConfirmController(registrationService());
+	}
+
+	@Bean
+	public RegistrationDetailsController registrationDetailsController() {
+		return new RegistrationDetailsController();
 	}
 
 	@Bean

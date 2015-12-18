@@ -2,7 +2,6 @@ package de.effectivetrainings.billy.registration.ui.password;
 
 import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
 import de.effectivetrainings.billy.registration.service.RegistrationService;
-import de.effectivetrainings.billy.registration.ui.RegistratioModelMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +21,6 @@ public class PasswordConfirmationController {
 
 
     private RegistrationService registrationService;
-    private RegistratioModelMapper modelMapper = new RegistratioModelMapper();
 
     public PasswordConfirmationController(RegistrationService registrationService) {
         this.registrationService = registrationService;

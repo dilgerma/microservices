@@ -29,7 +29,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public CustomerRegistration confirmRegistration(RegistrationConfirmationToken token) {
+    public CustomerRegistration findRegistrationForToken(RegistrationConfirmationToken token) {
         final CustomerRegistration customerRegistration = tokens.get(token);
         if (customerRegistration == null) {
             throw new InvalidRegistrationTokenException(token);
@@ -38,13 +38,15 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new AlreadyRegisteredException(customerRegistration);
         }
 
-        return customerRegistration.confirm();
+        return customerRegistration;
         //TODO send customer confirmed event
     }
 
     @Override
     public void confirmPasswords(
             CustomerRegistration registration, PasswordConfirmation passwordConfirmation) {
+        registration.confirm(passwordConfirmation.getPassword());
+        //TODO store confirmed registration
 
     }
 

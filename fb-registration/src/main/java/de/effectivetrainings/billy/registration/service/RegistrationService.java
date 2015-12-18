@@ -7,7 +7,7 @@ import de.effectivetrainings.billy.registration.domain.RegistrationConfirmationT
 public interface RegistrationService {
     void register(CustomerRegistration customerRegistration);
 
-    CustomerRegistration confirmRegistration(RegistrationConfirmationToken token);
+    CustomerRegistration findRegistrationForToken(RegistrationConfirmationToken token);
 
     void confirmPasswords(CustomerRegistration registration, PasswordConfirmation passwordConfirmation);
 }

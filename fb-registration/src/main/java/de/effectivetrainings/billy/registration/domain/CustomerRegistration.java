@@ -27,13 +27,10 @@ public class CustomerRegistration {
         this.registrationConfirmationToken = new RegistrationConfirmationToken();
     }
 
-    public CustomerRegistration confirm() {
+    public CustomerRegistration confirm(String password) {
         this.confirmed = true;
-        return this;
-    }
-
-    public CustomerRegistration withPassword(String password) {
         this.password = password;
         return this;
     }
+
 }

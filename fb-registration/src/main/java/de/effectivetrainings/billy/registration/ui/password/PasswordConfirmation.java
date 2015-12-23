@@ -1,11 +1,11 @@
 package de.effectivetrainings.billy.registration.ui.password;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class PasswordConfirmation {
 
     private String password;

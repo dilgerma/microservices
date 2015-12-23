@@ -1,16 +1,13 @@
 package de.effectivetrainings.billy.registration.ui.password;
 
 import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.registration.domain.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.registration.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -31,20 +28,25 @@ public class PasswordConfirmationController {
         binder.addValidators(new PasswordValidator());
     }
 
-    @RequestMapping(value = "/register/password", method = RequestMethod.GET)
-    public ModelAndView modelAndView() {
-        return new ModelAndView("registration-password", "passwords", new PasswordConfirmation());
+    @RequestMapping(value = "/register/{token}/password", method = RequestMethod.GET)
+    public ModelAndView modelAndView(@PathVariable("token") String token) {
+        final ModelAndView model = new ModelAndView("registration-password",
+                "passwords",
+                new PasswordConfirmation());
+        model.addObject("token", token);
+        return model;
     }
 
-    @RequestMapping(value = "/register/password", method = RequestMethod.POST)
+    @RequestMapping(value = "/register/{token}/password", method = RequestMethod.POST)
     public String passwordConfirm(
-            @ModelAttribute("passwords") @Valid PasswordConfirmation passwords, BindingResult result, ModelMap
-            modelMap) {
+            @PathVariable("token") String token,
+            @ModelAttribute("passwords") @Valid PasswordConfirmation passwords, BindingResult result) {
         if (result.hasErrors()) {
             return "registration-password";
         }
-        final CustomerRegistration registration = (CustomerRegistration) modelMap.get("registration");
-        registrationService.confirmPasswords(registration, passwords);
+        final CustomerRegistration registrationForToken = registrationService.findRegistrationForToken(new RegistrationConfirmationToken(
+                token));
+        registrationService.confirmPasswords(registrationForToken, passwords);
         return "registration-complete";
     }
 

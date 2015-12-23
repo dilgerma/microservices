@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,10 +28,9 @@ public class RegistrationController {
         return new ModelAndView("index", "registration", new CustomerRegistrationDto());
     }
 
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String submit(
-            @ModelAttribute("registration") @Validated CustomerRegistrationDto customerRegistrationDto,
+            @Validated CustomerRegistrationDto customerRegistrationDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "index";

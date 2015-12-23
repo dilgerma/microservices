@@ -19,8 +19,9 @@ public class RegistrationConfirmController {
     }
 
     @RequestMapping("/register/confirm/{token}")
-    public String confirm(@PathVariable("token") RegistrationConfirmationToken token,  ModelMap modelMap) {
-        final CustomerRegistration customerRegistration = registrationService.findRegistrationForToken(token);
+    public String confirm(@PathVariable("token") String token,  ModelMap modelMap) {
+        final CustomerRegistration customerRegistration = registrationService.findRegistrationForToken(new RegistrationConfirmationToken(
+                token));
         modelMap.put("registration", customerRegistration);
         modelMap.put("passwords", new PasswordConfirmation());
         return "registration-password";

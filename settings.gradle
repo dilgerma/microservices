@@ -16,24 +16,26 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'fb-micro-services'
-include 'fb-repository',
+include 'correlation-id',
+        'events-support',
+        'spring-metrics',
+        'rest-support',
+        'influx-reporter',
+        'fb-repository',
         'fb-invoices',
         'fb-expenses',
-        'correlation-id',
-        'spring-metrics',
         'fb-customers',
         'fb-template',
         'fb-registration',
         'fb-eureka-server',
         'fb-boot-admin-server',
-        'rest-support',
         'eventstore',
         'fb-reporting',
         'fb-web',
-        'influx-reporter',
         'fb-metrics-server',
         'fb-auth-server',
-        'oauth2-client'
+        'clients/oauth2-client',
+        'clients/messaging-client'
+rootProject.name = 'fb-micro-services'
 //'fb-web-reporting'
 

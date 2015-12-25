@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url = 'http://repo.spring.io/milestone'
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "io.spring.dependency-management"
+
+
+dependencies {
+
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.google.guava:guava:17.0"
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
+
+    compile("org.springframework:spring-context:${springVersion}")
+    compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+

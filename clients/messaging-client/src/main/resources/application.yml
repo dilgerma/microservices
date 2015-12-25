@@ -1,0 +1,10 @@
+server:
+  port: 8090
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    user: guest
+    password: guest
+events:
+  queue: eventsQ

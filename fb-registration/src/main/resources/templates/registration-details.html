@@ -9,43 +9,66 @@
     <ul th:if="${#fields.hasErrors('*')}">
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
     </ul>
-    <label>
-        Anrede:
-        <input th:required="true" name="salutation" type="text" th:value="*{salutation}" th:errorclass="error"/>
-    </label>
-    <label>
-        Firmenname:
-        <input th:required="true" name="companyDetails.companyName" type="text"
-               th:value="*{companyDetails.companyName}"
-               th:errorclass="error"/>
-    </label>
-    <label>
-        Vorname / Name:
-        <input th:required="true" name="nameDetails.name" type="text" th:value="*{nameDetails.name}"
-               th:errorclass="error"/>
-        <input th:required="true" name="nameDetails.firstname" type="text" th:value="*{nameDetails.firstname}" th:errorclass="error"/>
-    </label>
-    <label>
-        Straße / Hausnummer:
-        <input th:required="true" name="addressDetails.street" type="text" th:value="*{addressDetails.street}" th:errorclass="error"/>
-        <input th:required="true" name="addressDetails.houseNumber" type="text" th:value="*{addressDetails.street}"
-               th:errorclass="error"/>
-    </label>
-    <label>
-        Postleitzahl / Ort:
-        <input th:required="true" name="addressDetails.zip" type="text" th:value="*{addressDetails.zip}"
-               th:errorclass="error"/>
-        <input th:required="true" name="addressDetails.city" type="text" th:value="*{addressDetails.city}"
-               th:errorclass="error"/>
-    </label>
-    <label>
-        Umsatzsteuer-Identifikationsnummer
-        <input th:required="true" name="companyDetails.ustId" type="text" th:value="*{companyDetails.ustId}"
-               th:errorclass="error"/>
-    </label>
-    <label>
-        <input type="submit" value="Speichern"/>
-    </label>
+    <p>
+        <label>
+            Anrede:
+            <input th:required="true" name="salutation" type="text" th:value="*{salutation}" th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Firmenname:
+            <input th:required="true" name="companyDetails.companyName" type="text"
+                   th:value="*{companyDetails.companyName}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Vorname / Name:
+            <input th:required="true" name="nameDetails.name" type="text" th:value="*{nameDetails.name}"
+                   th:errorclass="error"/>
+            <input th:required="true" name="nameDetails.firstname" type="text" th:value="*{nameDetails.firstname}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Straße / Hausnummer:
+            <input th:required="true" name="addressDetails.street" type="text" th:value="*{addressDetails.street}"
+                   th:errorclass="error"/>
+            <input th:required="true" name="addressDetails.houseNumber" type="text" th:value="*{addressDetails.street}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Postleitzahl / Ort:
+            <input th:required="true" name="addressDetails.zip" type="text" th:value="*{addressDetails.zip}"
+                   th:errorclass="error"/>
+            <input th:required="true" name="addressDetails.city" type="text" th:value="*{addressDetails.city}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Umsatzsteuer-Identifikationsnummer
+            <input th:required="true" name="companyDetails.ustId" type="text" th:value="*{companyDetails.ustId}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            Fastbill-Key
+            <input th:required="true" name="fastbillApiKey" type="text" th:value="*{fastbillApiKey}"
+                   th:errorclass="error"/>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="submit" value="Speichern"/>
+        </label>
+    </p>
 </form>
 </body>
 </html>

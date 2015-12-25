@@ -9,5 +9,5 @@ public interface RegistrationService {
 
     CustomerRegistration findRegistrationForToken(RegistrationConfirmationToken token);
 
-    void confirmPasswords(CustomerRegistration registration, PasswordConfirmation passwordConfirmation);
+    void confirmAccount(CustomerRegistration registration, PasswordConfirmation passwordConfirmation);
 }

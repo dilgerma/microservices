@@ -18,4 +18,7 @@ public class RegistrationDetails {
     private AddressDetails addressDetails = new AddressDetails();
     @NonNull
     private CompanyDetails companyDetails = new CompanyDetails();
+    //TODO think where to store this..
+    @NonNull
+    private String fastbillApiKey;
 }

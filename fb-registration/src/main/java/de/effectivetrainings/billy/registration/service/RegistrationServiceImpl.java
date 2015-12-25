@@ -43,7 +43,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void confirmPasswords(
+    public void confirmAccount(
             CustomerRegistration registration, PasswordConfirmation passwordConfirmation) {
         registration.confirm(passwordConfirmation.getPassword());
         //TODO store confirmed registration

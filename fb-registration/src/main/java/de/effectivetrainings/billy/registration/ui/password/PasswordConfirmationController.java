@@ -46,7 +46,7 @@ public class PasswordConfirmationController {
         }
         final CustomerRegistration registrationForToken = registrationService.findRegistrationForToken(new RegistrationConfirmationToken(
                 token));
-        registrationService.confirmPasswords(registrationForToken, passwords);
+        registrationService.confirmAccount(registrationForToken, passwords);
         return "registration-complete";
     }
 

@@ -1,17 +1,26 @@
 package de.effectivetrainings.support.events.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.effectivetrainings.support.events.api.EventEmitter;
 import de.effectivetrainings.support.events.api.EventListener;
+import de.effectivetrainings.support.events.impl.EventContentTypeProvider;
+import de.effectivetrainings.support.events.impl.EventMessageJsonConverter;
 import de.effectivetrainings.support.events.impl.RabbitMqEventDispatcher;
+import de.effectivetrainings.support.events.impl.AmqpEventEmitter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -26,7 +35,7 @@ public class MessagingConnectionConfig {
     private String eventsQueueName;
 
     @Value("${events.exchangeName:eventsXchg}")
-    private String fanoutExchangeName;
+    private String eventsExchange;
 
     //these properties are only here to force
     //the developer to define them - otherwise
@@ -46,18 +55,39 @@ public class MessagingConnectionConfig {
     @Autowired(required = false)
     private List<EventListener<?>> eventListeners;
 
+    @Autowired
+    private SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory;
+
+    @Autowired
+    private ResourcePatternResolver resourcePatternResolver;
+
     @Bean
     public AmqpAdmin amqpAdmin() {
         return new RabbitAdmin(connectionFactory);
     }
 
+    @Bean
+    public MetadataReaderFactory metadataReaderFactory() {
+        return new CachingMetadataReaderFactory(resourcePatternResolver);
+    }
 
     @Bean
-    public AmqpTemplate rabbitTemplate() {
+    public AmqpTemplate amqpTemplate() {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange(fanoutExchangeName);
-        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+        rabbitTemplate.setExchange(eventsExchange);
+        rabbitTemplate.setMessageConverter(eventMessageJsonConverter());
         return rabbitTemplate;
+    }
+
+    @ConditionalOnMissingBean(value = EventContentTypeProvider.class)
+    @Bean
+    public EventContentTypeProvider eventContentTypeProvider() {
+        return new EventContentTypeProvider(metadataReaderFactory(), resourcePatternResolver());
+    }
+
+    @Bean
+    public ResourcePatternResolver resourcePatternResolver() {
+        return new PathMatchingResourcePatternResolver(resourcePatternResolver);
     }
 
     @Bean
@@ -66,15 +96,33 @@ public class MessagingConnectionConfig {
     }
 
     @Bean
-    public Exchange eventsExchange() {
-        return new FanoutExchange(fanoutExchangeName, true, false);
+    public FanoutExchange eventsExchange() {
+        return new FanoutExchange(eventsExchange, true, false);
+    }
+
+    @Bean
+    public Binding binding() {
+        return BindingBuilder.bind(eventsQueue()).to(eventsExchange());
     }
 
     @Bean
     public RabbitMqEventDispatcher eventDispatcher() {
         final RabbitMqEventDispatcher rabbitMqEventDispatcher = new RabbitMqEventDispatcher(eventListeners);
-        rabbitMqEventDispatcher.setConnectionFactory(connectionFactory);
-        rabbitMqEventDispatcher.setQueueNames(eventsQueueName);
         return rabbitMqEventDispatcher;
+    }
+
+    @Bean
+    public EventEmitter eventEmitter() {
+        return new AmqpEventEmitter(eventsExchange, amqpTemplate());
+    }
+
+    @Bean
+    public EventMessageJsonConverter eventMessageJsonConverter() {
+        return new EventMessageJsonConverter(eventContentTypeProvider(), new ObjectMapper());
+    }
+
+    @PostConstruct
+    public void initialize() {
+        simpleRabbitListenerContainerFactory.setMessageConverter(eventMessageJsonConverter());
     }
 }

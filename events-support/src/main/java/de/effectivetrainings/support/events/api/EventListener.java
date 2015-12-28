@@ -4,5 +4,5 @@ public interface EventListener<T> {
 
     void onEvent(Event<T> event);
 
-    boolean supports(EventType eventType, int version, String source);
+    boolean supports(Event event);
 }

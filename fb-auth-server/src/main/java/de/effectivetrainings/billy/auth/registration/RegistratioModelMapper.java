@@ -1,9 +1,9 @@
-package de.effectivetrainings.billy.registration.ui;
+package de.effectivetrainings.billy.auth.registration;
 
-import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.registration.domain.Email;
-import de.effectivetrainings.billy.registration.ui.mapper.Mapper;
-import de.effectivetrainings.billy.registration.ui.registration.CustomerRegistrationDto;
+
+import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.auth.registration.domain.Email;
+import de.effectivetrainings.billy.auth.registration.ui.CustomerRegistrationDto;
 
 public class RegistratioModelMapper implements Mapper<CustomerRegistration, CustomerRegistrationDto> {
 

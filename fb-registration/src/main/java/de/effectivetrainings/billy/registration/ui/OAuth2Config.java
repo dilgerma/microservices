@@ -20,12 +20,6 @@ public class OAuth2Config extends WebSecurityConfigurerAdapter {
     private RedisConnectionFactory redisConnectionFactory;
 
     @Override
-    public void init(WebSecurity web) throws Exception {
-        super.init(web);
-        web.ignoring().antMatchers("/", "/register");
-    }
-
-    @Override
     public void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests().anyRequest().authenticated();

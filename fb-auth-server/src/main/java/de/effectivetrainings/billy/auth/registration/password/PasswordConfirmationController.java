@@ -1,9 +1,10 @@
-package de.effectivetrainings.billy.registration.ui.password;
+package de.effectivetrainings.billy.auth.registration.password;
 
-import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.registration.domain.RegistrationConfirmationToken;
-import de.effectivetrainings.billy.registration.service.RegistrationService;
+import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.auth.registration.domain.RegistrationConfirmationToken;
+import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,6 +20,7 @@ public class PasswordConfirmationController {
 
     private RegistrationService registrationService;
 
+    @Autowired
     public PasswordConfirmationController(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }

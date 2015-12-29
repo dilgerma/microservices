@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.registration.ui.password;
+package de.effectivetrainings.billy.auth.registration.password;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

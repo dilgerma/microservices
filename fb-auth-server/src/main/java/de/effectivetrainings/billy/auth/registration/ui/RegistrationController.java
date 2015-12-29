@@ -1,9 +1,10 @@
-package de.effectivetrainings.billy.registration.ui.registration;
+package de.effectivetrainings.billy.auth.registration.ui;
 
-import de.effectivetrainings.billy.registration.service.RegistrationService;
-import de.effectivetrainings.billy.registration.service.exception.AlreadyRegisteredException;
-import de.effectivetrainings.billy.registration.ui.RegistratioModelMapper;
+import de.effectivetrainings.billy.auth.registration.RegistratioModelMapper;
+import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
+import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ public class RegistrationController {
     private RegistrationService registrationService;
     private RegistratioModelMapper modelMapper = new RegistratioModelMapper();
 
+    @Autowired
     public RegistrationController(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }

@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.registration.ui.registration;
+package de.effectivetrainings.billy.auth.registration.ui;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

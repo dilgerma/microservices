@@ -1,11 +1,12 @@
-package de.effectivetrainings.billy.registration.service;
+package de.effectivetrainings.billy.auth.registration.service;
 
-import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.registration.domain.Email;
-import de.effectivetrainings.billy.registration.ui.password.PasswordConfirmation;
-import de.effectivetrainings.billy.registration.domain.RegistrationConfirmationToken;
-import de.effectivetrainings.billy.registration.service.exception.AlreadyRegisteredException;
-import de.effectivetrainings.billy.registration.service.exception.InvalidRegistrationTokenException;
+
+import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.auth.registration.domain.Email;
+import de.effectivetrainings.billy.auth.registration.domain.RegistrationConfirmationToken;
+import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
+import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
+import de.effectivetrainings.billy.auth.registration.service.exception.InvalidRegistrationTokenException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

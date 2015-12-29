@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.registration.domain;
+package de.effectivetrainings.billy.auth.registration.domain;
 
 import lombok.Getter;
 import lombok.ToString;

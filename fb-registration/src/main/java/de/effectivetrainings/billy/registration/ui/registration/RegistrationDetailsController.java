@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegistrationDetailsController {
 
 
-    @RequestMapping("/details")
+    @RequestMapping("/")
     public ModelAndView registrationDetails(@ModelAttribute("registrationDetails") RegistrationDetails
                                                     registrationDetails) {
         return new ModelAndView("registration-details", "registrationDetails", registrationDetails);

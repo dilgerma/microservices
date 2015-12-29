@@ -1,10 +1,5 @@
 package de.effectivetrainings.billy.registration;
 
-import de.effectivetrainings.billy.registration.service.RegistrationService;
-import de.effectivetrainings.billy.registration.service.RegistrationServiceImpl;
-import de.effectivetrainings.billy.registration.ui.confirm.RegistrationConfirmController;
-import de.effectivetrainings.billy.registration.ui.password.PasswordConfirmationController;
-import de.effectivetrainings.billy.registration.ui.registration.RegistrationController;
 import de.effectivetrainings.billy.registration.ui.registration.RegistrationDetailsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -33,29 +28,8 @@ public class RegistrationApplication extends WebMvcConfigurerAdapter {
     }
 
 	@Bean
-	public RegistrationService registrationService() {
-		return new RegistrationServiceImpl();
-	}
-
-	@Bean
-	public RegistrationController registrationController() {
-		final RegistrationController registrationController = new RegistrationController(registrationService());
-		return registrationController;
-	}
-
-	@Bean
-	public RegistrationConfirmController registrationConfirmController() {
-		return new RegistrationConfirmController(registrationService());
-	}
-
-	@Bean
 	public RegistrationDetailsController registrationDetailsController() {
 		return new RegistrationDetailsController();
-	}
-
-	@Bean
-	public PasswordConfirmationController passwordConfirmationController() {
-		return new PasswordConfirmationController(registrationService());
 	}
 
 }

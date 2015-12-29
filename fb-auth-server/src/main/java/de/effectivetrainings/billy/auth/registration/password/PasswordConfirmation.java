@@ -1,8 +1,7 @@
-package de.effectivetrainings.billy.registration.ui.password;
+package de.effectivetrainings.billy.auth.registration.password;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 @Data
 @RequiredArgsConstructor
@@ -17,6 +16,6 @@ public class PasswordConfirmation {
     }
 
     public boolean canConfirm() {
-        return password != null && passwordConfirm != null && StringUtils.equals(password, passwordConfirm);
+        return password != null && passwordConfirm != null && password.equals(passwordConfirm);
     }
 }

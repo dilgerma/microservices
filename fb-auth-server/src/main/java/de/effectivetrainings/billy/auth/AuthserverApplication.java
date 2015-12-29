@@ -1,5 +1,7 @@
 package de.effectivetrainings.billy.auth;
 
+import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
+import de.effectivetrainings.billy.auth.registration.service.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
@@ -7,18 +9,21 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -35,6 +40,7 @@ import java.security.KeyPair;
 @EnableAutoConfiguration
 @Controller
 @SessionAttributes("authorizationRequest")
+@PropertySource("classpath:messages.properties")
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {
@@ -48,6 +54,16 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 	}
 
 	@Configuration
+	protected static class ApplicationConfig {
+
+		@Bean
+		public RegistrationService registrationService() {
+			return new RegistrationServiceImpl();
+		}
+
+	}
+
+	@Configuration
 	@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
 	protected static class LoginConfig extends WebSecurityConfigurerAdapter {
 
@@ -55,15 +71,22 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		private AuthenticationManager authenticationManager;
 
 		@Override
+		public void init(WebSecurity web) throws Exception {
+			super.init(web);
+			web.ignoring().antMatchers("/register/**", "/");
+		}
+
+		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable();
-			http.formLogin().loginPage("/login").permitAll().and().authorizeRequests()
+			http.formLogin().loginPage("/login").permitAll()
+					.and().authorizeRequests()
 					.anyRequest().authenticated();
 		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.parentAuthenticationManager(authenticationManager);
+			auth.inMemoryAuthentication().withUser("user").password("secret2").authorities("USER");
 		}
 	}
 

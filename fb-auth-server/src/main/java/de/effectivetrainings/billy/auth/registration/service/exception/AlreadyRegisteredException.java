@@ -1,6 +1,6 @@
-package de.effectivetrainings.billy.registration.service.exception;
+package de.effectivetrainings.billy.auth.registration.service.exception;
 
-import de.effectivetrainings.billy.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
 import lombok.Getter;
 
 @Getter

@@ -3,6 +3,7 @@ package de.effectivetrainings.support.events.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.effectivetrainings.support.events.api.EventEmitter;
 import de.effectivetrainings.support.events.api.EventListener;
+import de.effectivetrainings.support.events.api.EventsExchangeQualifier;
 import de.effectivetrainings.support.events.impl.EventContentTypeProvider;
 import de.effectivetrainings.support.events.impl.EventMessageJsonConverter;
 import de.effectivetrainings.support.events.impl.RabbitMqEventDispatcher;
@@ -23,6 +24,7 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,6 +81,7 @@ public class MessagingConnectionConfig {
         return rabbitTemplate;
     }
 
+
     @ConditionalOnMissingBean(value = EventContentTypeProvider.class)
     @Bean
     public EventContentTypeProvider eventContentTypeProvider() {
@@ -90,20 +93,13 @@ public class MessagingConnectionConfig {
         return new PathMatchingResourcePatternResolver(resourcePatternResolver);
     }
 
-    @Bean
-    public Queue eventsQueue() {
-        return new Queue(this.eventsQueueName, true);
-    }
 
+    @EventsExchangeQualifier
     @Bean
     public FanoutExchange eventsExchange() {
         return new FanoutExchange(eventsExchange, true, false);
     }
 
-    @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(eventsQueue()).to(eventsExchange());
-    }
 
     @Bean
     public RabbitMqEventDispatcher eventDispatcher() {

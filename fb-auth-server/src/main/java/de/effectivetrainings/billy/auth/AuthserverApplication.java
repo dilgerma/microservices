@@ -4,14 +4,13 @@ import de.effectivetrainings.billy.auth.registration.infrastructure.AuthUserDeta
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationServiceImpl;
+import de.effectivetrainings.support.events.api.EventEmitter;
+import de.effectivetrainings.support.events.config.MessagingConnectionConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -26,7 +25,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -45,7 +43,10 @@ import java.security.KeyPair;
 @SessionAttributes("authorizationRequest")
 @PropertySource("classpath:messages.properties")
 @EnableMongoRepositories(basePackages = "de.effectivetrainings.billy.auth.registration.repository")
+@Import(MessagingConnectionConfig.class)
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
+
+	public static final String EVENT_SOURCE = "auth";
 
 	public static void main(String[] args) {
 		SpringApplication.run(AuthserverApplication.class, args);
@@ -63,6 +64,9 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		@Autowired
 		private CustomerRegistrationRepository customerRegistrationRepository;
 
+		@Autowired
+		private EventEmitter eventEmitter;
+
 		@Bean
 		public AuthUserDetailsService authUserDetailsService() {
 			return new AuthUserDetailsService(customerRegistrationRepository);
@@ -70,8 +74,9 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 		@Bean
 		public RegistrationService registrationService() {
-			return new RegistrationServiceImpl(customerRegistrationRepository);
+			return new RegistrationServiceImpl(customerRegistrationRepository, eventEmitter);
 		}
+
 
 	}
 

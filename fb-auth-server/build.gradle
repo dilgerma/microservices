@@ -42,6 +42,7 @@ dependencies {
     compile("org.springframework.security:spring-security-jwt")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-redis")
+    compile project (":events-support")
     compile("org.projectlombok:lombok:1.16.6")
 
     compile("org.springframework.data:spring-data-mongodb") {

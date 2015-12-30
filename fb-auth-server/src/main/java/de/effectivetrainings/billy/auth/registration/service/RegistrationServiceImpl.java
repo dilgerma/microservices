@@ -2,11 +2,14 @@ package de.effectivetrainings.billy.auth.registration.service;
 
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
+import de.effectivetrainings.billy.auth.registration.events.CustomerRegisteredEvent;
+import de.effectivetrainings.billy.auth.registration.events.RegisteredCustomer;
 import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
 import de.effectivetrainings.billy.auth.registration.service.exception.InvalidRegistrationTokenException;
+import de.effectivetrainings.support.events.api.EventEmitter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,9 +19,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     private CustomerRegistationDocumentMapper customerRegistationDocumentMapper = new CustomerRegistationDocumentMapper();
 
     private CustomerRegistrationRepository customerRegistrationRepository;
+    private EventEmitter eventEmitter;
 
-    public RegistrationServiceImpl(CustomerRegistrationRepository customerRegistrationRepository) {
+    public RegistrationServiceImpl(CustomerRegistrationRepository customerRegistrationRepository, EventEmitter eventEmitter) {
         this.customerRegistrationRepository = customerRegistrationRepository;
+        this.eventEmitter = eventEmitter;
     }
 
     @Override
@@ -28,7 +33,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         log.info("Registering email {} for Token : {}", customerRegistration.getEmail(), customerRegistration.getRegistrationConfirmationToken());
         customerRegistrationRepository.save(customerRegistationDocumentMapper.to(customerRegistration));
-        //TODO send customer registration event...
     }
 
     @Override
@@ -44,7 +48,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         return customerRegistration;
-        //TODO send customer confirmed event
     }
 
     @Override
@@ -52,7 +55,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             CustomerRegistration registration, PasswordConfirmation passwordConfirmation) {
         registration.confirm(passwordConfirmation.getPassword());
         customerRegistrationRepository.save(customerRegistationDocumentMapper.to(registration));
-        //TODO send customer registration completed event
+        eventEmitter.emit(new CustomerRegisteredEvent(new RegisteredCustomer(registration.getEmail().getEmail(), registration.getName())));
     }
 
     private boolean alreadyRegistered(CustomerRegistration customerRegistration) {

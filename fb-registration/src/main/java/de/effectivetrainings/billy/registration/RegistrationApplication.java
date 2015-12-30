@@ -1,12 +1,10 @@
 package de.effectivetrainings.billy.registration;
 
 import de.effectivetrainings.billy.registration.ui.registration.RegistrationDetailsController;
+import de.effectivetrainings.support.events.config.MessagingConnectionConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -15,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan
 @Controller
 @PropertySource("messages.properties")
+@Import(MessagingConnectionConfig.class)
 public class RegistrationApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {

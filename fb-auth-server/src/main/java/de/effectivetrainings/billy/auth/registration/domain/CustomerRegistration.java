@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.auth.registration.domain;
 
+import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import lombok.Getter;
 import lombok.ToString;
 

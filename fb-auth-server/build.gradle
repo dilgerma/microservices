@@ -44,15 +44,17 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.projectlombok:lombok:1.16.6")
 
+    compile("org.springframework.data:spring-data-mongodb") {
 
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module: 'commons-logging')
+        testCompile("org.springframework.boot:spring-boot-starter-test") {
+            exclude(module: 'commons-logging')
+        }
+        testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
+            exclude(module: 'commons-logging')
+        }
     }
-    testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
-        exclude(module: 'commons-logging')
-    }
-}
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    task wrapper(type: Wrapper) {
+        gradleVersion = '2.3'
+    }
 }

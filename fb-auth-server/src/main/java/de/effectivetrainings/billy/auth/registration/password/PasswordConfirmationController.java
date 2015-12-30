@@ -1,7 +1,7 @@
 package de.effectivetrainings.billy.auth.registration.password;
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.auth.registration.domain.RegistrationConfirmationToken;
+import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

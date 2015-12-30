@@ -1,5 +1,7 @@
 package de.effectivetrainings.billy.auth;
 
+import de.effectivetrainings.billy.auth.registration.infrastructure.AuthUserDetailsService;
+import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -41,6 +44,7 @@ import java.security.KeyPair;
 @Controller
 @SessionAttributes("authorizationRequest")
 @PropertySource("classpath:messages.properties")
+@EnableMongoRepositories(basePackages = "de.effectivetrainings.billy.auth.registration.repository")
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {
@@ -56,9 +60,17 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 	@Configuration
 	protected static class ApplicationConfig {
 
+		@Autowired
+		private CustomerRegistrationRepository customerRegistrationRepository;
+
+		@Bean
+		public AuthUserDetailsService authUserDetailsService() {
+			return new AuthUserDetailsService(customerRegistrationRepository);
+		}
+
 		@Bean
 		public RegistrationService registrationService() {
-			return new RegistrationServiceImpl();
+			return new RegistrationServiceImpl(customerRegistrationRepository);
 		}
 
 	}
@@ -69,6 +81,9 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 		@Autowired
 		private AuthenticationManager authenticationManager;
+
+		@Autowired
+		private AuthUserDetailsService authUserDetailsService;
 
 		@Override
 		public void init(WebSecurity web) throws Exception {
@@ -86,7 +101,8 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.inMemoryAuthentication().withUser("user").password("secret2").authorities("USER");
+//			auth.inMemoryAuthentication().withUser("user").password("secret2").authorities("USER");
+			auth.userDetailsService(authUserDetailsService);
 		}
 	}
 

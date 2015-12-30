@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.auth.registration.domain;
+package de.effectivetrainings.billy.auth.registration.repository;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package de.effectivetrainings.billy.auth.registration.ui;
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.auth.registration.domain.RegistrationConfirmationToken;
+import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;

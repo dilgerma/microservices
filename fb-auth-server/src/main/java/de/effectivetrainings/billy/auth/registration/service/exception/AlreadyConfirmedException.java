@@ -1,7 +1,7 @@
 package de.effectivetrainings.billy.auth.registration.service.exception;
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.auth.registration.domain.RegistrationConfirmationToken;
+import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

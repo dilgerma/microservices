@@ -24,6 +24,6 @@ public class RegistrationDetailsControllerTest {
     @SneakyThrows(Exception.class)
     @Test
     public void render_registratioDetailsPage() {
-        mockMvc.perform(get("/details")).andExpect(status().isOk());
+        mockMvc.perform(get("/")).andExpect(status().isOk());
     }
 }

@@ -50,6 +50,12 @@
       "group": "app"
     },
     {
+      "name": "registration",
+      "dir": "fb-registration",
+      "tag": "dilgerm/rpi-billy-registration",
+      "group": "app"
+    },
+    {
       "name": "eurekaserver",
       "dir": "fb-eureka-server",
       "tag": "dilgerm/rpi-eurekaserver",

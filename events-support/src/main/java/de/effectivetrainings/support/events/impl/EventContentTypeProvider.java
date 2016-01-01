@@ -1,5 +1,6 @@
 package de.effectivetrainings.support.events.impl;
 
+import de.effectivetrainings.support.events.api.ApiVersion;
 import de.effectivetrainings.support.events.api.EventMessageContentType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -65,7 +66,7 @@ public class EventContentTypeProvider {
                             .hasAnnotation(EventMessageContentType.class.getName()))
                     .map(this::mapClass)
                     .collect(Collectors.toMap(aClass -> toContentType(aClass.getAnnotation
-                                    (EventMessageContentType.class)),
+                                    (EventMessageContentType.class), aClass.getAnnotation(ApiVersion.class)),
                             Function.identity()));
 
         } catch (IOException e) {
@@ -73,8 +74,8 @@ public class EventContentTypeProvider {
         }
     }
 
-    private String toContentType(EventMessageContentType annotation) {
-        return EventContentType.forContentType(annotation.source(), annotation.version(), annotation.type());
+    private String toContentType(EventMessageContentType annotation, ApiVersion apiVersion) {
+        return EventContentType.forContentType(annotation.eventSource(), apiVersion != null ? apiVersion.version() : 1, annotation.classType());
     }
 
     private Class<?> mapClass(MetadataReader metadataReader) {

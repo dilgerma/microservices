@@ -6,7 +6,7 @@ import de.effectivetrainings.support.events.api.EventListener;
 import de.effectivetrainings.support.events.api.EventsExchangeQualifier;
 import de.effectivetrainings.support.events.impl.EventContentTypeProvider;
 import de.effectivetrainings.support.events.impl.EventMessageJsonConverter;
-import de.effectivetrainings.support.events.impl.RabbitMqEventDispatcher;
+import de.effectivetrainings.support.events.impl.AmqpEventDispatcher;
 import de.effectivetrainings.support.events.impl.AmqpEventEmitter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -24,7 +24,6 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,12 +38,15 @@ public class MessagingConnectionConfig {
     @Value("${events.exchangeName:eventsXchg}")
     private String eventsExchange;
 
+    @Value("${events.source.name}")
+    private String eventsSource;
+
     //these properties are only here to force
     //the developer to define them - otherwise
     //auto configuration kicks in.
     @Value("${spring.rabbitmq.host}")
     private String host;
-    @Value("${spring.rabbitmq.port}")
+    @Value("${spring.rabbitmq.port:5672}")
     private String port;
     @Value("${spring.rabbitmq.user}")
     private String user;
@@ -60,9 +62,6 @@ public class MessagingConnectionConfig {
     @Autowired
     private SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory;
 
-    @Autowired
-    private ResourcePatternResolver resourcePatternResolver;
-
     @Bean
     public AmqpAdmin amqpAdmin() {
         return new RabbitAdmin(connectionFactory);
@@ -70,7 +69,7 @@ public class MessagingConnectionConfig {
 
     @Bean
     public MetadataReaderFactory metadataReaderFactory() {
-        return new CachingMetadataReaderFactory(resourcePatternResolver);
+        return new CachingMetadataReaderFactory(eventsResourcePatternResolver());
     }
 
     @Bean
@@ -85,12 +84,12 @@ public class MessagingConnectionConfig {
     @ConditionalOnMissingBean(value = EventContentTypeProvider.class)
     @Bean
     public EventContentTypeProvider eventContentTypeProvider() {
-        return new EventContentTypeProvider(metadataReaderFactory(), resourcePatternResolver());
+        return new EventContentTypeProvider(metadataReaderFactory(), eventsResourcePatternResolver());
     }
 
     @Bean
-    public ResourcePatternResolver resourcePatternResolver() {
-        return new PathMatchingResourcePatternResolver(resourcePatternResolver);
+    public ResourcePatternResolver eventsResourcePatternResolver() {
+        return new PathMatchingResourcePatternResolver();
     }
 
 
@@ -102,9 +101,9 @@ public class MessagingConnectionConfig {
 
 
     @Bean
-    public RabbitMqEventDispatcher eventDispatcher() {
-        final RabbitMqEventDispatcher rabbitMqEventDispatcher = new RabbitMqEventDispatcher(eventListeners);
-        return rabbitMqEventDispatcher;
+    public AmqpEventDispatcher eventDispatcher() {
+        final AmqpEventDispatcher amqpEventDispatcher = new AmqpEventDispatcher(eventListeners);
+        return amqpEventDispatcher;
     }
 
     @Bean
@@ -114,7 +113,7 @@ public class MessagingConnectionConfig {
 
     @Bean
     public EventMessageJsonConverter eventMessageJsonConverter() {
-        return new EventMessageJsonConverter(eventContentTypeProvider(), new ObjectMapper());
+        return new EventMessageJsonConverter(eventContentTypeProvider(), new ObjectMapper(), eventsSource);
     }
 
     @PostConstruct

@@ -5,8 +5,14 @@ import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistra
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationServiceImpl;
 import de.effectivetrainings.support.events.api.EventEmitter;
+import de.effectivetrainings.support.events.api.EventsExchangeQualifier;
 import de.effectivetrainings.support.events.config.MessagingConnectionConfig;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -46,8 +52,6 @@ import java.security.KeyPair;
 @Import(MessagingConnectionConfig.class)
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
-	public static final String EVENT_SOURCE = "auth";
-
 	public static void main(String[] args) {
 		SpringApplication.run(AuthserverApplication.class, args);
 	}
@@ -76,8 +80,28 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		public RegistrationService registrationService() {
 			return new RegistrationServiceImpl(customerRegistrationRepository, eventEmitter);
 		}
+	}
 
+	@Configuration
+	@Import(MessagingConnectionConfig.class)
+	public static class EventsConfig {
 
+		@Value("${events.queue.name}")
+		private String eventsQueueName;
+
+		@EventsExchangeQualifier
+		@Autowired
+		private FanoutExchange eventsExchange;
+
+		@Bean
+		public Queue eventsQueue() {
+			return new Queue(eventsQueueName, true, false, true);
+		}
+
+		@Bean
+		public Binding binding() {
+			return BindingBuilder.bind(eventsQueue()).to(eventsExchange);
+		}
 	}
 
 	@Configuration

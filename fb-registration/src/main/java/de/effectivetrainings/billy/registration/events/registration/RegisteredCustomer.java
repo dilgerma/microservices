@@ -1,4 +1,4 @@
-package de.effectivetrainings.billy.auth.registration.events;
+package de.effectivetrainings.billy.registration.events.registration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

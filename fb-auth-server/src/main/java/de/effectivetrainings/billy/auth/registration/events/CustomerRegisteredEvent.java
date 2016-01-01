@@ -1,21 +1,16 @@
 package de.effectivetrainings.billy.auth.registration.events;
 
 
-import de.effectivetrainings.billy.auth.AuthserverApplication;
-import de.effectivetrainings.support.events.api.Event;
-import de.effectivetrainings.support.events.api.EventMessageContentType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import de.effectivetrainings.support.events.api.ApiVersion;
+import de.effectivetrainings.support.events.api.BaseEvent;
 
-@EventMessageContentType(version = 1, type = RegisteredCustomer.class, source = AuthserverApplication.EVENT_SOURCE)
-public class CustomerRegisteredEvent implements Event<RegisteredCustomer> {
+@ApiVersion(version = 1)
+public class CustomerRegisteredEvent extends BaseEvent<RegisteredCustomer> {
 
-    private RegisteredCustomer registeredCustomer;
-
-    public CustomerRegisteredEvent(RegisteredCustomer registeredCustomer) {
-        this.registeredCustomer = registeredCustomer;
+    @JsonCreator
+    public CustomerRegisteredEvent(RegisteredCustomer payload) {
+        super(payload);
     }
 
-    @Override
-    public RegisteredCustomer getPayload() {
-        return registeredCustomer;
-    }
 }

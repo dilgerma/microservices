@@ -2,7 +2,7 @@ package de.effectivetrainings.support.events.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.effectivetrainings.support.events.api.EventMessageContentType;
+import de.effectivetrainings.support.events.api.ApiVersion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
@@ -16,24 +16,28 @@ public class EventMessageJsonConverter implements MessageConverter {
 
     private ObjectMapper objectMapper;
     private EventContentTypeProvider eventContentTypeProvider;
+    private String eventsSource;
 
     public EventMessageJsonConverter(
             EventContentTypeProvider eventContentTypeProvider,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            String eventsSource) {
         this.objectMapper = objectMapper;
         this.eventContentTypeProvider = eventContentTypeProvider;
+        this.eventsSource = eventsSource;
     }
 
     @Override
     public Message toMessage(
             Object object, MessageProperties messageProperties) throws MessageConversionException {
-        final EventMessageContentType annotationsByType = object
-                .getClass()
-                .getAnnotation(EventMessageContentType.class);
-        if (annotationsByType != null) {
-            messageProperties.setContentType(EventContentType.forContentType(
-                    annotationsByType.source(), annotationsByType.version(), annotationsByType.type()));
-        }
+
+        final ApiVersion versionAnnotation = object.getClass().getAnnotation(ApiVersion.class);
+        final int version = version(versionAnnotation);
+        messageProperties.setContentType(EventContentType.forContentType(
+                eventsSource, version, object.getClass()));
+        messageProperties.setHeader("x-evt-msg-version", version);
+        messageProperties.setHeader("x-evt-origin", eventsSource);
+        messageProperties.setAppId(eventsSource);
         try {
             byte[] raw = objectMapper.writeValueAsBytes(object);
             return new Message(raw, messageProperties);
@@ -58,5 +62,9 @@ public class EventMessageJsonConverter implements MessageConverter {
         } catch (IOException e) {
             throw new MessageConversionException("Cannot read message", e);
         }
+    }
+
+    private int version(ApiVersion version) {
+        return version != null ? version.version() : 1;
     }
 }

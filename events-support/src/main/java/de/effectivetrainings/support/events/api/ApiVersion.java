@@ -3,13 +3,8 @@ package de.effectivetrainings.support.events.api;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * only relevant for the receiver.
- */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EventMessageContentType {
+public @interface ApiVersion {
 
-    Class<?> classType();
-
-    String eventSource();
+    int version() default 1;
 }

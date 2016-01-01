@@ -12,7 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringConfigTest.TestConfiguration.class, MessagingConnectionConfig.class})
 @TestPropertySource(properties = {
-        "events.queue=eventsQ",
+        "events.queue.name=eventsQ",
+        "events.source.name=source",
         "events.exchangeName=exchangeName",
         "spring.rabbitmq.host=host",
         "spring.rabbitmq.port=4711",

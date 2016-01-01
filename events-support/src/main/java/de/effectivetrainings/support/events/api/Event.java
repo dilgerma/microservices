@@ -1,6 +1,8 @@
 package de.effectivetrainings.support.events.api;
 
-public interface Event<T> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-    T getPayload();
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Event {
 }

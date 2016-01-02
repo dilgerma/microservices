@@ -1,3 +1,4 @@
+generated
 gradlew*
 gradle
 .tmp
@@ -42,3 +43,4 @@ hs_error*.log
 test.xlsx
 bower_components
 node_modules
+generated

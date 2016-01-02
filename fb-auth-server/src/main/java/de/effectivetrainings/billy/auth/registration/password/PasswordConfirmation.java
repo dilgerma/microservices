@@ -1,10 +1,8 @@
 package de.effectivetrainings.billy.auth.registration.password;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
 public class PasswordConfirmation {
 
     private String password;
@@ -13,6 +11,9 @@ public class PasswordConfirmation {
     public PasswordConfirmation(String password, String passwordConfirm) {
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public PasswordConfirmation() {
     }
 
     public boolean canConfirm() {

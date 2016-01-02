@@ -2,10 +2,12 @@ package de.effectivetrainings.support.events.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.effectivetrainings.support.events.api.EventEmitter;
-import de.effectivetrainings.support.events.api.EventListener;
+import de.effectivetrainings.support.events.api.EventHandler;
 import de.effectivetrainings.support.events.api.EventsExchangeQualifier;
-import de.effectivetrainings.support.events.impl.EventContentTypeProvider;
-import de.effectivetrainings.support.events.impl.EventMessageJsonConverter;
+import de.effectivetrainings.support.events.impl.conversion.json.EventContentTypeProvider;
+import de.effectivetrainings.support.events.impl.conversion.avro.AvroSerializer;
+import de.effectivetrainings.support.events.impl.conversion.avro.EventMessageAvroConverter;
+import de.effectivetrainings.support.events.impl.conversion.json.EventMessageJsonConverter;
 import de.effectivetrainings.support.events.impl.AmqpEventDispatcher;
 import de.effectivetrainings.support.events.impl.AmqpEventEmitter;
 import org.springframework.amqp.core.*;
@@ -57,7 +59,7 @@ public class MessagingConnectionConfig {
     private ConnectionFactory connectionFactory;
 
     @Autowired(required = false)
-    private List<EventListener<?>> eventListeners;
+    private List<EventHandler> eventHandlers;
 
     @Autowired
     private SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory;
@@ -76,7 +78,7 @@ public class MessagingConnectionConfig {
     public AmqpTemplate amqpTemplate() {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setExchange(eventsExchange);
-        rabbitTemplate.setMessageConverter(eventMessageJsonConverter());
+        rabbitTemplate.setMessageConverter(eventMessageAvroConverter());
         return rabbitTemplate;
     }
 
@@ -102,7 +104,7 @@ public class MessagingConnectionConfig {
 
     @Bean
     public AmqpEventDispatcher eventDispatcher() {
-        final AmqpEventDispatcher amqpEventDispatcher = new AmqpEventDispatcher(eventListeners);
+        final AmqpEventDispatcher amqpEventDispatcher = new AmqpEventDispatcher(eventHandlers);
         return amqpEventDispatcher;
     }
 
@@ -116,8 +118,18 @@ public class MessagingConnectionConfig {
         return new EventMessageJsonConverter(eventContentTypeProvider(), new ObjectMapper(), eventsSource);
     }
 
+    @Bean
+    public AvroSerializer avroSerializer() {
+        return new AvroSerializer();
+    }
+
+    @Bean
+    public EventMessageAvroConverter eventMessageAvroConverter() {
+        return new EventMessageAvroConverter(avroSerializer());
+    }
+
     @PostConstruct
     public void initialize() {
-        simpleRabbitListenerContainerFactory.setMessageConverter(eventMessageJsonConverter());
+        simpleRabbitListenerContainerFactory.setMessageConverter(eventMessageAvroConverter());
     }
 }

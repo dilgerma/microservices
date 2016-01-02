@@ -20,6 +20,8 @@ dependencies {
     compile "com.google.guava:guava:17.0"
     compile("io.dropwizard.metrics:metrics-core:3.1.0")
     compile("io.dropwizard.metrics:metrics-healthchecks:3.1.0")
+    compile("org.apache.avro:avro:1.7.7")
+
 
     compile("org.springframework:spring-context:${springVersion}")
     compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")

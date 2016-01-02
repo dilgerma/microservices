@@ -1,4 +1,4 @@
-package de.effectivetrainings.support.events.impl;
+package de.effectivetrainings.support.events.impl.conversion.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

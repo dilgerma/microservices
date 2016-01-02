@@ -4,16 +4,20 @@ buildscript {
         maven {
             url = 'http://repo.spring.io/milestone'
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.8.0"
     }
 }
 
+apply plugin: "com.commercehub.gradle.plugin.avro-base"
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: "io.spring.dependency-management"
-
 
 jar {
     baseName = 'fb-auth-server'
@@ -33,6 +37,31 @@ repositories {
     }
 }
 
+
+/**
+ * avro - we cannot rely on the commercehub defaults, as this generated
+ * the sources to /build/** and build is per default excluded in IntellIJ,
+ * so the sources are not usable.
+ * Instead we define a common sourceset that is excluded in git.
+ */
+
+task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
+    source("src/main/schema/avro")
+    outputDir = file("generated/avro/java")
+}
+
+sourceSets {
+    avro {
+        java.srcDir file("generated/avro/java")
+    }
+}
+
+compileJava.source("generated/avro/java")
+compileJava.dependsOn generateAvro
+/**
+ * end avro
+ */
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -42,6 +71,7 @@ dependencies {
     compile("org.springframework.security:spring-security-jwt")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-redis")
+
     compile project (":events-support")
     compile("org.projectlombok:lombok:1.16.6")
 

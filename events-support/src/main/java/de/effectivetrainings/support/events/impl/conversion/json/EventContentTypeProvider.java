@@ -1,4 +1,4 @@
-package de.effectivetrainings.support.events.impl;
+package de.effectivetrainings.support.events.impl.conversion.json;
 
 import de.effectivetrainings.support.events.api.ApiVersion;
 import de.effectivetrainings.support.events.api.EventMessageContentType;
@@ -6,7 +6,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +23,6 @@ public class EventContentTypeProvider {
     private final MetadataReaderFactory metadataReaderFactory;
     private final String basePackage;
     private Map<String, Class> eventClasses;
-    private AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(EventMessageContentType.class);
 
 
     public EventContentTypeProvider(

@@ -2,13 +2,13 @@ package de.effectivetrainings.billy.auth.registration.service;
 
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
-import de.effectivetrainings.billy.auth.registration.events.CustomerRegisteredEvent;
-import de.effectivetrainings.billy.auth.registration.events.RegisteredCustomer;
 import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
 import de.effectivetrainings.billy.auth.registration.service.exception.InvalidRegistrationTokenException;
+import de.effectivetrainings.billy.authserver.events.CustomerRegisteredEvent;
+import de.effectivetrainings.billy.authserver.events.RegisteredCustomer;
 import de.effectivetrainings.support.events.api.EventEmitter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             CustomerRegistration registration, PasswordConfirmation passwordConfirmation) {
         registration.confirm(passwordConfirmation.getPassword());
         customerRegistrationRepository.save(customerRegistationDocumentMapper.to(registration));
-        eventEmitter.emit(new CustomerRegisteredEvent(new RegisteredCustomer(registration.getEmail().getEmail(), registration.getName())));
+        eventEmitter.emit(new CustomerRegisteredEvent(new RegisteredCustomer(registration.getName(), registration.getEmail().getEmail())));
     }
 
     private boolean alreadyRegistered(CustomerRegistration customerRegistration) {

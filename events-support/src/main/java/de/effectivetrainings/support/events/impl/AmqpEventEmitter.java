@@ -1,6 +1,5 @@
 package de.effectivetrainings.support.events.impl;
 
-import de.effectivetrainings.support.events.api.BaseEvent;
 import de.effectivetrainings.support.events.api.EventEmitter;
 import org.springframework.amqp.core.AmqpTemplate;
 
@@ -16,7 +15,7 @@ public class AmqpEventEmitter implements EventEmitter {
     }
 
     @Override
-    public void emit(BaseEvent<?> ev) {
+    public void emit(Object ev) {
         rabbitTemplate.convertAndSend(eventsExchange, null, ev);
     }
 }

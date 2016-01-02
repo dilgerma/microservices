@@ -42,8 +42,8 @@ public class MessagingClientApplication {
     }
 
     @Bean
-    public AddressChangedEventListener eventListener() {
-        return new AddressChangedEventListener();
+    public AddressChangedEventHandler eventListener() {
+        return new AddressChangedEventHandler();
     }
 
     @Bean

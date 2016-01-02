@@ -1,0 +1,8 @@
+{
+ "namespace": "de.effectivetrainings.billy.authserver.events",
+ "type": "record",
+ "name": "CustomerRegisteredEvent",
+ "fields": [
+     {"name": "payload", "type": "RegisteredCustomer"}
+ ]
+}

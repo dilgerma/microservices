@@ -16,11 +16,11 @@ include 'api'
 include 'services:webservice'
 */
 
-include 'correlation-id',
-        'events-support',
-        'spring-metrics',
-        'rest-support',
-        'influx-reporter',
+include 'libraries/correlation-id',
+        'libraries/events-support',
+        'libraries/spring-metrics',
+        'libraries/rest-support',
+        'libraries/influx-reporter',
         'fb-repository',
         'fb-invoices',
         'fb-expenses',

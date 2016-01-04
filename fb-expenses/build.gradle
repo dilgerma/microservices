@@ -39,8 +39,8 @@ dependencies {
     /**
      * libs
      */
-    compile project(":rest-support")
-    compile project(":spring-metrics")
+    compile project(":libraries/rest-support")
+    compile project(":libraries/spring-metrics")
 
     /**
      * 3rd party
@@ -56,9 +56,10 @@ dependencies {
     compile ('org.springframework.cloud:spring-cloud-starter-eureka')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+
 
     compile("org.springframework.boot:spring-boot-starter-redis")
-    compile("org.springframework.security.oauth:spring-security-oauth2")
     compile("org.springframework.cloud:spring-cloud-security")
 
     compile("io.dropwizard.metrics:metrics-core:3.1.0")

@@ -38,8 +38,8 @@ dependencies {
     /**
      * libs
      */
-    compile project(":rest-support")
-    compile project(":spring-metrics")
+    compile project(":libraries/rest-support")
+    compile project(":libraries/spring-metrics")
 
     compile "org.projectlombok:lombok:1.16.4"
     compile "com.fasterxml.jackson.core:jackson-annotations"
@@ -54,9 +54,10 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix-dashboard")
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+
 
     compile("org.springframework.boot:spring-boot-starter-redis")
-    compile("org.springframework.security.oauth:spring-security-oauth2")
     compile("org.springframework.cloud:spring-cloud-security")
 
     compile("de.codecentric:spring-boot-admin-starter-client:1.2.3")

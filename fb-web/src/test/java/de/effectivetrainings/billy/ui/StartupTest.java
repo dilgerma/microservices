@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.ui;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ import org.springframework.web.client.RestOperations;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @WebAppConfiguration
-@TestPropertySource({"classpath:application.properties","classpath:test.properties"})
+@TestPropertySource({"classpath:application.properties"})
+@Ignore
 public class StartupTest {
 
     @Autowired

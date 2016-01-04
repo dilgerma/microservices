@@ -5,5 +5,6 @@
  "fields": [
      {"name" : "name", "type" : "string"},
      {"name" : "email", "type" : "string"}
- ]
+ ],
+ "doc" : "Defines a registered customer"
 }

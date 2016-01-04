@@ -1,5 +1,6 @@
 package de.effectivetrainings.billy.registration;
 
+import com.codahale.metrics.MetricRegistry;
 import de.effectivetrainings.billy.registration.ui.registration.RegistrationDetailsController;
 import de.effectivetrainings.support.events.api.EventsExchangeQualifier;
 import de.effectivetrainings.support.events.config.MessagingConnectionConfig;
@@ -10,6 +11,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.metrics.dropwizard.DropwizardMetricServices;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -22,41 +24,55 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @PropertySource("messages.properties")
 public class RegistrationApplication extends WebMvcConfigurerAdapter {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RegistrationApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RegistrationApplication.class, args);
+    }
 
-	@Bean
+    @Bean
     public static WorkaroundRestTemplateCustomizer workaroundRestTemplateCustomizer() {
         //workaround for https://github.com/spring-projects/spring-boot/issues/4553
         return new WorkaroundRestTemplateCustomizer();
     }
 
-	@Bean
-	public RegistrationDetailsController registrationDetailsController() {
-		return new RegistrationDetailsController();
-	}
+    @Bean
+    public RegistrationDetailsController registrationDetailsController() {
+        return new RegistrationDetailsController();
+    }
 
-	@Configuration
-	@Import(MessagingConnectionConfig.class)
-	public static class EventsConfig {
+    @Configuration
+    @Import(MessagingConnectionConfig.class)
+    public static class EventsConfig {
 
-		@Value("${events.queue.name}")
-		private String eventsQueueName;
+        @Value("${events.queue.name}")
+        private String eventsQueueName;
 
-		@EventsExchangeQualifier
-		@Autowired
-		private FanoutExchange eventsExchange;
+        @EventsExchangeQualifier
+        @Autowired
+        private FanoutExchange eventsExchange;
 
-		@Bean
-		public Queue registrationEventsQueue() {
-			return new Queue(eventsQueueName, true, false, true);
-		}
+        @Bean
+        public Queue registrationEventsQueue() {
+            return new Queue(eventsQueueName, true, false, true);
+        }
 
-		@Bean
-		public Binding eventsQueueBinding() {
-			return BindingBuilder.bind(registrationEventsQueue()).to(eventsExchange);
-		}
-	}
+        @Bean
+        public Binding eventsQueueBinding() {
+            return BindingBuilder.bind(registrationEventsQueue()).to(eventsExchange);
+        }
+    }
+
+    @Configuration
+    public static class MetricsConfig {
+
+        @Autowired
+        private MetricRegistry metricRegistry;
+
+        //just here to prevent duplciate bean exceptions (with HystrixMetricsPollerConfiguration)
+        @Bean
+        @Primary
+        public DropwizardMetricServices dropwizardMetricServices() {
+            return new DropwizardMetricServices(metricRegistry);
+        }
+    }
 
 }

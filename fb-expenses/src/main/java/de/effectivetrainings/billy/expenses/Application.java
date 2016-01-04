@@ -7,6 +7,7 @@ import de.effectivetrainings.correlation.DefaultCorrelationId;
 import de.effectivetrainings.correlation.request.CorrelationIdFilter;
 import de.effectivetrainings.spring.influx.EnableInflux;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.metrics.dropwizard.DropwizardMetricServices;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;

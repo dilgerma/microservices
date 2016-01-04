@@ -9,12 +9,10 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.metrics.dropwizard.DropwizardMetricServices;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.cloud.netflix.zuul.filters.route.RestClientRibbonCommandFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.context.annotation.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
@@ -72,5 +70,11 @@ public class ApplicationConfig {
         return simpleClientHttpRequestFactory;
     }
 
+    //just here to prevent duplciate bean exceptions (with HystrixMetricsPollerConfiguration)
+     @Bean
+     @Primary
+     public DropwizardMetricServices dropwizardMetricServices() {
+         return new DropwizardMetricServices(registry);
+     }
 
 }

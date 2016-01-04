@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
 
-    compile project(":influx-reporter")
+    compile project(":libraries/influx-reporter")
 
     compile "org.projectlombok:lombok:1.16.4"
     compile "com.google.guava:guava:17.0"
@@ -22,6 +22,6 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.10'
 }
 

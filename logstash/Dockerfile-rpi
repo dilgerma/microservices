@@ -6,7 +6,8 @@ RUN dpkg -i logstash_1.5.4-1_all.deb
 
 
 #raspberry pi workaround
-RUN apt-get -f -y install git-core
+RUN apt-get update && \
+	apt-get -f -y install git-core
 
 RUN wget http://mirror.synyx.de/apache//ant/binaries/apache-ant-1.9.6-bin.tar.gz
 RUN tar -xf apache-ant-1.9.6-bin.tar.gz

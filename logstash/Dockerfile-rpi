@@ -1,6 +1,6 @@
 FROM dilgerm/rpi-app-base
 
-RUN wget https://download.elastic.co/logstash/logstash/packages/debian/logstash_1.5.4-1_all.deb
+RUN wget --no-check-certificate https://download.elastic.co/logstash/logstash/packages/debian/logstash_1.5.4-1_all.deb
 RUN apt-get -f -y install logrotate git-core
 RUN dpkg -i logstash_1.5.4-1_all.deb
 

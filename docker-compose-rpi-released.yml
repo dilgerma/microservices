@@ -15,13 +15,13 @@ eurekaserver:
    log_opt:
      gelf-address: udp://pi31:12201
 authserver:
-   build: dilgerm/rpi-auth-server:41
+   image: dilgerm/fb-auth-server:41
    container_name: authserver
    ports:
    - "9820:8080"
    log_driver: "gelf"
-     log_opt:
-       gelf-address: udp://pi31:12201
+   log_opt:
+     gelf-address: udp://pi31:12201
 bootadmin:
    image: dilgerm/rpi-bootadmin:41
    ports:

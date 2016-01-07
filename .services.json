@@ -76,6 +76,11 @@
       "name": "kibana",
       "dir": "kibana",
       "tag": "dilgerm/rpi-billy-kibana"
+    },
+    {
+      "name": "rabbitmq",
+      "dir": "rabbitmq",
+      "tag": "dilgerm/rpi-rabbitmq"
     }
   ]
 }

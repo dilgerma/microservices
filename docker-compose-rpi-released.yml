@@ -122,3 +122,10 @@ mongo:
   - "27017"
   ports:
   - "27017:27017"
+rabbitmq:
+  hostname: rabbitmq
+  dockerfile: Dockerfile-rpi
+  image: dilgerm/rpi-rabbitmq
+  ports:
+  - "5672:5672"
+  - "15672:15672"

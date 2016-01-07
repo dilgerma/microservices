@@ -1,13 +1,5 @@
-#loadbalancer:
-#   build: loadbalancer
-#   dockerfile: Dockerfile-rpi
-#   ports:
-#   - "80:80"
-#   links:
-#   - ui
-#   - reportingui
 eurekaserver:
-   image: dilgerm/rpi-eurekaserver:41
+   image: dilgerm/rpi-eurekaserver:78
    ports:
    - "8761:8761"
    container_name: "eurekaserver"
@@ -15,7 +7,7 @@ eurekaserver:
    log_opt:
      gelf-address: udp://pi31:12201
 authserver:
-   image: dilgerm/fb-auth-server:41
+   image: dilgerm/rpi-auth-server:75
    container_name: authserver
    ports:
    - "9820:8080"
@@ -23,7 +15,7 @@ authserver:
    log_opt:
      gelf-address: udp://pi31:12201
 bootadmin:
-   image: dilgerm/rpi-bootadmin:41
+   image: dilgerm/rpi-bootadmin:75
    ports:
    - "9800:8080"
    container_name: "bootadmin"
@@ -31,43 +23,36 @@ bootadmin:
    log_opt:
      gelf-address: udp://pi31:12201
 ui:
-   image: dilgerm/rpi-billy-ui:41
+   image: dilgerm/rpi-billy-ui:77
    container_name: "ui"
    ports:
    - "8080:8080"
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
-#reportingui:
-#  image: dilgerm/rpi-billy-reporting-ui:41
-#  ports:
-#  - "8999:8081"
-#  log_driver: "gelf"
-#  log_opt:
-#    gelf-address: udp://pi31:12201
 invoices:
-   image: dilgerm/rpi-billy-invoices:46
+   image: dilgerm/rpi-billy-invoices:78
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
 expenses:
-   image: dilgerm/rpi-billy-expenses:46
+   image: dilgerm/rpi-billy-expenses:74
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
 customers:
-   image: dilgerm/rpi-billy-customers:41
+   image: dilgerm/rpi-billy-customers:77
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
 reporting:
-   image: dilgerm/rpi-billy-reporting:41
+   image: dilgerm/rpi-billy-reporting:77
    expose:
    - "8081"
    ports:
@@ -75,15 +60,15 @@ reporting:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
-templates:
-   image: dilgerm/rpi-billy-templates:41
-   expose:
-   - "8081"
-   log_driver: "gelf"
-   log_opt:
-    gelf-address: udp://pi31:12201
+#templates:
+#   image: dilgerm/rpi-billy-templates:75
+#   expose:
+#   - "8081"
+#   log_driver: "gelf"
+#   log_opt:
+#    gelf-address: udp://pi31:12201
 repository:
-   image: dilgerm/rpi-billy-repository:45
+   image: dilgerm/rpi-billy-repository:78
    expose:
    - "8080"
    environment:
@@ -101,7 +86,7 @@ elasticsearch:
   - "9200:9200"
   - "9300:9300"
 logstash:
-  image: dilgerm/rpi-logstash:41
+  image: dilgerm/rpi-logstash:49
   container_name: logstash
   expose:
   - "5000"
@@ -111,7 +96,7 @@ logstash:
   environment:
   - constraint:node==pi31
 kibana:
-  image: dilgerm/rpi-billy-kibana:41
+  image: dilgerm/rpi-billy-kibana:49
   ports:
   - "9681:80"
 influxdb:
@@ -128,9 +113,12 @@ redis:
   image: hypriot/rpi-redis
   ports:
   - "6379"
-#grafana:
-#  build: grafana
-#  dockerfile: Dockerfile-rpi
-#  ports:
-#  - "8091:80"
-
+mongo:
+  container_name: mongo
+  image: sponki/rpi-mongo
+  volumes:
+   - /data/db
+  expose:
+  - "27017"
+  ports:
+  - "27017:27017"

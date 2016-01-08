@@ -4,7 +4,7 @@ MAINTAINER Martin Dilger <martin@effectivetrainings.de>
 
 # Install InfluxDB
 ENV INFLUXDB_VERSION 0.9.0
-ADD src/influxdb_${INFLUXDB_VERSION}_armhf.deb /tmp/influxdb_${INFLUXDB_VERSION}_armhf.dep
+ADD https://github.com/sbiermann/rpi-influxdb/blob/master/src/influxdb_${INFLUXDB_VERSION}_armhf.deb /tmp/influxdb_${INFLUXDB_VERSION}_armhf.dep
 RUN dpkg -i /tmp/influxdb_${INFLUXDB_VERSION}_armhf.dep && \
   rm /tmp/influxdb_${INFLUXDB_VERSION}_armhf.dep && \
   rm -rf /var/lib/apt/lists/*

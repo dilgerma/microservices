@@ -77,37 +77,37 @@ repository:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi31:12201
-elasticsearch:
-  image: itwars/rpi-elasticsearch
-  container_name: elasticsearch
-  environment:
-  - constraint:node==pi24
-  ports:
-  - "9200:9200"
-  - "9300:9300"
-logstash:
-  image: dilgerm/rpi-logstash:49
-  container_name: logstash
-  expose:
-  - "5000"
-  ports:
-  - "12201:12201/udp"
+#elasticsearch:
+#  image: itwars/rpi-elasticsearch
+#  container_name: elasticsearch
+#  environment:
+#  - constraint:node==pi24
+#  ports:
+#  - "9200:9200"
+#  - "9300:9300"
+#logstash:
+#  image: dilgerm/rpi-logstash:49
+#  container_name: logstash
+#  expose:
+#  - "5000"
+#  ports:
+#  - "12201:12201/udp"
 #needs to run on pi31 to be able to use gelf-logging
-  environment:
-  - constraint:node==pi31
-kibana:
-  image: dilgerm/rpi-billy-kibana:49
-  ports:
-  - "9681:80"
-influxdb:
-  image: sbiermann/rpi-influxdb
-  container_name: "influxdb"
-  ports:
-  - "8086"
-  - "8083"
-  log_driver: "gelf"
-  log_opt:
-   gelf-address: udp://pi31:12201
+#  environment:
+#  - constraint:node==pi31
+#kibana:
+#  image: dilgerm/rpi-billy-kibana:49
+#  ports:
+#  - "9681:80"
+#influxdb:
+#  image: sbiermann/rpi-influxdb
+#  container_name: "influxdb"
+#  ports:
+#  - "8086"
+#  - "8083"
+#  log_driver: "gelf"
+#  log_opt:
+#   gelf-address: udp://pi31:12201
 redis:
   container_name: redis
   image: hypriot/rpi-redis
@@ -124,7 +124,6 @@ mongo:
   - "27017:27017"
 rabbitmq:
   hostname: rabbitmq
-  dockerfile: Dockerfile-rpi
   image: dilgerm/rpi-rabbitmq
   ports:
   - "5672:5672"

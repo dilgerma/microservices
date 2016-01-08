@@ -1,15 +1,3 @@
-- name: setup public key
-  authorized_key: user=root key="{{ lookup('file', './id_rsa.pub') }}"
-- name: install python
-  apt: name=python update_cache=yes state=present
-- name: install haveged
-  apt: name=haveged update_cache=yes  state=present
-- name: install weave
-  get_url: url=http://git.io/vEcym dest=/usr/local/bin/weave mode=0740
-- name: setup weave
-  shell: weave setup
-#- name: download docker
-#  get_url: url={{docker_url}} dest=/tmp/docker-{{docker_version}}.deb mode=0740
-#- name: upgrade docker
-#  apt: deb=/tmp/docker-{{docker_version}}.deb
+- name: install collectd
+  apt: name=collectd update_cache=yes  state=present
 

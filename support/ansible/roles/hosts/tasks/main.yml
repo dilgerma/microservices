@@ -1,3 +1,6 @@
 - name: install collectd
   apt: name=collectd update_cache=yes  state=present
+- name: copy collectd config
+  copy: src=collectd/collectd.conf dest=/etc/collectd/collectd.conf owner=root mode="u=rwx,g=r,o=r"
+- name: restart collectd
 

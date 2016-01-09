@@ -117,6 +117,9 @@ influxdb:
   log_driver: "gelf"
   log_opt:
    gelf-address: udp://pi31:12201
+  #constrainted to pi31 to allow collectd on every host to report
+  environment:
+  - constraint:node==pi31
 redis:
   container_name: redis
   image: hypriot/rpi-redis

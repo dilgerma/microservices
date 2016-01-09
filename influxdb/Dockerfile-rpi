@@ -3,6 +3,7 @@ MAINTAINER Martin Dilger <martin@effectivetrainings.de>
 #based on https://github.com/sbiermann/rpi-influxdb
 
 ADD config.toml /config/config.toml
+ADD types.db /config/collectd_types.db
 
 CMD ["/run.sh"]
 

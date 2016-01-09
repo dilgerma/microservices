@@ -49,7 +49,7 @@ reporting-disabled = false
   file   = "/opt/influxdb/shared/log.txt"
 
 [monitoring]
-  enabled = false
+  enabled = true
 
 [debugging]
   pprof-enabled = false

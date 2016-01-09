@@ -62,6 +62,12 @@
       "group": "app"
     },
     {
+      "name": "metrics-server",
+      "dir": "fb-metrics-server",
+      "tag": "dilgerm/rpi-metrics-server",
+      "group": "app"
+    },
+    {
       "name": "bootadmin",
       "dir": "fb-boot-admin-server",
       "tag": "dilgerm/rpi-bootadmin",

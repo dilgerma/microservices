@@ -6,6 +6,14 @@ eurekaserver:
    log_driver: "gelf"
    log_opt:
      gelf-address: udp://pi31:12201
+metrics-server:
+   image: dilgerm/rpi-metrics-server:78
+   ports:
+   - "9821:8080"
+   container_name: "metrics-server"
+   log_driver: "gelf"
+   log_opt:
+     gelf-address: udp://pi31:12201
 authserver:
    image: dilgerm/rpi-auth-server:75
    container_name: authserver
@@ -122,10 +130,10 @@ mongo:
   expose:
   - "27017"
   ports:
-  - "27017:27017"
+  - "27017"
 rabbitmq:
   hostname: rabbitmq
   image: dilgerm/rpi-rabbitmq
   ports:
-  - "5672:5672"
+  - "5672"
   - "15672:15672"

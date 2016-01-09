@@ -99,15 +99,16 @@ repository:
 #  image: dilgerm/rpi-billy-kibana:49
 #  ports:
 #  - "9681:80"
-#influxdb:
-#  image: sbiermann/rpi-influxdb
-#  container_name: "influxdb"
-#  ports:
-#  - "8086"
-#  - "8083"
-#  log_driver: "gelf"
-#  log_opt:
-#   gelf-address: udp://pi31:12201
+influxdb:
+  image: dilgerm/rpi-influxdb
+  container_name: "influxdb"
+  ports:
+  - "8086"
+  - "8083"
+  - "25826:25826"
+  log_driver: "gelf"
+  log_opt:
+   gelf-address: udp://pi31:12201
 redis:
   container_name: redis
   image: hypriot/rpi-redis

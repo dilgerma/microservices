@@ -114,9 +114,9 @@ influxdb:
   - "8086"
   - "8083"
   - "25826:25826"
-  log_driver: "gelf"
-  log_opt:
-   gelf-address: udp://pi31:12201
+#  log_driver: "gelf"
+#  log_opt:
+#   gelf-address: udp://pi31:12201
   #constrainted to pi31 to allow collectd on every host to report
   environment:
   - constraint:node==pi31

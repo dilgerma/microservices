@@ -65,12 +65,8 @@ reporting-disabled = false
   enabled = true
   dir = "/var/opt/influxdb/hh"
 
-[collectd]
+[input_plugins.collectd]
   enabled = true
-  port = 25826 # the bind address
-  database = "collectd" # Name of the database that will be written to
-  batch-size = 5000 # will flush if this many points get buffered
-  batch-pending = 10 # number of batches that may be pending in memory
-  batch-timeout = "10s"
-  read-buffer = 0 # UDP read buffer size, 0 means to use OS default
-  typesdb = "/config/collectd_types.db"
+  port = 25826
+  database = "collectd"
+  typesdb = "/usr/share/collectd/types.db"

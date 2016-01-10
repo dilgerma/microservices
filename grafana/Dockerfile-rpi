@@ -1,11 +1,28 @@
-FROM akkerman/rpi-nginx
-WORKDIR /tmp
+FROM resin/rpi-raspbian:jessie
+MAINTAINER Martin Dilger <martin@effectivetrainings.de>
+
 RUN apt-get update && \
-    apt-get install wget -y
+ apt-get install -y nginx && \
+ apt-get install -y wget
+
+
 WORKDIR /tmp
 RUN wget https://grafanarel.s3.amazonaws.com/builds/grafana-2.6.0.linux-x64.tar.gz --no-check-certificate
-RUN tar zxf /tmp/grafana-2.6.0.linux-x64.tar.gz && mv grafana-2.6.0/* /usr/share/nginx/www/
+RUN mkdir -p /usr/share/nginx/www
+RUN tar zxf /tmp/grafana-2.6.0.linux-x64.tar.gz && mv grafana-2.6.0/* /usr/share/nginx/www
 ADD config.js /usr/share/nginx/html/config.js
 #add default dashboard
 ADD dashboards/requests.json /usr/share/nginx/html/app/dashboards/default.json
 
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
+
+VOLUME ["/usr/share/nginx/www"]
+VOLUME ["/etc/nginx"]
+
+ADD nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

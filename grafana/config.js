@@ -5,16 +5,30 @@ define(['settings'], function(Settings) {
   return new Settings({
 
       datasources: {
-        graphite: {
-          type: 'graphite',
-          url: "http://graphite:8080"
-        }
-       /** elasticsearch: {
-          type: 'elasticsearch',
-          url: "elasticsearch:9200",
-          index: 'grafana-dash',
-          grafanaDB: true
-        }*/
+          'metrics': {
+              type: 'influxdb',
+              url: 'http://influxdb:8086/db/metrics',
+              username: 'root',
+              password: 'root'
+          },
+          'collectd': {
+              type: 'influxdb',
+              url: 'http://influxdb:8086/db/collectd',
+              username: 'root',
+              password: 'root'
+          },
+          'grafana': {
+              type: 'influxdb',
+              url: 'http://influxdb:8086/db/grafana',
+              username: 'root',
+              password: 'root',
+              grafanaDB: true
+          }
+          //In the above example you see two InfluxDB datasources,
+         //one for metrics and a seperate used for dashboard storage.
+         //You can use the same InfluxDB database for both.
+         //But it is probably a good idea to keep them seperate.
+         //The InfluxDB databases need to exist, grafana does not create them.
       },
 
       /* Global configuration options

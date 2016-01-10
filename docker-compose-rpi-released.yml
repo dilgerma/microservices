@@ -140,3 +140,9 @@ rabbitmq:
   ports:
   - "5672"
   - "15672:15672"
+grafana:
+  image: dilgerm/rpi-grafana
+  ports:
+  - "8080"
+  environment:
+  - constraint:node==pi31

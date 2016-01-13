@@ -76,9 +76,10 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 RUN echo "disable-cache"
 RUN go get github.com/dilgerma/grafana
 WORKDIR $GOPATH/src/github.com/dilgerma/grafana
-RUN go run build.go setup 
+RUN go run build.go setup
 RUN $GOPATH/bin/godep restore && go run build.go build
 
 
 RUN npm install
+RUN npm install -g grunt grunt-cli
 RUN grunt --force

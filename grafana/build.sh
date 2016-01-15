@@ -9,6 +9,7 @@ container_id=$(docker run -d --name grafana-build -v /gopath1.5/src/github.com/d
 mkdir build
 cp Dockerfile build
 cd build
-docker cp -r $container_id:/gopath1.5/src/github.com/dilgerma/grafana/ .
+docker cp -r $container_id:/gopath1.5/src/github.com/dilgerma/grafana/bin/grafana-server/bin .
+docker cp -r $container_id:/gopath1.5/src/github.com/dilgerma/grafana/public_gen .
 docker build -t dilgerm/rpi-grafana:$TAG
 docker push dilgerm/rpi-grafana:$TAG

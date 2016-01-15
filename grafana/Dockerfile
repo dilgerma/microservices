@@ -1,5 +1,6 @@
 FROM resin/rpi-raspbian:jessie
-ADD grafana
+ADD build/grafana/ /grafana/
 EXPOSE 3000
-ENTRYPOINT ["/gopath1.5/src/github.com/dilgerma/grafana/bin","grafana-server"]
+ENTRYPOINT ["/grafana/bin","grafana-server"]
+
 

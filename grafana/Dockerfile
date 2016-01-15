@@ -1,6 +1,7 @@
 FROM resin/rpi-raspbian:jessie
-ADD build/grafana/ /grafana/
+ADD grafana /grafana/
+ENTRYPOINT ["/grafana/bin/grafana-server"]
 EXPOSE 3000
-ENTRYPOINT ["/grafana/bin","grafana-server"]
+RUN chmod +x /grafana/bin/grafana-server
 
 

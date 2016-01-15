@@ -83,3 +83,8 @@ RUN $GOPATH/bin/godep restore && go run build.go build
 RUN npm install
 RUN npm install -g grunt grunt-cli
 RUN grunt --force
+
+RUN mkdir dist && \
+    mv bin dist && \
+    mv public_gen dist && \
+    mv conf dist

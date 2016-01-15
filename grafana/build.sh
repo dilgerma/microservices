@@ -13,7 +13,7 @@ rm -rf dist && mkdir dist
 echo "Preparing dist"
 cp Dockerfile dist
 echo "Getting binaries"
-docker cp $container_id:/gopath1.5/src/github.com/dilgerma/grafana/dist grafana 
+docker cp $container_id:/gopath1.5/src/github.com/dilgerma/grafana/dist dist/grafana 
 echo "Building grafana image"
 docker build -t dilgerm/rpi-grafana:$TAG dist 
 echo "Pushing image"

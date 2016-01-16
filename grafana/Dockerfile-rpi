@@ -1,5 +1,5 @@
 FROM dilgerm/rpi-golang:jessie
-
+#http://padcom13.blogspot.de/2015/12/influxdb-telegraf-and-grafana-on.html
 RUN apt-get update && \
     apt-get install -y wget
 

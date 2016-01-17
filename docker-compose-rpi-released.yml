@@ -59,6 +59,15 @@ customers:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+registration:
+   image: dilgerm/rpi-billy-registration:101
+   expose:
+   - "8081"
+   ports:
+   - "9823:8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi28:12201
 reporting:
    image: dilgerm/rpi-billy-reporting:77
    expose:

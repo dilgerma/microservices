@@ -5,7 +5,7 @@ eurekaserver:
    container_name: "eurekaserver"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi31:12201
+     gelf-address: udp://pi28:12201
 metrics-server:
    image: dilgerm/rpi-metrics-server:78
    ports:
@@ -13,7 +13,7 @@ metrics-server:
    container_name: "metrics-server"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi31:12201
+     gelf-address: udp://pi28:12201
 authserver:
    image: dilgerm/rpi-auth-server:75
    container_name: authserver
@@ -21,7 +21,7 @@ authserver:
    - "9820:8080"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi31:12201
+     gelf-address: udp://pi28:12201
 bootadmin:
    image: dilgerm/rpi-bootadmin:75
    ports:
@@ -29,7 +29,7 @@ bootadmin:
    container_name: "bootadmin"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi31:12201
+     gelf-address: udp://pi28:12201
 ui:
    image: dilgerm/rpi-billy-ui:77
    container_name: "ui"
@@ -37,28 +37,28 @@ ui:
    - "8080:8080"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 invoices:
    image: dilgerm/rpi-billy-invoices:78
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 expenses:
    image: dilgerm/rpi-billy-expenses:74
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 customers:
    image: dilgerm/rpi-billy-customers:77
    expose:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 reporting:
    image: dilgerm/rpi-billy-reporting:77
    expose:
@@ -67,14 +67,14 @@ reporting:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 #templates:
 #   image: dilgerm/rpi-billy-templates:75
 #   expose:
 #   - "8081"
 #   log_driver: "gelf"
 #   log_opt:
-#    gelf-address: udp://pi31:12201
+#    gelf-address: udp://pi28:12201
 repository:
    image: dilgerm/rpi-billy-repository:78
    expose:
@@ -84,7 +84,7 @@ repository:
    - user_apiKey=b7cd951bc464a9ab45640730001d64edBRI3mrXeTVGh2dT43ff6Z4FCXSBDSnMk
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi31:12201
+    gelf-address: udp://pi28:12201
 #elasticsearch:
 #  image: itwars/rpi-elasticsearch
 #  container_name: elasticsearch
@@ -111,15 +111,15 @@ influxdb:
   image: dilgerm/rpi-influxdb
   container_name: "influxdb"
   ports:
-  - "8086"
-  - "8083"
-  - "25826:25826"
+  - "8086:8086"
+  - "8083:8083"
+  - "25826:25826/udp"
 #  log_driver: "gelf"
 #  log_opt:
-#   gelf-address: udp://pi31:12201
+#   gelf-address: udp://pi28:12201
   #constrainted to pi31 to allow collectd on every host to report
   environment:
-  - constraint:node==pi31
+  - constraint:node==pi24
 redis:
   container_name: redis
   image: hypriot/rpi-redis
@@ -141,8 +141,6 @@ rabbitmq:
   - "5672"
   - "15672:15672"
 grafana:
-  image: dilgerm/rpi-grafana
+  image: dilgerm/rpi-grafana:2.6.0
   ports:
-  - "9822:8080"
-  environment:
-  - constraint:node==pi31
+  - "9822:3000"

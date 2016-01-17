@@ -1,0 +1,4 @@
+#- name: cleanup
+#  command: /var/scripts/docker-cleanup-volumes.sh
+- name: bootstrap
+  shell: sh /var/scripts/bootstrap-env.sh

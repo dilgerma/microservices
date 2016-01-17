@@ -3,10 +3,10 @@
 
 [slaves]
 192.168.178.23 ansible_connection=ssh ansible_ssh_user=root
-192.168.178.31 ansible_connection=ssh ansible_ssh_user=root
-192.168.178.41 ansible_connection=ssh ansible_ssh_user=root
-192.168.178.46 ansible_connection=ssh ansible_ssh_user=root
-192.168.178.48 ansible_connection=ssh ansible_ssh_user=root
 192.168.178.24 ansible_connection=ssh ansible_ssh_user=root
 192.168.178.25 ansible_connection=ssh ansible_ssh_user=root
+192.168.178.26 ansible_connection=ssh ansible_ssh_user=root
+192.168.178.28 ansible_connection=ssh ansible_ssh_user=root
+192.168.178.41 ansible_connection=ssh ansible_ssh_user=root
+192.168.178.48 ansible_connection=ssh ansible_ssh_user=root
 

@@ -2,7 +2,10 @@
 #  shell: docker ps -a -q | xargs docker rm -f >> /dev/null 2>&1
 - name: Assures /var/scripts dir exists
   file: path=/var/scripts state=directory
-- name: copy script
-  copy: src=var/scripts/restart-env.sh dest=/var/scripts/restart-env.sh owner=root mode="u=rwx,g=r,o=r"
-- name: run script
-  shell: sh /var/scripts/restart-env.sh
+- name: copy container script
+  copy: src=var/scripts/bootstrap-env.sh dest=/var/scripts/bootstrap-env.sh owner=root mode="u=rwx,g=r,o=r"
+- name: copy cleanup volumes script
+  copy: src=var/scripts/docker-cleanup-volumes.sh dest=/var/scripts/docker-cleanup-volumes.sh owner=root mode="u=rwx,g=r,o=r"
+- name: copy cleanup host script
+  copy: src=var/scripts/docker-cleanup.sh dest=/var/scripts/docker-cleanup.sh owner=root mode="u=rwx,g=r,o=r"
+- include: bootstrap.yml

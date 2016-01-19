@@ -15,7 +15,7 @@ metrics-server:
    log_opt:
      gelf-address: udp://pi28:12201
 authserver:
-   image: dilgerm/rpi-auth-server:101
+   image: dilgerm/rpi-authserver:101
    container_name: authserver
    ports:
    - "9820:8080"

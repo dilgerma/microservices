@@ -1,4 +1,4 @@
 ---
 - hosts: slaves
   roles:
-    - docker
+    - app-container

@@ -4,3 +4,9 @@
   copy: src=collectd/collectd.conf dest=/etc/collectd/collectd.conf owner=root mode="u=rwx,g=r,o=r"
 - name: restart collectd
   shell: service collectd restart
+- name: download latest swarm
+  command: docker pull hypriot/rpi-swarm:latest
+- name: download latest weave
+  command: docker pull dilgerm/rpi-weave
+- name : download latest weave-proxy
+  command: docker pull dilgerm/rpi-weaveexec

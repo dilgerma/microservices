@@ -22,6 +22,8 @@ authserver:
    log_driver: "gelf"
    log_opt:
      gelf-address: udp://pi28:12201
+   environment:
+    - constraint:node==pi23
 bootadmin:
    image: dilgerm/rpi-bootadmin:101
    ports:
@@ -38,6 +40,8 @@ ui:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 invoices:
    image: dilgerm/rpi-billy-invoices:101
    expose:
@@ -45,6 +49,8 @@ invoices:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 expenses:
    image: dilgerm/rpi-billy-expenses:101
    expose:
@@ -52,6 +58,8 @@ expenses:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 customers:
    image: dilgerm/rpi-billy-customers:101
    expose:
@@ -59,6 +67,8 @@ customers:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 registration:
    image: dilgerm/rpi-billy-registration:101
    expose:
@@ -68,6 +78,8 @@ registration:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 reporting:
    image: dilgerm/rpi-billy-reporting:101
    expose:
@@ -77,6 +89,8 @@ reporting:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 #templates:
 #   image: dilgerm/rpi-billy-templates:75
 #   expose:
@@ -94,6 +108,8 @@ repository:
    log_driver: "gelf"
    log_opt:
     gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
 #elasticsearch:
 #  image: itwars/rpi-elasticsearch
 #  container_name: elasticsearch
@@ -153,5 +169,6 @@ rabbitmq:
   - "15672:15672"
 grafana:
   image: dilgerm/rpi-grafana:2.6.0
+  container_name: grafana
   ports:
   - "9822:3000"

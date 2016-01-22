@@ -1,5 +1,7 @@
 package de.effectivetrainings.billy.auth;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import de.effectivetrainings.billy.auth.registration.infrastructure.AuthUserDetailsService;
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
@@ -15,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.metrics.dropwizard.DropwizardMetricServices;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
@@ -40,6 +44,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.net.URI;
 import java.security.KeyPair;
 
 @Configuration
@@ -49,6 +54,7 @@ import java.security.KeyPair;
 @SessionAttributes("authorizationRequest")
 @PropertySource("classpath:messages.properties")
 @EnableMongoRepositories(basePackages = "de.effectivetrainings.billy.auth.registration.repository")
+@EnableEurekaClient
 @Import(MessagingConnectionConfig.class)
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
@@ -80,6 +86,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		public RegistrationService registrationService() {
 			return new RegistrationServiceImpl(customerRegistrationRepository, eventEmitter);
 		}
+
 	}
 
 	@Configuration
@@ -179,8 +186,28 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 			oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess(
 					"permitAll()");
 		}
-
 	}
 
+	@Configuration
+	protected static class MetricsConfig {
+
+	    @Autowired
+	    private MetricRegistry metricRegistry;
+
+	    @Bean
+	    public HealthCheckRegistry healthChecks() {
+	        HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+	        return healthCheckRegistry;
+	    }
+
+
+	    //just here to prevent duplciate bean exceptions (with HystrixMetricsPollerConfiguration)
+	    @Bean
+	    @Primary
+	    public DropwizardMetricServices dropwizardMetricServices() {
+	        return new DropwizardMetricServices(metricRegistry);
+	    }
+
+	}
 
 }

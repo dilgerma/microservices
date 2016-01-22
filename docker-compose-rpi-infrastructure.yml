@@ -59,3 +59,5 @@ grafana:
   container_name: grafana
   ports:
   - "9822:3000"
+  environment:
+  - constraint:node==pi41

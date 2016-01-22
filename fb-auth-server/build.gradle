@@ -68,6 +68,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
+    compile ('org.springframework.cloud:spring-cloud-starter-eureka')
 
     compile("org.springframework.cloud:spring-cloud-starter-oauth2")
     compile("org.springframework.security:spring-security-jwt")

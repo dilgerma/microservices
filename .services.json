@@ -56,6 +56,12 @@
       "group": "app"
     },
     {
+      "name": "edge",
+      "dir": "fb-edge-server",
+      "tag": "dilgerm/rpi-edge-server",
+      "group": "app"
+    },
+    {
       "name": "eurekaserver",
       "dir": "fb-eureka-server",
       "tag": "dilgerm/rpi-eurekaserver",

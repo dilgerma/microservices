@@ -22,7 +22,7 @@ dependencyManagement {
 }
 
 jar {
-    baseName = "fb-admin-server"
+    baseName = "fb-edge-server"
 }
 
 repositories {
@@ -40,11 +40,14 @@ configurations {
 dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("de.codecentric:spring-boot-admin-starter-client:1.3.1")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+    compile('org.springframework.cloud:spring-cloud-starter-zuul')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
 
-    compile("de.codecentric:spring-boot-admin-server:$springBootAdminVersion")
-    compile("de.codecentric:spring-boot-admin-server-ui:$springBootAdminVersion")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 

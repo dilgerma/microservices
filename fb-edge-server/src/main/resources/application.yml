@@ -1,0 +1,42 @@
+server:
+  port: ${port:8080}
+spring:
+  application:
+    name: edgeserver
+
+security:
+  basic:
+    enabled: false
+
+
+zuul:
+  routes:
+    auth:
+      path: /auth/**
+      serviceId: authserver
+    registration:
+      path: /register/**
+      serviceId: registration
+    ui:
+      path: /**
+      serviceId: UI
+    bootadmin:
+      path: /internal/admin/**
+      serviceId: bootadmin
+    eureka:
+      path: /internal/eureka/**
+      url: http://eurekaserver:8761/
+    grafana:
+      path: /internal/grafana/**
+      url: http://pi41:9822
+  ignoredPatterns: /**/admin/**
+  ignoredServices: '*'
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver:8761/eureka/
+  instance:
+    metadataMap:
+      instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      preferIpAddress: true

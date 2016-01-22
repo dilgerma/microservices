@@ -1,5 +1,5 @@
 eurekaserver:
-   image: dilgerm/rpi-eurekaserver:101
+   image: dilgerm/rpi-eurekaserver:107
    ports:
    - "8761:8761"
    container_name: "eurekaserver"
@@ -7,7 +7,7 @@ eurekaserver:
    log_opt:
      gelf-address: udp://pi28:12201
 metrics-server:
-   image: dilgerm/rpi-metrics-server:101
+   image: dilgerm/rpi-metrics-server:107
    ports:
    - "9821:8080"
    container_name: "metrics-server"
@@ -15,7 +15,7 @@ metrics-server:
    log_opt:
      gelf-address: udp://pi28:12201
 authserver:
-   image: dilgerm/rpi-authserver:101
+   image: dilgerm/rpi-authserver:107
    container_name: authserver
    ports:
    - "9820:8080"
@@ -25,7 +25,7 @@ authserver:
    environment:
     - constraint:node==pi23
 bootadmin:
-   image: dilgerm/rpi-bootadmin:101
+   image: dilgerm/rpi-bootadmin:107
    ports:
    - "9800:8080"
    container_name: "bootadmin"
@@ -33,7 +33,7 @@ bootadmin:
    log_opt:
      gelf-address: udp://pi28:12201
 ui:
-   image: dilgerm/rpi-billy-ui:101
+   image: dilgerm/rpi-billy-ui:107
    container_name: "ui"
    ports:
    - "8080:8080"
@@ -43,7 +43,7 @@ ui:
    extra_hosts:
    - "authserver:192.168.178.28"
 invoices:
-   image: dilgerm/rpi-billy-invoices:101
+   image: dilgerm/rpi-billy-invoices:107
    expose:
    - "8081"
    log_driver: "gelf"
@@ -52,7 +52,7 @@ invoices:
    extra_hosts:
    - "authserver:192.168.178.28"
 expenses:
-   image: dilgerm/rpi-billy-expenses:101
+   image: dilgerm/rpi-billy-expenses:107
    expose:
    - "8081"
    log_driver: "gelf"
@@ -61,7 +61,7 @@ expenses:
    extra_hosts:
    - "authserver:192.168.178.28"
 customers:
-   image: dilgerm/rpi-billy-customers:101
+   image: dilgerm/rpi-billy-customers:107
    expose:
    - "8081"
    log_driver: "gelf"
@@ -70,7 +70,18 @@ customers:
    extra_hosts:
    - "authserver:192.168.178.28"
 registration:
-   image: dilgerm/rpi-billy-registration:101
+   image: dilgerm/rpi-billy-registration:107
+   expose:
+   - "8081"
+   ports:
+   - "9823:8081"
+   log_driver: "gelf"
+   log_opt:
+    gelf-address: udp://pi28:12201
+   extra_hosts:
+   - "authserver:192.168.178.28"
+edge-server:
+   image: dilgerm/rpi-edge-server:107
    expose:
    - "8081"
    ports:
@@ -81,7 +92,7 @@ registration:
    extra_hosts:
    - "authserver:192.168.178.28"
 reporting:
-   image: dilgerm/rpi-billy-reporting:101
+   image: dilgerm/rpi-billy-reporting:107
    expose:
    - "8081"
    ports:
@@ -92,7 +103,7 @@ reporting:
    extra_hosts:
    - "authserver:192.168.178.28"
 repository:
-   image: dilgerm/rpi-billy-repository:101
+   image: dilgerm/rpi-billy-repository:107
    expose:
    - "8080"
    environment:

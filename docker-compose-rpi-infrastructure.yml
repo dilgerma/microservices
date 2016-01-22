@@ -13,7 +13,6 @@ logstash:
   - "5000"
   ports:
   - "12201:12201/udp"
-needs to run on pi31 to be able to use gelf-logging
   environment:
   - constraint:node==pi28
 kibana:

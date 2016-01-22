@@ -91,13 +91,6 @@ reporting:
     gelf-address: udp://pi28:12201
    extra_hosts:
    - "authserver:192.168.178.28"
-#templates:
-#   image: dilgerm/rpi-billy-templates:75
-#   expose:
-#   - "8081"
-#   log_driver: "gelf"
-#   log_opt:
-#    gelf-address: udp://pi28:12201
 repository:
    image: dilgerm/rpi-billy-repository:101
    expose:
@@ -110,65 +103,3 @@ repository:
     gelf-address: udp://pi28:12201
    extra_hosts:
    - "authserver:192.168.178.28"
-#elasticsearch:
-#  image: itwars/rpi-elasticsearch
-#  container_name: elasticsearch
-#  environment:
-#  - constraint:node==pi24
-#  ports:
-#  - "9200:9200"
-#  - "9300:9300"
-#logstash:
-#  image: dilgerm/rpi-logstash:49
-#  container_name: logstash
-#  expose:
-#  - "5000"
-#  ports:
-#  - "12201:12201/udp"
-#needs to run on pi31 to be able to use gelf-logging
-#  environment:
-#  - constraint:node==pi31
-#kibana:
-#  image: dilgerm/rpi-billy-kibana:49
-#  ports:
-#  - "9681:80"
-influxdb:
-  image: dilgerm/rpi-influxdb
-  container_name: "influxdb"
-  ports:
-  - "8086:8086"
-  - "8083:8083"
-  - "25826:25826/udp"
-#  log_driver: "gelf"
-#  log_opt:
-#   gelf-address: udp://pi28:12201
-  #constrainted to pi31 to allow collectd on every host to report
-  environment:
-  - constraint:node==pi24
-redis:
-  container_name: redis
-  image: hypriot/rpi-redis
-  ports:
-  - "6379"
-  environment:
-  - constraint:node==pi28
-mongo:
-  container_name: mongo
-  image: sponki/rpi-mongo
-  volumes:
-   - /data/db
-  expose:
-  - "27017"
-  ports:
-  - "27017"
-rabbitmq:
-  hostname: rabbitmq
-  image: dilgerm/rpi-rabbitmq:101
-  ports:
-  - "5672"
-  - "15672:15672"
-grafana:
-  image: dilgerm/rpi-grafana:2.6.0
-  container_name: grafana
-  ports:
-  - "9822:3000"

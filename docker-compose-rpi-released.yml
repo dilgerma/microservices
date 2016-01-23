@@ -1,16 +1,8 @@
-eurekaserver:
+management-server:
    image: dilgerm/rpi-eurekaserver:107
    ports:
-   - "8761:8761"
-   container_name: "eurekaserver"
-   log_driver: "gelf"
-   log_opt:
-     gelf-address: udp://pi28:12201
-metrics-server:
-   image: dilgerm/rpi-metrics-server:107
-   ports:
-   - "9821:8080"
-   container_name: "metrics-server"
+   - "8761:8080"
+   container_name: "management-server"
    log_driver: "gelf"
    log_opt:
      gelf-address: udp://pi28:12201
@@ -24,14 +16,6 @@ authserver:
      gelf-address: udp://pi28:12201
    environment:
     - constraint:node==pi23
-bootadmin:
-   image: dilgerm/rpi-bootadmin:107
-   ports:
-   - "9800:8080"
-   container_name: "bootadmin"
-   log_driver: "gelf"
-   log_opt:
-     gelf-address: udp://pi28:12201
 ui:
    image: dilgerm/rpi-billy-ui:107
    container_name: "ui"

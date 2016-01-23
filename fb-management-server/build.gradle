@@ -22,7 +22,7 @@ dependencyManagement {
 }
 
 jar {
-    baseName = "fb-metrics-server"
+    baseName = "fb-management-server"
 }
 
 repositories {
@@ -34,16 +34,26 @@ repositories {
 
 configurations {
     compile.exclude group: 'javax.servlet', module: 'servlet-api'
+//    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 }
 
+springBoot {
+    requiresUnpack = ['com.netflix.eureka:eureka-core', 'com.netflix.eureka:eureka-client']
+}
 
 dependencies {
-
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.cloud:spring-cloud-starter-turbine")
+    compile("de.codecentric:spring-boot-admin-starter-client:1.3.1")
     compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+    compile("org.springframework.cloud:spring-cloud-starter-turbine")
+    compile("de.codecentric:spring-boot-admin-server:$springBootAdminVersion")
+    compile("de.codecentric:spring-boot-admin-server-ui:$springBootAdminVersion")
+    compile("org.springframework.cloud:spring-cloud-starter-eureka-server") {
+        exclude module: 'javax.servlet:servlet-api'
+    }
+    compile('org.springframework.cloud:spring-cloud-starter-zuul')
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 

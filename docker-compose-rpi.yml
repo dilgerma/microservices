@@ -1,18 +1,11 @@
-loadbalancer:
-   build: loadbalancer
-   dockerfile: Dockerfile-rpi
-   ports:
-   - "80:80"
-eurekaserver:
-   build: fb-eureka-server
+management:
+   build: fb-management-server
    dockerfile: Dockerfile-rpi
    hostname: eurekaserver
    ports:
-   - "8761:8761"
+   - "8761:88080"
    expose:
    - "8761"
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 authserver:
    build: fb-auth-server
    container_name: authserver
@@ -29,8 +22,6 @@ ui:
    - logstash
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 reportingui:
   build: fb-web-reporting
   dockerfile: Dockerfile-rpi
@@ -41,8 +32,6 @@ reportingui:
   - logstash
   command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
   volumes_from: ['lsf']
-  extra_hosts:
-  - "eurekaserver:192.168.178.46"
 invoices:
    build: fb-invoices
    dockerfile: Dockerfile-rpi
@@ -52,8 +41,6 @@ invoices:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 expenses:
    build: fb-expenses
    dockerfile: Dockerfile-rpi
@@ -64,8 +51,6 @@ expenses:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 customers:
    build: fb-customers
    dockerfile: Dockerfile-rpi
@@ -77,8 +62,6 @@ customers:
    - rabbitmq:messaging
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 reporting:
    build: fb-reporting
    dockerfile: Dockerfile-rpi
@@ -91,8 +74,6 @@ reporting:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 templates:
    build: fb-template
    dockerfile: Dockerfile-rpi
@@ -104,8 +85,6 @@ templates:
    - graphite
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
    volumes_from: ['lsf']
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 repository:
    build: fb-repository
    dockerfile: Dockerfile-rpi
@@ -120,8 +99,6 @@ repository:
    links:
    - graphite
    - rabbitmq:messaging
-   extra_hosts:
-   - "eurekaserver:192.168.178.46"
 lsf:
    build: logstash-forwarder
    dockerfile: Dockerfile-rpi

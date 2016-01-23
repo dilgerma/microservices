@@ -1,0 +1,26 @@
+server:
+  port: ${port:8080}
+spring:
+  application:
+    name: fb-management
+  boot:
+    admin:
+      url: http://localhost:8080
+      context-path: /admin
+
+security:
+  basic:
+    enabled: false
+
+eureka:
+  client:
+     serviceUrl:
+        defaultZone: http://localhost:${server.port}/eureka/
+  instance:
+     metadataMap:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+     preferIpAddress: true
+
+turbine :
+  appConfig: FB-REPOSITORY,CUSTOMERS,EXPENSES,INVOICES,UI
+  clusterNameExpression: new String("default")

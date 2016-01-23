@@ -62,21 +62,9 @@
       "group": "app"
     },
     {
-      "name": "eurekaserver",
-      "dir": "fb-eureka-server",
-      "tag": "dilgerm/rpi-eurekaserver",
-      "group": "app"
-    },
-    {
-      "name": "metrics-server",
-      "dir": "fb-metrics-server",
-      "tag": "dilgerm/rpi-metrics-server",
-      "group": "app"
-    },
-    {
-      "name": "bootadmin",
-      "dir": "fb-boot-admin-server",
-      "tag": "dilgerm/rpi-bootadmin",
+      "name": "managementserver",
+      "dir": "fb-management-server",
+      "tag": "dilgerm/rpi-management-server",
       "group": "app"
     },
     {

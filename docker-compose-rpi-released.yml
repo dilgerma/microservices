@@ -1,5 +1,5 @@
 management-server:
-   image: dilgerm/rpi-eurekaserver:107
+   image: dilgerm/rpi-management-server:108
    ports:
    - "8761:8080"
    container_name: "management-server"
@@ -7,7 +7,7 @@ management-server:
    log_opt:
      gelf-address: udp://pi28:12201
 authserver:
-   image: dilgerm/rpi-authserver:107
+   image: dilgerm/rpi-authserver:108
    container_name: authserver
    ports:
    - "9820:8080"
@@ -17,7 +17,7 @@ authserver:
    environment:
     - constraint:node==pi23
 ui:
-   image: dilgerm/rpi-billy-ui:107
+   image: dilgerm/rpi-billy-ui:108
    container_name: "ui"
    ports:
    - "8080:8080"
@@ -27,7 +27,7 @@ ui:
    extra_hosts:
    - "authserver:192.168.178.28"
 invoices:
-   image: dilgerm/rpi-billy-invoices:107
+   image: dilgerm/rpi-billy-invoices:108
    expose:
    - "8081"
    log_driver: "gelf"
@@ -36,7 +36,7 @@ invoices:
    extra_hosts:
    - "authserver:192.168.178.28"
 expenses:
-   image: dilgerm/rpi-billy-expenses:107
+   image: dilgerm/rpi-billy-expenses:108
    expose:
    - "8081"
    log_driver: "gelf"
@@ -45,7 +45,7 @@ expenses:
    extra_hosts:
    - "authserver:192.168.178.28"
 customers:
-   image: dilgerm/rpi-billy-customers:107
+   image: dilgerm/rpi-billy-customers:108
    expose:
    - "8081"
    log_driver: "gelf"
@@ -54,7 +54,7 @@ customers:
    extra_hosts:
    - "authserver:192.168.178.28"
 registration:
-   image: dilgerm/rpi-billy-registration:107
+   image: dilgerm/rpi-billy-registration:108
    expose:
    - "8081"
    ports:
@@ -65,7 +65,7 @@ registration:
    extra_hosts:
    - "authserver:192.168.178.28"
 edge-server:
-   image: dilgerm/rpi-edge-server:107
+   image: dilgerm/rpi-edge-server:108
    expose:
    - "8081"
    ports:
@@ -76,7 +76,7 @@ edge-server:
    extra_hosts:
    - "authserver:192.168.178.28"
 reporting:
-   image: dilgerm/rpi-billy-reporting:107
+   image: dilgerm/rpi-billy-reporting:108
    expose:
    - "8081"
    ports:
@@ -87,7 +87,7 @@ reporting:
    extra_hosts:
    - "authserver:192.168.178.28"
 repository:
-   image: dilgerm/rpi-billy-repository:107
+   image: dilgerm/rpi-billy-repository:108
    expose:
    - "8080"
    environment:

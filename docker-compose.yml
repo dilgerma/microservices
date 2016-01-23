@@ -1,38 +1,24 @@
-loadbalancer:
-   build: loadbalancer
+management-server:
+   build: services/fb-management-server
+   container_name: management-server
    ports:
-   - "80:80"
-eurekaserver:
-   build: fb-eureka-server
-   container_name: eurekaserver
-   ports:
-   - "8761:8761"
+   - "8761:8080"
    expose:
    - "8761"
-bootadmin:
-   build: fb-boot-admin-server
-   container_name: bootadmin
-   ports:
-   - "9800:8080"
-metricsserver:
-   build: fb-metrics-server
-   container_name: metricsserver
-   ports:
-   - "9810:8080"
 authserver:
-   build: fb-auth-server
+   build: services/fb-auth-server
    container_name: authserver
    ports:
    - "9820:8080"
 ui:
-   build: fb-web
+   build: services/fb-web
    expose:
    - "8080"
    ports:
    - "8080:8080"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 registration:
-   image: fb-registration
+   image: services/fb-registration
    expose:
    - "8081"
    ports:
@@ -45,34 +31,34 @@ registration:
 #  - "8081:8081"
 #  command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 invoices:
-   build: fb-invoices
+   build: services/fb-invoices
    expose:
    - "8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 expenses:
-   build: fb-expenses
+   build: services/fb-expenses
    expose:
    - "8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 customers:
-   build: fb-customers
+   build: services/fb-customers
    expose:
    - "8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 reporting:
-   build: fb-reporting
+   build: services/fb-reporting
    expose:
    - "8081"
    ports:
    - "9999:8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 templates:
-   build: fb-template
+   build: services/fb-template
    expose:
    - "8081"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 repository:
-   build: fb-repository
+   build: services/fb-repository
    expose:
    - "8080"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
@@ -81,11 +67,11 @@ repository:
    - user_apiKey
    - spring.profiles.active=mock
 elasticvolume:
-   build: elasticsearch-volume
+   build: infrastructure/elasticsearch-volume
    mem_limit: 4m
 elasticsearch:
   user: root
-  build: elasticsearch
+  build: infrastructure/elasticsearch
   container_name: elasticsearch
   expose:
   - "9200"
@@ -95,11 +81,11 @@ elasticsearch:
   - "9300:9300"
   volumes_from: ['elasticvolume']
 logstash:
-  build: logstash
+  build: infrastructure/logstash
   expose:
   - "5000"
 kibana:
-  build: kibana
+  build: infrastructure/kibana
   expose:
   - "80"
   ports:

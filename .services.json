@@ -3,67 +3,67 @@
   "services": [
     {
       "name": "invoices",
-      "dir": "fb-invoices",
+      "dir": "services/fb-invoices",
       "tag": "dilgerm/rpi-billy-invoices",
       "group": "app"
     },
     {
       "name": "expenses",
-      "dir": "fb-expenses",
+      "dir": "services/fb-expenses",
       "tag": "dilgerm/rpi-billy-expenses",
       "group": "app"
     },
     {
       "name": "repository",
-      "dir": "fb-repository",
+      "dir": "services/fb-repository",
       "tag": "dilgerm/rpi-billy-repository",
       "group": "app"
     },
     {
       "name": "customers",
-      "dir": "fb-customers",
+      "dir": "services/fb-customers",
       "tag": "dilgerm/rpi-billy-customers",
       "group": "app"
     },
     {
       "name": "template",
-      "dir": "fb-template",
+      "dir": "services/fb-template",
       "tag": "dilgerm/rpi-billy-templates",
       "group": "app"
     },
     {
       "name": "ui",
-      "dir": "fb-web",
+      "dir": "services/fb-web",
       "tag": "dilgerm/rpi-billy-ui",
       "group": "app"
     },
     {
       "name": "reporting",
-      "dir": "fb-reporting",
+      "dir": "services/fb-reporting",
       "tag": "dilgerm/rpi-billy-reporting",
       "group": "app"
     },
     {
       "name": "authserver",
-      "dir": "fb-auth-server",
+      "dir": "services/fb-auth-server",
       "tag": "dilgerm/rpi-authserver",
       "group": "app"
     },
     {
       "name": "registration",
-      "dir": "fb-registration",
+      "dir": "services/fb-registration",
       "tag": "dilgerm/rpi-billy-registration",
       "group": "app"
     },
     {
       "name": "edge",
-      "dir": "fb-edge-server",
+      "dir": "services/fb-edge-server",
       "tag": "dilgerm/rpi-edge-server",
       "group": "app"
     },
     {
       "name": "managementserver",
-      "dir": "fb-management-server",
+      "dir": "services/fb-management-server",
       "tag": "dilgerm/rpi-management-server",
       "group": "app"
     },

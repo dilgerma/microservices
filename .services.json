@@ -69,17 +69,17 @@
     },
     {
       "name": "logstash",
-      "dir": "logstash",
+      "dir": "infrastructure/logstash",
       "tag": "dilgerm/rpi-logstash"
     },
     {
       "name": "kibana",
-      "dir": "kibana",
+      "dir": "infrastructure/kibana",
       "tag": "dilgerm/rpi-billy-kibana"
     },
     {
       "name": "rabbitmq",
-      "dir": "rabbitmq",
+      "dir": "infrastructure/rabbitmq",
       "tag": "dilgerm/rpi-rabbitmq"
     }
   ]

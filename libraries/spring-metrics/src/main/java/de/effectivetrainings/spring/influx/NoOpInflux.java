@@ -23,9 +23,8 @@ public class NoOpInflux implements InfluxDB {
     }
 
     @Override
-    public InfluxDB disableBatch() {
-        log.debug("reporting against NoOpInflux");
-        return this;
+    public void disableBatch() {
+
     }
 
     @Override
@@ -78,7 +77,18 @@ public class NoOpInflux implements InfluxDB {
     }
 
     @Override
-    public InfluxDB withDefaultRetentionPolicy(String s) {
-        return this;
+    public void setConnectTimeout(long connectTimeout, TimeUnit timeUnit) {
+
     }
+
+    @Override
+    public void setReadTimeout(long readTimeout, TimeUnit timeUnit) {
+
+    }
+
+    @Override
+    public void setWriteTimeout(long writeTimeout, TimeUnit timeUnit) {
+
+    }
+
 }

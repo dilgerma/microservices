@@ -26,6 +26,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:2.4.4"
     compile "com.google.guava:guava:17.0"
     compile('io.dropwizard.metrics:metrics-core:3.1.0')
-    compile('com.github.dilgerma:influxdb-java:2.0.1e')
+    compile('org.influxdb:influxdb-java:2.1')
     testCompile('junit:junit:4.12')
 }

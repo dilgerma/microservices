@@ -1,0 +1,4 @@
+- name: download docker
+  get_url: url={{docker_url}} dest=/tmp/docker-{{docker_version}}.deb mode=0740
+- name: upgrade docker
+  apt: deb=/tmp/docker-{{docker_version}}.deb

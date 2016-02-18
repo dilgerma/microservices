@@ -3,6 +3,8 @@ chmod +x /usr/local/bin/weave
 curl -L https://raw.githubusercontent.com/dilgerma/scope/master/scope -o /usr/local/bin/scope
 chmod +x /usr/local/bin/scope
 
+export SCRIPT_VERSION=1.4.4
+
 export IP=$( hostname -I | sed 's/^ *//g' | cut -d ' ' -f 1 )
 docker rm -f swarm-agent
 weave reset

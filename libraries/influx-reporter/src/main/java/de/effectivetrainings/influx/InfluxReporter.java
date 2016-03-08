@@ -12,6 +12,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Self written influx reporter for influx 0.9x
+ *
+ * Only as long as https://github.com/dropwizard/metrics has not
+ * released its next version (3.2.x)
+ */
 @Slf4j
 public class InfluxReporter extends ScheduledReporter {
 
@@ -135,11 +141,15 @@ public class InfluxReporter extends ScheduledReporter {
     }
 
     private List<Point> reportGauges(SortedMap<String, Gauge> gauges) {
-        return gauges.entrySet().stream().map(entry -> point(entry.getKey(),
-                Collections.singleton(field("gauge",
-                        sanitizeGauge(entry.getValue().getValue()))))).collect(
-                Collectors
-                        .toList());
+        return gauges
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getValue() != null)
+                .map(entry ->
+                    point(entry.getKey(),
+                                Collections.singleton(field("gauge",
+                                        sanitizeGauge(entry.getValue().getValue())))))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -154,6 +164,8 @@ public class InfluxReporter extends ScheduledReporter {
             finalValue = null;
         } else if (value instanceof Float && (Float.isInfinite((Float) value) || Float.isNaN((Float) value))) {
             finalValue = null;
+        } else if (value instanceof Collection){
+            finalValue = ((Collection)value).size();
         } else {
             finalValue = value;
         }
@@ -161,13 +173,16 @@ public class InfluxReporter extends ScheduledReporter {
     }
 
     private List<Point> reportCounters(SortedMap<String, Counter> counters) {
-        return counters.entrySet().stream().map(entry -> point(entry.getKey(),
-                Collections.singleton(field("counter", entry
-                        .getValue()
-                        .getCount
-                                ())))).collect(
-                Collectors
-                        .toList());
+        return counters
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getCount() != 0)
+                .map(entry -> point(entry.getKey(),
+                        Collections.singleton(field("counter", entry
+                                .getValue()
+                                .getCount
+                                        ()))))
+                .collect(Collectors.toList());
     }
 
     private List<Point> reportMeters(SortedMap<String, Meter> meters) {

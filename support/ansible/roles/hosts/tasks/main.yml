@@ -10,3 +10,5 @@
   command: docker pull dilgerm/rpi-weave
 - name : download latest weave-proxy
   command: docker pull dilgerm/rpi-weaveexec
+- name : download latest weave-scope
+  command: docker pull dilgerm/rpi-scope

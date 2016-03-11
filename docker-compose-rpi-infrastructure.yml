@@ -50,7 +50,7 @@ mongo:
   - "27017"
 rabbitmq:
   hostname: rabbitmq
-  image: dilgerm/rpi-rabbitmq:101
+  image: dilgerm/rpi-rabbitmq:111
   ports:
   - "5672"
   - "15672:15672"

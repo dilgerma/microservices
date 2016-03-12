@@ -1,6 +1,6 @@
 curl -L https://raw.githubusercontent.com/dilgerma/weave/rpi-latest-release/weave -o /usr/local/bin/weave
 chmod +x /usr/local/bin/weave
-curl -L https://raw.githubusercontent.com/dilgerma/scope/rpi-latest-release/scope -o /usr/local/bin/scope
+curl -L https://raw.githubusercontent.com/dilgerma/scope/latest-rpi-release/scope -o /usr/local/bin/scope
 chmod +x /usr/local/bin/scope
 
 export IP=$( hostname -I | sed 's/^ *//g' | cut -d ' ' -f 1 )

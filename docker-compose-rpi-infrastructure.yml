@@ -20,7 +20,7 @@ kibana:
   ports:
   - "9681:80"
 influxdb:
-  image: dilgerm/rpi-influxdb
+  image: dilgerm/rpi-influxdb:0.10
   container_name: "influxdb"
   ports:
   - "8086:8086"

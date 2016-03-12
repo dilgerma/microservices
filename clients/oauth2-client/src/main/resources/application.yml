@@ -11,8 +11,8 @@ security:
     client:
             client-id: client
             client-secret: secret
-            access-token-uri: http://authserver:8080/auth/oauth/token
-            user-authorization-uri: http://authserver:8080/auth/oauth/authorize
+            access-token-uri: http://192.168.178.28:9200/auth/oauth/token
+            user-authorization-uri: http://192.168.178.28:9200/auth/oauth/authorize
             client-authentication-scheme: header
             use-current-uri:  true
             scope: services

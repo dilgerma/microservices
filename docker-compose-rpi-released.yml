@@ -15,7 +15,7 @@ authserver:
    log_opt:
      gelf-address: udp://pi28:12201
    environment:
-    - constraint:node==pi23
+    - constraint:node==pi28
 ui:
    image: dilgerm/rpi-billy-ui:111
    container_name: "ui"

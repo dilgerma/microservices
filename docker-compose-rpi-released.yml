@@ -17,7 +17,7 @@ authserver:
    environment:
     - constraint:node==pi28
 ui:
-   image: dilgerm/rpi-billy-ui:111
+   image: dilgerm/rpi-billy-ui:112
    container_name: "ui"
    ports:
    - "8080:8080"

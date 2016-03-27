@@ -17,6 +17,8 @@ dependencies {
 
     compile("org.springframework:spring-context:${springVersion}")
     compile("org.springframework.boot:spring-boot-starter-amqp:${springBootVersion}")
+    //should not be necessary, transitively there is 1.5.3.RELEASE verify after boot 1.4 upgrade
+    compile("org.springframework.amqp:spring-rabbit:1.5.4.RELEASE")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
 }

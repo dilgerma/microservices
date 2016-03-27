@@ -6,7 +6,7 @@ import de.effectivetrainings.billy.auth.registration.repository.RegistrationConf
 import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
 
 public interface RegistrationService {
-    void register(CustomerRegistration customerRegistration);
+    CustomerRegistration register(CustomerRegistration customerRegistration);
 
     CustomerRegistration findRegistrationForToken(RegistrationConfirmationToken token);
 

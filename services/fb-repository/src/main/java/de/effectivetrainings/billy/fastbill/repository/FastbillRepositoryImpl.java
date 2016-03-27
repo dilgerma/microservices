@@ -85,7 +85,6 @@ public class FastbillRepositoryImpl implements FastbillRepository {
     @Override
     public FastbillResponse request(FastbillRequest parameter){
 
-        log.debug("Requesting Fastbill for {} and correlation-id: {}", parameter.toJson(), correlationId.getCorrelationId());
         try {
             HttpHeaders headers = getHttpHeaders();
             HttpEntity entity = new HttpEntity(parameter.toJson(), headers);
@@ -102,7 +101,6 @@ public class FastbillRepositoryImpl implements FastbillRepository {
         String auth = "Basic " + new String(Base64.getEncoder().encode((userData.getEmail() + ":" + userData.getApiKey()).getBytes()));
         HttpHeaders headers = new HttpHeaders();
         headers.put("Authorization", Arrays.asList(auth));
-        headers.add(CorrelationId.CORRELATION_ID_HEADER_KEY, correlationId.getCorrelationId());
         return headers;
     }
 

@@ -23,7 +23,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -53,7 +52,6 @@ import java.security.KeyPair;
 @Controller
 @SessionAttributes("authorizationRequest")
 @PropertySource("classpath:messages.properties")
-@EnableMongoRepositories(basePackages = "de.effectivetrainings.billy.auth.registration.repository")
 @EnableEurekaClient
 @Import(MessagingConnectionConfig.class)
 public class AuthserverApplication extends WebMvcConfigurerAdapter {
@@ -153,15 +151,15 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		@Autowired
 		private RedisConnectionFactory redisConnectionFactory;
 
-		@Bean
-		public JwtAccessTokenConverter jwtAccessTokenConverter() {
-			JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-			KeyPair keyPair = new KeyStoreKeyFactory(
-					new ClassPathResource("keystore.jks"), "foobar".toCharArray())
-					.getKeyPair("test");
-			converter.setKeyPair(keyPair);
-			return converter;
-		}
+//		@Bean
+//		public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//			JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//			KeyPair keyPair = new KeyStoreKeyFactory(
+//					new ClassPathResource("keystore.jks"), "foobar".toCharArray())
+//					.getKeyPair("test");
+//			converter.setKeyPair(keyPair);
+//			return converter;
+//		}
 
 
 		@Override
@@ -169,6 +167,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 			clients.inMemory()
 					.withClient("client")
 					.secret("secret")
+					.autoApprove(true)
 					.authorizedGrantTypes("authorization_code", "implicit", "refresh_token", "client_credentials")
 					.scopes("services");
 		}

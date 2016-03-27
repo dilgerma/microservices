@@ -17,7 +17,7 @@ angular.module('expenses', ['ui.router']).config(['$stateProvider', function($st
         /* initialize */
         $scope.load = function() {
             expenseService.loadExpenses().success(function(data) {
-                $scope.expenses = data.expenses;
+                $scope.expenses = data;
             }).error(function(response) {
                 $scope.response = response;
             });

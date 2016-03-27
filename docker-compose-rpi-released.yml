@@ -5,15 +5,15 @@ management-server:
    container_name: "management-server"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi28:12201
+     gelf-address: udp://pi26:12201
 authserver:
    image: dilgerm/rpi-authserver:111
    container_name: authserver
    ports:
-   - "9820:8080"
+   - "9200:8080"
    log_driver: "gelf"
    log_opt:
-     gelf-address: udp://pi28:12201
+     gelf-address: udp://pi26:12201
    environment:
     - constraint:node==pi28
 ui:
@@ -23,7 +23,7 @@ ui:
    - "8080:8080"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 invoices:
@@ -32,7 +32,7 @@ invoices:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 expenses:
@@ -41,7 +41,7 @@ expenses:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 customers:
@@ -50,7 +50,7 @@ customers:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 registration:
@@ -61,7 +61,7 @@ registration:
    - "9823:8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 edge-server:
@@ -72,7 +72,7 @@ edge-server:
    - "9823:8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 reporting:
@@ -83,7 +83,7 @@ reporting:
    - "8081"
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"
 repository:
@@ -95,6 +95,6 @@ repository:
    - user_apiKey=b7cd951bc464a9ab45640730001d64edBRI3mrXeTVGh2dT43ff6Z4FCXSBDSnMk
    log_driver: "gelf"
    log_opt:
-    gelf-address: udp://pi28:12201
+    gelf-address: udp://pi26:12201
    extra_hosts:
    - "authserver:192.168.178.28"

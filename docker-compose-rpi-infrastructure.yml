@@ -2,7 +2,7 @@ elasticsearch:
   image: itwars/rpi-elasticsearch
   container_name: elasticsearch
   environment:
-  - constraint:node==pi24
+  - constraint:node==pi28
   ports:
   - "9200:9200"
   - "9300:9300"
@@ -14,7 +14,7 @@ logstash:
   ports:
   - "12201:12201/udp"
   environment:
-  - constraint:node==pi28
+  - constraint:node==pi26
 kibana:
   image: dilgerm/rpi-billy-kibana:49
   ports:

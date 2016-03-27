@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,11 +50,15 @@ public class RestConfig {
     @Autowired
     private CorrelationId correlationId;
 
+    @Autowired
+    private LoadBalancerInterceptor loadBalancerInterceptor;
+
+
     @Bean
     @Qualifier("userRestTemplate")
     public RestOperations restTemplate() {
         final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor()));
+        restTemplate.setInterceptors(Arrays.asList(restRequestTimerInterceptor(), loadBalancerInterceptor));
         return restTemplate;
     }
 

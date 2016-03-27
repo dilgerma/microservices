@@ -1,10 +1,11 @@
 package de.effectivetrainings.billy.auth.registration.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CustomerRegistrationRepository extends MongoRepository<CustomerRegistrationDocument, String> {
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    CustomerRegistrationDocument findByEmail(String email);
+public interface CustomerRegistrationRepository extends JpaRepository<CustomerRegistrationData, Long> {
 
-    CustomerRegistrationDocument findByToken(String token);
+    CustomerRegistrationData findByEmail(String email);
+
+    CustomerRegistrationData findByToken(String token);
 }

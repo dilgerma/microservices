@@ -3,6 +3,7 @@ package de.effectivetrainings.billy.auth.registration;
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
 import de.effectivetrainings.billy.auth.registration.domain.Email;
+import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.ui.CustomerRegistrationDto;
 
 public class RegistratioModelMapper implements Mapper<CustomerRegistration, CustomerRegistrationDto> {
@@ -10,7 +11,8 @@ public class RegistratioModelMapper implements Mapper<CustomerRegistration, Cust
 
     @Override
     public CustomerRegistration from(CustomerRegistrationDto from) {
-        return new CustomerRegistration(from.getName(), new Email(from.getEmail()));
+        return CustomerRegistration.builder().name(from.getName()).email(new Email(from.getEmail()))
+                .registrationConfirmationToken(new RegistrationConfirmationToken()).build();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package de.effectivetrainings.billy.auth.registration.infrastructure;
 
-import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationDocument;
+import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationData;
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +17,7 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final CustomerRegistrationDocument byEmail = customerRegistrationRepository.findByEmail(email);
+        final CustomerRegistrationData byEmail = customerRegistrationRepository.findByEmail(email);
         return userDetailsMapper.from(byEmail);
     }
 }

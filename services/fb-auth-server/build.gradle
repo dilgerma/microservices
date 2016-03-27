@@ -9,7 +9,6 @@ buildscript {
         }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
         classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.8.0"
     }
 }
@@ -28,6 +27,7 @@ jar {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-starter-parent:$springCloudStarterParentVersion"
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
     }
 }
 
@@ -38,7 +38,6 @@ repositories {
         url = 'http://repo.spring.io/milestone'
     }
 }
-
 
 /**
  * avro - we cannot rely on the commercehub defaults, as this generated
@@ -65,30 +64,31 @@ compileJava.dependsOn generateAvro
  */
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile ('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.cloud:spring-cloud-starter-eureka')
 
     compile("org.springframework.cloud:spring-cloud-starter-oauth2")
     compile("org.springframework.security:spring-security-jwt")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtime("org.hsqldb:hsqldb")
 
-    compile project (":libraries/events-support")
+
+    compile project(":libraries/events-support")
     compile("org.projectlombok:lombok:1.16.6")
 
-    compile("org.springframework.data:spring-data-mongodb") {
 
-        testCompile("org.springframework.boot:spring-boot-starter-test") {
-            exclude(module: 'commons-logging')
-        }
-        testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
-            exclude(module: 'commons-logging')
-        }
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module: 'commons-logging')
     }
+    testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
+        exclude(module: 'commons-logging')
+    }
+}
 
-    task wrapper(type: Wrapper) {
-        gradleVersion = '2.10'
-    }
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
 }

@@ -1,6 +1,7 @@
 package de.effectivetrainings.billy.auth.registration.ui;
 
 import de.effectivetrainings.billy.auth.registration.RegistratioModelMapper;
+import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
 import de.effectivetrainings.billy.auth.registration.service.RegistrationService;
 import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,20 +31,29 @@ public class RegistrationController {
         return new ModelAndView("index", "registration", new CustomerRegistrationDto());
     }
 
+    @RequestMapping("/login")
+    public String loginView() {
+        return "login";
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String submit(
+    public ModelAndView submit(
             @Validated CustomerRegistrationDto customerRegistrationDto,
-            BindingResult bindingResult) {
+            BindingResult bindingResult
+    ) {
+
         if (bindingResult.hasErrors()) {
-            return "index";
+            return new ModelAndView("index");
         }
         try {
-            registrationService.register(modelMapper.from(customerRegistrationDto));
+            final CustomerRegistration register = registrationService
+                    .register(modelMapper.from(customerRegistrationDto));
+            return new ModelAndView("registration-success", "token",
+                    register.getRegistrationConfirmationToken().getToken());
         } catch (AlreadyRegisteredException alreadyRegistered) {
             bindingResult.reject("already.registered");
-            return "index";
+            return new ModelAndView("index");
         }
-        return "registration-success";
     }
 
 

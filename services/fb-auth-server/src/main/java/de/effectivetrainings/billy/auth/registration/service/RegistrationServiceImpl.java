@@ -3,6 +3,7 @@ package de.effectivetrainings.billy.auth.registration.service;
 
 import de.effectivetrainings.billy.auth.registration.domain.CustomerRegistration;
 import de.effectivetrainings.billy.auth.registration.password.PasswordConfirmation;
+import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationData;
 import de.effectivetrainings.billy.auth.registration.repository.CustomerRegistrationRepository;
 import de.effectivetrainings.billy.auth.registration.repository.RegistrationConfirmationToken;
 import de.effectivetrainings.billy.auth.registration.service.exception.AlreadyRegisteredException;
@@ -25,18 +26,24 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void register(CustomerRegistration customerRegistration) {
+    public CustomerRegistration register(CustomerRegistration customerRegistration) {
         if (alreadyRegistered(customerRegistration)) {
             throw new AlreadyRegisteredException(customerRegistration);
         }
         log.info("Registering email {} for Token : {}", customerRegistration.getEmail(), customerRegistration.getRegistrationConfirmationToken());
-        customerRegistrationRepository.save(customerRegistationDocumentMapper.to(customerRegistration));
+        final CustomerRegistrationData registrationData = customerRegistationDocumentMapper.to(customerRegistration);
+        final CustomerRegistrationData persisted = customerRegistrationRepository.save(registrationData);
+        return customerRegistationDocumentMapper.from(persisted);
     }
 
     @Override
     public CustomerRegistration findRegistrationForToken(RegistrationConfirmationToken token) {
+        final CustomerRegistrationData byToken = customerRegistrationRepository.findByToken(token.getToken());
+        if (byToken == null) {
+            throw new InvalidRegistrationTokenException(token);
+        }
         final CustomerRegistration customerRegistration = customerRegistationDocumentMapper.from(
-                customerRegistrationRepository.findByToken(token.getToken()));
+                byToken);
 
         if (customerRegistration == null) {
             throw new InvalidRegistrationTokenException(token);
@@ -51,12 +58,14 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void confirmAccount(
             CustomerRegistration registration, PasswordConfirmation passwordConfirmation) {
-        registration.confirm(passwordConfirmation.getPassword());
-        customerRegistrationRepository.save(customerRegistationDocumentMapper.to(registration));
+        final CustomerRegistrationData byEmail = customerRegistrationRepository.findByEmail(registration.getEmail()
+                .getEmail());
+        byEmail.confirm(passwordConfirmation.getPassword());
+        customerRegistrationRepository.save(byEmail);
     }
 
     private boolean alreadyRegistered(CustomerRegistration customerRegistration) {
-        return customerRegistrationRepository.exists(customerRegistration.getEmail().getEmail());
+        return customerRegistrationRepository.findByEmail(customerRegistration.getEmail().getEmail()) != null;
     }
 
 }

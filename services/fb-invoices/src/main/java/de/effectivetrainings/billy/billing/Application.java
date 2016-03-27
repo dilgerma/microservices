@@ -1,7 +1,6 @@
 package de.effectivetrainings.billy.billing;
 
 import de.effectivetrainings.billy.billing.config.MetricsConfig;
-import de.effectivetrainings.billy.billing.config.OAuth2Config;
 import de.effectivetrainings.billy.billing.config.RestConfig;
 import de.effectivetrainings.correlation.CorrelationId;
 import de.effectivetrainings.correlation.DefaultCorrelationId;
@@ -30,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableInflux
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@Import({RestConfig.class, MetricsConfig.class, OAuth2Config.class})
+@Import({RestConfig.class, MetricsConfig.class})
 public class Application {
 
     public static void main(String[] args) {

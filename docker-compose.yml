@@ -2,7 +2,7 @@ management-server:
    build: services/fb-management-server
    container_name: management-server
    ports:
-   - "8761:8080"
+   - "8761:8761"
    expose:
    - "8761"
 authserver:

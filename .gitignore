@@ -1,3 +1,4 @@
+*.rdb
 generated
 gradlew*
 gradle

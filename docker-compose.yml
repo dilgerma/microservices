@@ -15,10 +15,10 @@ ui:
    expose:
    - "8080"
    ports:
-   - "8080:8080"
+   - "80:8080"
    command: java -Djava.security.egd=file:/dev/./urandom -jar /sources/app.jar
 registration:
-   image: services/fb-registration
+   build: services/fb-registration
    expose:
    - "8081"
    ports:
@@ -66,9 +66,6 @@ repository:
    - user_email
    - user_apiKey
    - spring.profiles.active=mock
-elasticvolume:
-   build: infrastructure/elasticsearch-volume
-   mem_limit: 4m
 elasticsearch:
   user: root
   build: infrastructure/elasticsearch
@@ -79,7 +76,6 @@ elasticsearch:
   ports:
   - "9200:9200"
   - "9300:9300"
-  volumes_from: ['elasticvolume']
 logstash:
   build: infrastructure/logstash
   expose:

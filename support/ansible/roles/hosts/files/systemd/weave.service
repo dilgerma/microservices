@@ -1,0 +1,12 @@
+[Unit]
+Description=Runs Weave Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=/usr/local/bin/run-weave.sh
+
+[Install]
+WantedBy=multi-user.target

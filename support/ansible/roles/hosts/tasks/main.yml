@@ -1,14 +1,17 @@
+- name: upgrade libraries
+  apt: upgrade=dist
 - name: install collectd
   apt: name=collectd update_cache=yes  state=present
 - name: copy collectd config
   copy: src=collectd/collectd.conf dest=/etc/collectd/collectd.conf owner=root mode="u=rwx,g=r,o=r"
 - name: restart collectd
   shell: service collectd restart
-- name: download latest swarm
-  command: docker pull hypriot/rpi-swarm:latest
-- name: download latest weave
-  command: docker pull dilgerm/rpi-weave
-- name : download latest weave-proxy
-  command: docker pull dilgerm/rpi-weaveexec
-- name : download latest weave-scope
-  command: docker pull dilgerm/rpi-scope
+- name: copy systemd startup script
+  copy: src=systemd/run-weave.sh dest=/usr/local/bin/ owner=root
+- name: copy systemd config
+  copy: src=systemd/weave.service dest=/etc/systemd/system/ owner=root mode="u=rwx,g=rx,o=rx"
+- name: enable weave service
+  shell: systemctl enable weave
+- name: restart weave
+  shell: service weave restart
+docer

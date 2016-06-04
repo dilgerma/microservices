@@ -29,8 +29,14 @@
 package de.effectivetrainings.billy.fastbill;
 
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.core.util.ThreadSafeSimpleDateFormat;
 import de.effectivetrainings.billy.fastbill.config.Profiles;
-import de.effectivetrainings.billy.fastbill.domain.*;
+import de.effectivetrainings.billy.fastbill.domain.Customer;
+import de.effectivetrainings.billy.fastbill.domain.FastbillResponse;
+import de.effectivetrainings.billy.fastbill.domain.Filter;
+import de.effectivetrainings.billy.fastbill.domain.Invoice;
 import de.effectivetrainings.billy.fastbill.domain.customer.Address;
 import de.effectivetrainings.billy.fastbill.domain.customer.CustomerType;
 import de.effectivetrainings.billy.fastbill.domain.customer.DeleteCustomer;
@@ -50,8 +56,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
@@ -68,11 +73,11 @@ import static org.junit.Assert.*;
 @ComponentScan(basePackages = "de.effectivetrainings.domain.fastbill")
 @TestPropertySource({"classpath:application.properties"})
 @WebAppConfiguration
-@Ignore
 public class FastbillRepositoryTest {
 
     @Autowired
     private FastbillRepository repository;
+
 
     //TODO runs against real fastbill
     @Test
@@ -93,6 +98,7 @@ public class FastbillRepositoryTest {
         FastbillResponse response = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, new Filter(Filter.MONTH, "1"), new Filter(Filter.YEAR, "2014")));
         assertEquals(1, response.getResponse().getInvoices().size());
     }
+
 
     @Test
     public void testGetExenses() {
@@ -223,14 +229,31 @@ public class FastbillRepositoryTest {
     }
 
     @Test
-    public void testFindPaidInvoicesInYear1() throws Exception {
-        FastbillResponse response = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, new Filter(Filter.YEAR, "2015")));
-        List<Invoice> invoices = response.getResponse().getInvoices().stream().filter(invoice -> invoice.getPaidDate() != null && invoice.getPaidMonth().isPresent() && invoice.getPaidMonth().get().getMonth().equals(Month.MAY)).collect(Collectors.toList());
+    public void findPaidInvoices() throws Exception {
+        FastbillResponse response2014 = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, new Filter(Filter.YEAR, "2014")));
+        FastbillResponse response2015 = repository.request(new FastbillRequestParameter(RetrieveServiceType.INVOICES, new Filter(Filter.YEAR, "2015")));
 
-        FastbillResponse expenses = repository.request(new FastbillRequestParameter(RetrieveServiceType.EXPENSES, new Filter(Filter.YEAR, "2015")));
-                List<Expense> expenseList = response.getResponse().getExpenses().stream().filter(expense -> expense.getPaidDate() != null && expense.getPaidMonth().isPresent() && expense.getPaidMonth().get().getMonth().equals(Month.MAY)).collect(Collectors.toList());
+        final ArrayList<Invoice> rawInvoices = Lists
+                .newArrayList(Iterables.concat(response2014.getResponse().getInvoices(),
+                        response2015
+                                .getResponse()
+                                .getInvoices()));
+
+        List<Invoice> invoices = rawInvoices.stream().filter(invoice -> invoice.getPaidDate() != null)
+                .filter(invoice -> invoice.getCancelled() == 0)
+                .sorted((o1, o2) -> o1.getPaidDate().compareTo(o2.getPaidDate()))
+                .collect
+                (Collectors.toList());
 
         System.out.println("finish");
+        invoices.stream().forEach((invoice)->{
+            ThreadSafeSimpleDateFormat format = new ThreadSafeSimpleDateFormat("dd.MM.yyyy", TimeZone.getDefault(),
+                    1, 5, true);
+            System.out.println("Rechnungsnr: " + invoice.getInvoiceNumber() + ", Kunde: " + invoice
+                    .getOrganization() + ", Bezahlt am: " + format.format(invoice.getPaidDate()) + ", Gestellt am : " +
+                    format
+                    .format(invoice.getInvoiceDate()) + ".");
+        });
 
     }
 }
